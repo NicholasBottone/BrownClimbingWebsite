@@ -4,6 +4,10 @@
 
 In the server directory, you can run:
 
+### `npm install`
+
+Installs all the dependencies
+
 ### `npm run watch`
 
 Transpiles the .ts files into .js files and outputs in the source directory. Automatically transpiles on save.
