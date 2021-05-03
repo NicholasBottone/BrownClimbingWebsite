@@ -22,7 +22,7 @@ Starts the server
 
 ## Environment Variables
 
-Create a file named '.env' inside src
+Create a file named '.env' inside /server
 Put all environment variables in .env file.
 Environment Variables:
 

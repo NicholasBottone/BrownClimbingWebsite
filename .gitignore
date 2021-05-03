@@ -109,3 +109,4 @@ server/node_modules
 
 # client folder
 client/node_modules
+client/.env
