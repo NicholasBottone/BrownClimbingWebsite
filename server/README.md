@@ -10,7 +10,7 @@ Installs all the dependencies
 
 ### `npm run watch`
 
-Transpiles the .ts files into .js files and outputs in the source directory. Automatically transpiles on save.
+Transpiles the .ts files into .js files and outputs in the dist directory. Automatically transpiles on save.
 
 ### `npm run dev`
 
