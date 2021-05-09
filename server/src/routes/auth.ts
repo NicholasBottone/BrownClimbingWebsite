@@ -37,6 +37,7 @@ authRouter.get(
   passport.authenticate("google", {
     hd: "brown.edu", // limits the authentication to brown.edu addresses
     scope: ["profile", "email"],
+    prompt: "select_account",
   })
 );
 
