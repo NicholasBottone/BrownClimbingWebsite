@@ -37,3 +37,5 @@ Environment Variables:
 ### `COOKIE_KEY=`
 
 ### `CLIENT_URL=` (front end URL)
+
+### `SESSION_SECRET=`
