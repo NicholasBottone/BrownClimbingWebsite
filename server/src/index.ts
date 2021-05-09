@@ -1,7 +1,8 @@
-import express, { Request, Response } from "express";
-import session from "express-session";
 import * as dotenv from "dotenv";
 import path from "path";
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import passport from "passport";
 import cookieSession from "cookie-session";
@@ -10,16 +11,26 @@ import cors from "cors";
 import authRouter from "./routes/auth";
 import { authCheck } from "./middleware/auth";
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+import * as passportConfig from "./config/passport";
+passportConfig;
 
 // main function
 const main = () => {
   const app = express();
 
+  console.log(process.env);
+
   // connect to mongoDB
-  mongoose.connect(process.env.MONGODB_URI || "", () => {
-    console.log("connected to mongodb");
-  });
+  mongoose.connect(
+    process.env.MONGODB_URI || "",
+    {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    },
+    () => {
+      console.log("connected to mongodb");
+    }
+  );
 
   // cookie session setup
   app.use(
@@ -40,7 +51,7 @@ const main = () => {
   // set up cors to allow us to accept requests from front end client
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN,
+      origin: process.env.CLIENT_URL || "",
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
       credentials: true,
     })

@@ -6,6 +6,7 @@ const authRouter = Router();
 // when login success, retrive user info
 authRouter.get("/login/success", (req: Request, res: Response) => {
   if (req.user) {
+    console.log(req.user);
     res.status(200).json({
       success: true,
       message: "user authentication successful",
@@ -17,6 +18,7 @@ authRouter.get("/login/success", (req: Request, res: Response) => {
 
 // when login fails, send failed message
 authRouter.get("/login/failed", (req: Request, res: Response) => {
+  console.log(req);
   res.status(401).json({
     success: false,
     message: "user failed to authenticate",
@@ -26,7 +28,7 @@ authRouter.get("/login/failed", (req: Request, res: Response) => {
 // when logout, redirect to client
 authRouter.get("/logout", (req: Request, res: Response) => {
   req.logout();
-  res.redirect(process.env.CLIENT_HOME_PAGE_URL || "/");
+  res.redirect(process.env.CLIENT_URL || "/");
 });
 
 // auth with google
@@ -42,7 +44,7 @@ authRouter.get(
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_HOME_PAGE_URL || "/",
+    successRedirect: process.env.CLIENT_URL || "http://localhost:3000",
     failureMessage: "/auth/login/failed",
   })
 );

@@ -4,7 +4,7 @@ import {
   Strategy as GoogleStrategy,
   VerifyCallback,
 } from "passport-google-oauth20";
-import User, { IUser } from "../models/User";
+import User from "../models/User";
 import { UserType } from "../types";
 
 // serialize the user.id to save in the cookie session
@@ -20,10 +20,11 @@ passport.deserializeUser((id, done) => {
       done(null, user);
     })
     .catch((err) => {
+      console.error(err);
       done(new Error("failed to deserialize an user"));
     });
 });
-
+//console.log(process.env.GOOGLE_CLIENT_ID);
 // sets up the GoogleStrategy with call back functions
 // call back functions checks if a User exists in the MongoDB collection
 // if not creates new user object otherwise retrieves existing user object
@@ -35,8 +36,8 @@ passport.use(
       callbackURL: "/auth/google/callback",
     },
     async (
-      accessToken: string,
-      refreshToken: string,
+      _accessToken: string,
+      _refreshToken: string,
       profile: Profile,
       done: VerifyCallback
     ) => {
