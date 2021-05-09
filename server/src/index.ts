@@ -19,8 +19,6 @@ passportConfig;
 const main = () => {
   const app = express();
 
-  console.log(process.env);
-
   // connect to mongoDB
   mongoose.connect(
     process.env.MONGODB_URI || "",
@@ -36,7 +34,7 @@ const main = () => {
   // express session
   app.use(
     session({
-      secret: "secret12344", // TODO: change to env variable
+      secret: process.env.SESSION_SECRET || "",
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: 24 * 60 * 60 * 1000 },
