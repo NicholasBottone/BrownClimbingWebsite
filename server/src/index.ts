@@ -5,11 +5,12 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import passport from "passport";
-import cookieSession from "cookie-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth";
 import { authCheck } from "./middleware/auth";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 import * as passportConfig from "./config/passport";
 passportConfig;
@@ -32,12 +33,17 @@ const main = () => {
     }
   );
 
-  // cookie session setup
+  // express session
   app.use(
-    cookieSession({
-      name: "cookie-session",
-      keys: [process.env.COOKIE_KEY || "1234"],
-      maxAge: 24 * 60 * 60 * 10, // might want to change this value
+    session({
+      secret: "secret12344", // TODO: change to env variable
+      resave: false,
+      saveUninitialized: false,
+      cookie: { maxAge: 24 * 60 * 60 * 1000 },
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        mongoOptions: { useUnifiedTopology: true },
+      }),
     })
   );
 
