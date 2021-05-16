@@ -17,65 +17,65 @@ passportConfig;
 
 // main function
 const main = () => {
-  const app = express();
+    const app = express();
 
-  // connect to mongoDB
-  mongoose.connect(
-    process.env.MONGODB_URI || "",
-    {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-    },
-    () => {
-      console.log("connected to mongodb");
-    }
-  );
+    // connect to mongoDB
+    mongoose.connect(
+        process.env.MONGODB_URI || "",
+        {
+            useUnifiedTopology: true,
+            useNewUrlParser: true,
+        },
+        () => {
+            console.log("connected to mongodb");
+        }
+    );
 
-  // express session
-  app.use(
-    session({
-      secret: process.env.SESSION_SECRET || "",
-      resave: false,
-      saveUninitialized: false,
-      cookie: { maxAge: 24 * 60 * 60 * 1000 },
-      store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI,
-        mongoOptions: { useUnifiedTopology: true },
-      }),
-    })
-  );
+    // express session
+    app.use(
+        session({
+            secret: process.env.SESSION_SECRET || "",
+            resave: false,
+            saveUninitialized: false,
+            cookie: { maxAge: 24 * 60 * 60 * 1000 },
+            store: MongoStore.create({
+                mongoUrl: process.env.MONGODB_URI,
+                mongoOptions: { useUnifiedTopology: true },
+            }),
+        })
+    );
 
-  app.use(cookieParser());
+    app.use(cookieParser());
 
-  // initialize and set up passport to use sessions
-  app.use(passport.initialize());
-  app.use(passport.session());
+    // initialize and set up passport to use sessions
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-  // set up cors
-  // set up cors to allow us to accept requests from front end client
-  app.use(
-    cors({
-      origin: process.env.CLIENT_URL || "",
-      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      credentials: true,
-    })
-  );
+    // set up cors
+    // set up cors to allow us to accept requests from front end client
+    app.use(
+        cors({
+            origin: process.env.CLIENT_URL || "",
+            methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+            credentials: true,
+        })
+    );
 
-  // set up auth route
-  app.use("/auth", authRouter);
+    // set up auth route
+    app.use("/auth", authRouter);
 
-  // default route to check if user is authenticated
-  app.get("/", authCheck, (req: Request, res: Response) => {
-    res.status(200).json({
-      authenticated: true,
-      message: "user successfully authenticated",
-      user: req.user,
-      cookies: req.cookies,
+    // default route to check if user is authenticated
+    app.get("/", authCheck, (req: Request, res: Response) => {
+        res.status(200).json({
+            authenticated: true,
+            message: "user successfully authenticated",
+            user: req.user,
+            cookies: req.cookies,
+        });
     });
-  });
 
-  app.listen(process.env.PORT || 8080, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
-  });
+    app.listen(process.env.PORT || 8080, () => {
+        console.log(`Server running on port ${process.env.PORT}`);
+    });
 };
 main();

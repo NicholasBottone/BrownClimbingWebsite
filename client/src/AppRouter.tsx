@@ -3,13 +3,13 @@ import HomePage from "./components/HomePage";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 export default function AppRouter() {
-  return (
-    <div>
-      <Router>
+    return (
         <div>
-          <Route exact path="/" component={HomePage} />
+            <Router>
+                <div>
+                    <Route exact path="/" component={HomePage} />
+                </div>
+            </Router>
         </div>
-      </Router>
-    </div>
-  );
+    );
 }
