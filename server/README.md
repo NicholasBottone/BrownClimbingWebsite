@@ -27,3 +27,15 @@ Put all environment variables in .env file.
 Environment Variables:
 
 ### `PORT=`
+
+### `GOOGLE_CLIENT_ID=`
+
+### `GOOGLE_CLIENT_SECRET=`
+
+### `MONGODB_URI=`
+
+### `COOKIE_KEY=`
+
+### `CLIENT_URL=` (front end URL)
+
+### `SESSION_SECRET=`
