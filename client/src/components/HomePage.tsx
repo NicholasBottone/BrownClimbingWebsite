@@ -1,6 +1,7 @@
 import Header from "./Header";
 import React from "react";
 import { useEffect, useState } from "react";
+import { fetchUser } from "../utils/auth";
 
 interface IUser {
     // types for User Model
@@ -15,34 +16,7 @@ export default function HomePage() {
     const [authenticated, setAuthenticated] = useState(false);
 
     useEffect(() => {
-        async function fetchUser() {
-            try {
-                const res = await fetch(
-                    "http://localhost:4000/auth/login/success",
-                    {
-                        method: "GET",
-                        credentials: "include",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            "Access-Control-Allow-Credentials": "true",
-                        },
-                    }
-                );
-                if (res.status === 200) {
-                    const resJson = await res.json();
-                    setAuthenticated(true);
-                    setUser(resJson.user);
-                } else {
-                    throw new Error("failed to authenticate user");
-                }
-            } catch (error) {
-                console.error(error);
-                setAuthenticated(false);
-                setError("Failed to authenticate user");
-            }
-        }
-        fetchUser();
+        fetchUser(setAuthenticated, setUser, setError);
     }, []);
 
     const handleNotAuthenticated = () => {
