@@ -15,6 +15,7 @@ export default function HomePage() {
     const [error, setError] = useState("");
     const [authenticated, setAuthenticated] = useState(false);
 
+    // called once when components on page have rendered
     useEffect(() => {
         fetchUser(setAuthenticated, setUser, setError);
     }, []);

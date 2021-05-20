@@ -24,18 +24,6 @@ passportConfig;
 const main = () => {
     const app = express();
 
-    // // connect to mongoDB
-    // mongoose.connect(
-    //     process.env.MONGODB_URI || "",
-    //     {
-    //         useUnifiedTopology: true,
-    //         useNewUrlParser: true,
-    //     },
-    //     () => {
-    //         console.log("connected to mongodb");
-    //     }
-    // );
-
     mongoConnection();
 
     // express session
