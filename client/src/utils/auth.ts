@@ -5,15 +5,18 @@ export async function fetchUser(
     setError: Function
 ) {
     try {
-        const res = await fetch("http://localhost:4000/auth/login/success", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-            },
-        });
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/auth/login/success`,
+            {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": "true",
+                },
+            }
+        );
         if (res.status === 200) {
             const resJson = await res.json();
             setAuthenticated(true);
@@ -31,15 +34,18 @@ export async function fetchUser(
 // checks if the user is authenticated (probably just going to be used for test purposes)
 export async function checkAuth() {
     try {
-        const res = await fetch("http://localhost:4000/auth/check-auth", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-            },
-        });
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/auth/check-auth`,
+            {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": "true",
+                },
+            }
+        );
 
         if (res.status === 200) {
             const resJson = await res.json();
