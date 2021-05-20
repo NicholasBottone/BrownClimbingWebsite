@@ -8,7 +8,6 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 import express, { Request, Response } from "express";
-import mongoose from "mongoose";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -18,23 +17,26 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 
 import * as passportConfig from "./config/passport";
+import { mongoConnection } from "./config/mongo";
 passportConfig;
 
 // main function
 const main = () => {
     const app = express();
 
-    // connect to mongoDB
-    mongoose.connect(
-        process.env.MONGODB_URI || "",
-        {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-        },
-        () => {
-            console.log("connected to mongodb");
-        }
-    );
+    // // connect to mongoDB
+    // mongoose.connect(
+    //     process.env.MONGODB_URI || "",
+    //     {
+    //         useUnifiedTopology: true,
+    //         useNewUrlParser: true,
+    //     },
+    //     () => {
+    //         console.log("connected to mongodb");
+    //     }
+    // );
+
+    mongoConnection();
 
     // express session
     app.use(
@@ -42,7 +44,7 @@ const main = () => {
             secret: process.env.SESSION_SECRET || "",
             resave: false,
             saveUninitialized: false,
-            cookie: { maxAge: 24 * 60 * 60 * 1000 },
+            cookie: { maxAge: 86400000 * 30 }, // 30 days cookie expiry
             store: MongoStore.create({
                 mongoUrl: process.env.MONGODB_URI,
                 mongoOptions: { useUnifiedTopology: true },
