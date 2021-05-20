@@ -1,6 +1,11 @@
-import * as dotenv from "dotenv";
-import path from "path";
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
+//import * as dotenv from "dotenv";
+//import path from "path";
+//dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+if (process.env.NODE_ENV !== "production") {
+    const path = require("path");
+    require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+}
 
 import express, { Request, Response } from "express";
 import mongoose from "mongoose";

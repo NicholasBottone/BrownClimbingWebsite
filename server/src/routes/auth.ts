@@ -1,12 +1,12 @@
 import { Request, Response, Router } from "express";
 import passport from "passport";
+import { authCheck } from "../middleware/auth";
 
 const authRouter = Router();
 
 // when login success, retrive user info
 authRouter.get("/login/success", (req: Request, res: Response) => {
     if (req.user) {
-        console.log(req.user);
         res.status(200).json({
             success: true,
             message: "user authentication successful",
@@ -49,5 +49,15 @@ authRouter.get(
         failureMessage: "/auth/login/failed",
     })
 );
+
+// just to test if checkAuth actually works
+authRouter.get("/check-auth", authCheck, (req: Request, res: Response) => {
+    console.log(req.user);
+    res.status(200).json({
+        success: true,
+        message: "user authenticated",
+        user: req.user,
+    });
+});
 
 export default authRouter;

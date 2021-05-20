@@ -13,11 +13,31 @@ export default function Header(props: any) {
         props.handleNotAuthenticated();
     };
 
+    // get the user's details
+    const checkAuth = () => {
+        fetch("http://localhost:4000/auth/check-auth", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credentials": "true",
+            },
+        })
+            .then((res) => {
+                if (res.status === 200) return res.json();
+            })
+            .then((resJson) => console.log(resJson.user))
+            .catch((err) => console.error(err));
+    };
+
     return (
         <ul className="menu">
             <li>
                 <Link to="/">Home</Link>
+                <button onClick={checkAuth}>Check Auth</button>
             </li>
+
             {authenticated ? (
                 <li onClick={handleLogoutClick}>Logout</li>
             ) : (

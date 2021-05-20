@@ -39,6 +39,19 @@ export default function HomePage() {
             });
     }, []);
 
+    // get the user's details
+    const checkAuth = () => {
+        fetch("http://localhost:4000/auth/check-auth", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Credentials": "true",
+            },
+        });
+    };
+
     const handleNotAuthenticated = () => {
         setAuthenticated(false);
     };
