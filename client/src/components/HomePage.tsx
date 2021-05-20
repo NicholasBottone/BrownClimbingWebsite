@@ -15,42 +15,35 @@ export default function HomePage() {
     const [authenticated, setAuthenticated] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:4000/auth/login/success", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-            },
-        })
-            .then((res) => {
-                if (res.status === 200) return res.json();
-                throw new Error("failed to authenticate user");
-            })
-            .then((resJson) => {
-                console.log(resJson);
-                setAuthenticated(true);
-                setUser(resJson.user);
-            })
-            .catch((err) => {
+        async function fetchUser() {
+            try {
+                const res = await fetch(
+                    "http://localhost:4000/auth/login/success",
+                    {
+                        method: "GET",
+                        credentials: "include",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            "Access-Control-Allow-Credentials": "true",
+                        },
+                    }
+                );
+                if (res.status === 200) {
+                    const resJson = await res.json();
+                    setAuthenticated(true);
+                    setUser(resJson.user);
+                } else {
+                    throw new Error("failed to authenticate user");
+                }
+            } catch (error) {
+                console.error(error);
                 setAuthenticated(false);
                 setError("Failed to authenticate user");
-            });
+            }
+        }
+        fetchUser();
     }, []);
-
-    // get the user's details
-    const checkAuth = () => {
-        fetch("http://localhost:4000/auth/check-auth", {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Credentials": "true",
-            },
-        });
-    };
 
     const handleNotAuthenticated = () => {
         setAuthenticated(false);
