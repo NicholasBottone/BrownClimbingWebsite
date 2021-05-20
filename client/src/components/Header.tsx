@@ -6,11 +6,17 @@ export default function Header(props: any) {
     const { authenticated } = props;
 
     const handleLoginClick = () => {
-        window.open("http://localhost:4000/auth/google", "_self");
+        window.open(
+            `${process.env.REACT_APP_API_BASE_URL}/auth/google`,
+            "_self"
+        );
     };
 
     const handleLogoutClick = () => {
-        window.open("http://localhost:4000/auth/logout", "_self");
+        window.open(
+            `${process.env.REACT_APP_API_BASE_URL}/auth/logout`,
+            "_self"
+        );
         props.handleNotAuthenticated();
     };
 
