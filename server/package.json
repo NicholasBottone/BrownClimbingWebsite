@@ -4,6 +4,7 @@
   "description": "Backend for Brown Climbing Club Website",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
     "watch": "tsc -w",
     "dev": "nodemon --exec ts-node src/index.ts",
     "dev2": "nodemon dist/index.js",

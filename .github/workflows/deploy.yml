@@ -1,0 +1,61 @@
+name: 🚀 Deploy Production
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  build-deploy:
+    
+    name: 🎉 Build and Deploy
+    
+    runs-on: ubuntu-latest
+    
+    strategy:
+      max-parallel: 4
+      matrix:
+        node-version: [14.16.1]
+
+    steps:
+
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2.3.4
+      
+    - name: 🔨 Set up Node ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: 🛠 Compile Backend
+      run: |
+        cd server
+        npm ci
+        npm run tsc
+        cd ..
+
+        mkdir -p deploy/server/dist
+        cp -r server/dist deploy/server
+        cp server/* deploy/server || :
+        
+    - name: ⛏ Build Frontend
+      run: |
+        cd client
+        npm ci
+        npm run build
+        cd ..
+
+        mkdir -p deploy/public
+        cp -r client/build deploy/public
+      env:
+        REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }}
+        
+    - name: ☁ SFTP Deploy
+      uses: easingthemes/ssh-deploy@v2.1.6
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        REMOTE_PORT: 21098
+        TARGET: ${{ secrets.REMOTE_TARGET }}
+        SOURCE: ${{ secrets.SOURCE_DIR }}
