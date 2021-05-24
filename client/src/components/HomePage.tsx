@@ -12,7 +12,7 @@ interface IUser {
 
 export default function HomePage() {
     const [user, setUser] = useState<IUser>();
-    const [error, setError] = useState("");
+    const [_error, setError] = useState("");
     const [authenticated, setAuthenticated] = useState(false);
 
     // called once when components on page have rendered
