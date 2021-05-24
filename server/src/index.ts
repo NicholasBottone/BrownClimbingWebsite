@@ -21,7 +21,7 @@ import { mongoConnection } from "./config/mongo";
 passportConfig;
 
 // main function
-const main = () => {
+export function main() {
     const app = express();
 
     mongoConnection();
@@ -72,5 +72,5 @@ const main = () => {
     app.listen(process.env.PORT || 8080, () => {
         console.log(`Server running on port ${process.env.PORT}`);
     });
-};
+}
 main();
