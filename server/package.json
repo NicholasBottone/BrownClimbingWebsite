@@ -1,7 +1,10 @@
 {
   "name": "brownclimbingclubserver",
+  "description": "Backend for Brown Climbing Website",
+  "author": "Full Stack at Brown",
+  "license": "AGPL-3.0",
   "version": "1.0.0",
-  "description": "Backend for Brown Climbing Club Website",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
@@ -11,8 +14,6 @@
     "start": "ts-node src/index.ts",
     "start2": "node dist/index.js"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
     "@types/cookie-session": "^2.0.42",

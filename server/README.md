@@ -1,4 +1,4 @@
-## Server for Brown Climbing Club Website
+# **Backend Server** for Brown Climbing Website
 
 ## Available Scripts
 
@@ -36,6 +36,6 @@ Environment Variables:
 
 ### `COOKIE_KEY=`
 
-### `CLIENT_URL=` (front end URL)
+### `CLIENT_URL=` (frontend URL)
 
 ### `SESSION_SECRET=`

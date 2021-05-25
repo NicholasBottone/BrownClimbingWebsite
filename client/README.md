@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# **Frontend Client** for Brown Climbing Website
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -47,4 +49,4 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 
 ## Environment Variables
 
-### `REACT_APP_API_BASE_URL=`
+### `REACT_APP_API_BASE_URL=` (backend url)
