@@ -33,8 +33,8 @@ jobs:
         cp -r server/dist deploy/server
         cp server/* deploy/server || :
         
-        mkdir tmp
-        touch tmp/restart.txt
+        mkdir deploy/server/tmp
+        touch deploy/server/tmp/restart.txt
         
     - name: ⛏ Build Frontend
       run: |
