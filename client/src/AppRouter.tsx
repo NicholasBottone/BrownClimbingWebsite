@@ -1,15 +1,16 @@
 import React from "react";
 import HomePage from "./components/HomePage";
+import { IProps } from "./App"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-export default function AppRouter() {
+export default function AppRouter(props: IProps) {
+    const { authenticated, user } = props;
+
     return (
-        <div>
-            <Router>
-                <div>
-                    <Route exact path="/" component={HomePage} />
-                </div>
-            </Router>
-        </div>
+        <Router>
+            <Route exact path="/" component={() => 
+                <HomePage authenticated={authenticated} user={user}/>
+            }/>
+        </Router>
     );
 }

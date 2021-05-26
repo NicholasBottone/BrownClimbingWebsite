@@ -5,8 +5,16 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
-export default function Header(props: any) {
-    const { authenticated } = props;
+import { IUser } from "../App"
+
+interface IProps {
+    authenticated: boolean,
+    user: IUser | undefined,
+    handleNotAuthenticated: () => void
+}
+
+export default function Header(props: IProps) {
+    const { authenticated, user, handleNotAuthenticated } = props;
 
     const handleLoginClick = () => {
         window.open(
@@ -20,7 +28,7 @@ export default function Header(props: any) {
             `${process.env.REACT_APP_API_BASE_URL}/auth/logout`,
             "_self"
         );
-        props.handleNotAuthenticated();
+        handleNotAuthenticated();
     };
 
     return (
