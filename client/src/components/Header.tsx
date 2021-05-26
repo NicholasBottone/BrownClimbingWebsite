@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom";
 import React from "react";
 import { checkAuth } from "../utils/auth";
+
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 export default function Header(props: any) {
     const { authenticated } = props;
@@ -21,17 +24,36 @@ export default function Header(props: any) {
     };
 
     return (
-        <ul className="menu">
-            <li>
-                <Link to="/">Home</Link>
-                <button onClick={checkAuth}>Check Auth</button>
-            </li>
-
-            {authenticated ? (
-                <li onClick={handleLogoutClick}>Logout</li>
-            ) : (
-                <li onClick={handleLoginClick}>Login</li>
-            )}
-        </ul>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Brand href="/">
+                <img
+                    alt=""
+                    src="/logo192.png"
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top"
+                />{' '}
+                Brown Climbing
+            </Navbar.Brand>
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+                <Nav className="mr-auto">
+                    <Nav.Link href="/">Home</Nav.Link>
+                    <NavDropdown title="About" id="collasible-nav-dropdown">
+                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    </NavDropdown>
+                </Nav>
+                <Nav>
+                    <Nav.Link onClick={checkAuth}>Check Auth</Nav.Link>
+                    <Nav.Link onClick={authenticated ? handleLogoutClick : handleLoginClick}>
+                        {authenticated ? "Logout" : "Login"}
+                    </Nav.Link>
+                </Nav>
+            </Navbar.Collapse>
+        </Navbar>
     );
 }
