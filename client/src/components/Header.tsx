@@ -55,11 +55,21 @@ export default function Header(props: IProps) {
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
-                <Nav>
-                    <Nav.Link onClick={checkAuth}>Check Auth</Nav.Link>
-                    <Nav.Link onClick={authenticated ? handleLogoutClick : handleLoginClick}>
-                        {authenticated ? "Logout" : "Login"}
-                    </Nav.Link>
+                <Nav style={{marginRight:'2%'}}>
+                    {authenticated ? (
+                        <NavDropdown id="collasible-nav-dropdown" data-display="static" className="dropdown-menu-lg-right" title={
+                            <span>
+                                {user?.displayName}{' '}
+                                <img width="30" height="30" className="img-profile rounded-circle" alt="profile"
+                                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" /> {/* TODO: Implement profile pics. This is a placeholder */}
+                            </span>
+                        }>
+                            <NavDropdown.Item onClick={checkAuth}>Check Auth</NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleLogoutClick}>Logout</NavDropdown.Item>
+                        </NavDropdown>
+                    ) : (
+                        <Nav.Link onClick={handleLoginClick}>Login</Nav.Link>
+                    )}
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
