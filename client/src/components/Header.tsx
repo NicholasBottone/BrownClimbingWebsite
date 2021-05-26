@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { checkAuth } from "../utils/auth";
 
 import Navbar from "react-bootstrap/Navbar";
@@ -33,7 +34,7 @@ export default function Header(props: IProps) {
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand href="/">
+            <Navbar.Brand as={Link} to="/">
                 <img
                     alt=""
                     src="/logo192.png"
@@ -46,13 +47,13 @@ export default function Header(props: IProps) {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
+                    <Nav.Link as={Link} to="/">Home</Nav.Link>
                     <NavDropdown title="About" id="collasible-nav-dropdown">
-                        <NavDropdown.Item href="/about">About Us</NavDropdown.Item>
-                        <NavDropdown.Item href="#staff">Staff</NavDropdown.Item>
-                        <NavDropdown.Item href="#history">History</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="/about">About Us</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="#staff">Staff</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="#history">History</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="#something">Something</NavDropdown.Item>
+                        <NavDropdown.Item as={Link} to="#something">Something</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 <Nav style={{marginRight:'2%'}}>
