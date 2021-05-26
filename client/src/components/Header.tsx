@@ -5,6 +5,7 @@ import { checkAuth } from "../utils/auth";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import Badge from "react-bootstrap/Badge";
 
 import { IUser } from "../App"
 
@@ -42,7 +43,8 @@ export default function Header(props: IProps) {
                     height="30"
                     className="d-inline-block align-top"
                 />{' '}
-                Brown Climbing
+                Brown Climbing{' '}
+                <Badge variant="primary">In Development</Badge>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">

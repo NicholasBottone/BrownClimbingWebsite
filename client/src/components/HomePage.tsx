@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
+import Alert from "react-bootstrap/Alert";
 
-import { IProps } from "../App"
+import { IUser } from "../App"
+
+interface IProps {
+    authenticated: boolean,
+    user: IUser | undefined
+}
 
 export default function HomePage(props: IProps) {
     const { authenticated, user } = props;
@@ -11,6 +17,7 @@ export default function HomePage(props: IProps) {
     return (
         <div>
             <Container className="p-3 text-center">
+                <AlertDismissibleExample/>
                 <Jumbotron>
                     <h1>Brown Climbing</h1>
                     <br/><br/>
@@ -30,3 +37,20 @@ export default function HomePage(props: IProps) {
         </div>
     );
 }
+
+function AlertDismissibleExample() {
+    const [show, setShow] = useState(true);
+  
+    if (show) {
+      return (
+        <Alert variant="warning" onClose={() => setShow(false)} dismissible>
+          <Alert.Heading>🚧 Under construction! 🏗</Alert.Heading>
+          <p>
+            👷 Heads up! This website is being actively developed by the Full Stack at Brown team, and is not currently completed.
+            <br/><a href="https://github.com/NicholasBottone/BrownClimbingWebsite/projects/1">Watch our progress!</a>
+          </p>
+        </Alert>
+      );
+    }
+    return <></>;
+  }

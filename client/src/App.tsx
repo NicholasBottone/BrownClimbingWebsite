@@ -17,11 +17,6 @@ export interface IUser {
     email: string
 }
 
-export interface IProps {
-    authenticated: boolean,
-    user: IUser | undefined
-}
-
 export default function App() {
     const [user, setUser] = useState<IUser>();
     const [, setError] = useState("");
