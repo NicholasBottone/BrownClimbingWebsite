@@ -1,7 +1,10 @@
 import React from "react";
-import HomePage from "./components/HomePage";
 import { IProps } from "./App"
 import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import HomePage from "./components/HomePage";
+import AboutPage from "./components/AboutPage";
+import PrivacyPage from "./components/PrivacyPage";
 
 export default function AppRouter(props: IProps) {
     const { authenticated, user } = props;
@@ -11,6 +14,8 @@ export default function AppRouter(props: IProps) {
             <Route exact path="/" component={() => 
                 <HomePage authenticated={authenticated} user={user}/>
             }/>
+            <Route exact path="/about" component={AboutPage}/>
+            <Route exact path="/privacy" component={PrivacyPage}/>
         </Router>
     );
 }
