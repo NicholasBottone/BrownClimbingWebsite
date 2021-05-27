@@ -6,16 +6,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Badge from "react-bootstrap/Badge";
+import { UserType } from "../types";
 
-import { IUser } from "../App"
-
-interface IProps {
-    authenticated: boolean,
-    user: IUser | undefined,
-    handleNotAuthenticated: () => void
-}
-
-export default function Header(props: IProps) {
+export default function Header(props: {authenticated: boolean, user: UserType | undefined, handleNotAuthenticated: () => void}) {
     const { authenticated, user, handleNotAuthenticated } = props;
 
     const handleLoginClick = () => {
@@ -57,6 +50,7 @@ export default function Header(props: IProps) {
                         <NavDropdown.Divider />
                         <NavDropdown.Item as={Link} to="#something">Something</NavDropdown.Item>
                     </NavDropdown>
+                    <Nav.Link as={Link} to="/calendar">Calendar</Nav.Link>
                 </Nav>
                 <Nav style={{marginRight:'2%'}}>
                     {authenticated ? (

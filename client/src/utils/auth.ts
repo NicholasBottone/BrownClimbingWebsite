@@ -1,8 +1,10 @@
+import { UserType } from "../types";
+
 // fetches the user if the user is logged in on the backend
 export async function fetchUser(
-    setAuthenticated: Function,
-    setUser: Function,
-    setError: Function
+    setAuthenticated: (authenticated: boolean) => void,
+    setUser: (user: UserType) => void,
+    setError: (error: string) => void
 ) {
     try {
         const res = await fetch(

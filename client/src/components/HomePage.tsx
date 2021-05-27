@@ -3,33 +3,27 @@ import React, { useState } from "react";
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import Alert from "react-bootstrap/Alert";
+import { UserType } from "../types";
 
-import { IUser } from "../App"
-
-interface IProps {
-    authenticated: boolean,
-    user: IUser | undefined
-}
-
-export default function HomePage(props: IProps) {
+export default function HomePage(props: {authenticated: boolean, user: UserType | undefined}) {
     const { authenticated, user } = props;
 
     return (
         <div>
             <Container className="p-3 text-center">
-                <AlertDismissibleExample/>
+                <AlertDismissible/>
                 <Jumbotron>
                     <h1>Brown Climbing</h1>
                     <br/><br/>
-                    {!authenticated ? (
-                        <div>
-                            <h2>Welcome unauthenticated user!</h2>
-                            <h3>You are not currently logged in!</h3>
-                        </div>
-                    ) : (
+                    {authenticated ? (
                         <div>
                             <h2>Welcome {user?.displayName}!</h2>
                             <h3>You have logged in successfully!</h3>
+                        </div>
+                    ) : (
+                        <div>
+                            <h2>Welcome unauthenticated user!</h2>
+                            <h3>You are not currently logged in!</h3>
                         </div>
                     )}
                 </Jumbotron>
@@ -38,7 +32,7 @@ export default function HomePage(props: IProps) {
     );
 }
 
-function AlertDismissibleExample() {
+function AlertDismissible() {
     const [show, setShow] = useState(true);
   
     if (show) {
