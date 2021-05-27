@@ -69,7 +69,7 @@ function EventElement(props: {event: EventType, user: UserType | undefined}) {
                 </Card.Text>
                 <ButtonGroup>
                     <Button>View Details</Button>
-                    {user != null || true ? (
+                    {user != null ? (
                         <>
                             <Button>View Registrants</Button>
                             {event.hostUser.googleId === user?.googleId ? (
