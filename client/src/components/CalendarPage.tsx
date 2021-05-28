@@ -63,7 +63,7 @@ function EventElement(props: {event: EventType, user: UserType | undefined}) {
                 <Card.Subtitle>Hosted by {event.hostUser.displayName}</Card.Subtitle>
                 <Card.Text>
                     {event.location.name} ({event.location.city}, {event.location.state})<br/>
-                    {event.dateTime.toLocaleString()}<br/>
+                    {event.startTime.toLocaleString()}<br/>
                     {event.transportType}<br/>
                     Registered: {event.registeredUsers.length}/{event.maxCapacity}
                 </Card.Text>

@@ -11,14 +11,17 @@ export type LocationType = {
     streetAddress: string;
     city: string;
     state: string;
+    // TODO Change to Google Maps link
 }
 
 // types for Event Model
 export type EventType = {
     eventTitle: string;
+    description: string;
     hostUser: UserType;
     location: LocationType;
-    dateTime: Date
+    startTime: Date
+    durationMinutes: number;
     transportType: string;
     registeredUsers: UserType[];
     maxCapacity: number;
