@@ -16,10 +16,15 @@ export default function App() {
     const [user, setUser] = useState<UserType>();
     const [, setError] = useState("");
     const [authenticated, setAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // called once when components on page have rendered
     useEffect(() => {
-        fetchUser(setAuthenticated, setUser, setError);
+        async function getUser() {
+            await fetchUser(setAuthenticated, setUser, setError);
+            setLoading(false);
+        }
+        getUser();
     }, []);
 
     const handleNotAuthenticated = () => {
@@ -35,18 +40,31 @@ export default function App() {
             />
 
             <Switch>
+                <Route
+                    exact
+                    path="/"
+                    component={() => (
+                        <HomePage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar"
+                    component={() => (
+                        <CalendarPage
+                            authenticated={authenticated}
+                            user={user}
+                        />
+                    )}
+                />
+                <Route exact path="/about" component={AboutPage} />
+                <Route exact path="/privacy" component={PrivacyPage} />
 
-                <Route exact path="/" component={() => 
-                    <HomePage authenticated={authenticated} user={user}/>
-                }/>
-                <Route exact path="/calendar" component={() => 
-                    <CalendarPage authenticated={authenticated} user={user}/>
-                }/>
-                <Route exact path="/about" component={AboutPage}/>
-                <Route exact path="/privacy" component={PrivacyPage}/>
-
-                <Route path="*" component={NotFoundPage}/>
-
+                <Route path="*" component={NotFoundPage} />
             </Switch>
 
             <Footer />

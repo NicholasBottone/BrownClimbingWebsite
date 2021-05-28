@@ -13,6 +13,9 @@ authRouter.get("/login/success", (req: Request, res: Response) => {
             user: req.user,
             cookies: req.cookies,
         });
+    } else {
+        // user is not authenticated
+        res.redirect("/auth/login/failed");
     }
 });
 
