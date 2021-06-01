@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchUser } from "./utils/auth";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -37,6 +36,7 @@ export default function App() {
                 authenticated={authenticated}
                 user={user}
                 handleNotAuthenticated={handleNotAuthenticated}
+                loading={loading}
             />
 
             <Switch>
