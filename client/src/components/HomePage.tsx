@@ -24,11 +24,14 @@ export default function HomePage(props: {
                     <br />
                     {loading ? (
                         <div>
-                            <Spinner animation="border" role="status"/>
+                            <Spinner animation="border" role="status" />
                             <p>Loading...</p>
                         </div> // don't show user info until loading from backend is done
                     ) : (
-                        <WelcomeMessage authenticated={authenticated} user={user}/>
+                        <WelcomeMessage
+                            authenticated={authenticated}
+                            user={user}
+                        />
                     )}
                 </Jumbotron>
             </Container>
@@ -36,7 +39,10 @@ export default function HomePage(props: {
     );
 }
 
-function WelcomeMessage(props: {authenticated: boolean, user: UserType | undefined}) {
+function WelcomeMessage(props: {
+    authenticated: boolean;
+    user: UserType | undefined;
+}) {
     const { authenticated, user } = props;
 
     return (
