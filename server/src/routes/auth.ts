@@ -20,8 +20,7 @@ authRouter.get("/login/success", (req: Request, res: Response) => {
 });
 
 // when login fails, send failed message
-authRouter.get("/login/failed", (req: Request, res: Response) => {
-    console.log(req);
+authRouter.get("/login/failed", (_req: Request, res: Response) => {
     res.status(401).json({
         success: false,
         message: "user failed to authenticate",
@@ -56,7 +55,6 @@ authRouter.get(
 
 // just to test if authCheck actually works
 authRouter.get("/check-auth", authCheck, (req: Request, res: Response) => {
-    console.log(req.user);
     res.status(200).json({
         success: true,
         message: "user authenticated",

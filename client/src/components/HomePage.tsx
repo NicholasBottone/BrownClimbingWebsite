@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/esm/Spinner";
+
 import { UserType } from "../types";
 
 export default function HomePage(props: {
@@ -12,9 +14,6 @@ export default function HomePage(props: {
 }) {
     const { authenticated, user, loading } = props;
 
-    if (loading) {
-        return <div>Loading...</div>; // basic implementation of loading
-    }
     return (
         <div>
             <Container className="p-3 text-center">
@@ -23,20 +22,43 @@ export default function HomePage(props: {
                     <h1>Brown Climbing</h1>
                     <br />
                     <br />
-                    {authenticated ? (
+                    {loading ? (
                         <div>
-                            <h2>Welcome {user?.displayName}!</h2>
-                            <h3>You have logged in successfully!</h3>
-                        </div>
+                            <Spinner animation="border" role="status" />
+                            <p>Loading...</p>
+                        </div> // don't show user info until loading from backend is done
                     ) : (
-                        <div>
-                            <h2>Welcome unauthenticated user!</h2>
-                            <h3>You are not currently logged in!</h3>
-                        </div>
+                        <WelcomeMessage
+                            authenticated={authenticated}
+                            user={user}
+                        />
                     )}
                 </Jumbotron>
             </Container>
         </div>
+    );
+}
+
+function WelcomeMessage(props: {
+    authenticated: boolean;
+    user: UserType | undefined;
+}) {
+    const { authenticated, user } = props;
+
+    return (
+        <>
+            {authenticated ? (
+                <div>
+                    <h2>Welcome {user?.displayName}!</h2>
+                    <h3>You have logged in successfully!</h3>
+                </div>
+            ) : (
+                <div>
+                    <h2>Welcome unauthenticated user!</h2>
+                    <h3>You are not currently logged in!</h3>
+                </div>
+            )}
+        </>
     );
 }
 

@@ -9,21 +9,36 @@ export async function fetchCalendar(
         setEventList([
             {
                 eventTitle: "Test Event",
-                hostUser: {googleId: "", displayName: "John Smith"},
-                location: {name: "Pro Rock Climbing Inc", streetAddress: "", city: "Providence", state: "RI"},
-                dateTime: new Date("05/23/2021, 5:00 PM"),
+                description: "Test Description",
+                hostUser: { googleId: "", displayName: "John Smith" },
+                location: {
+                    name: "Pro Rock Climbing Inc",
+                    streetAddress: "",
+                    city: "Providence",
+                    state: "RI",
+                },
+                startTime: new Date("05/23/2021, 5:00 PM"),
+                durationMinutes: 120,
                 transportType: "John's Car",
                 registeredUsers: [],
-                maxCapacity: 5
-            }, {
+                maxCapacity: 5,
+            },
+            {
                 eventTitle: "Test Event 2",
-                hostUser: {googleId: "", displayName: "Bob Joe"},
-                location: {name: "Mount Everest", streetAddress: "", city: "Kala Patthar", state: "Nepal"},
-                dateTime: new Date("05/29/2021, 3:00 PM"),
+                description: "Test Description",
+                hostUser: { googleId: "", displayName: "Bob Joe" },
+                location: {
+                    name: "Mount Everest",
+                    streetAddress: "",
+                    city: "Kala Patthar",
+                    state: "Nepal",
+                },
+                startTime: new Date("05/29/2021, 3:00 PM"),
+                durationMinutes: 180,
                 transportType: "RIPTA Bus",
-                registeredUsers: [{googleId: "", displayName: "Bob Joe"}],
-                maxCapacity: 1
-            }
+                registeredUsers: [{ googleId: "", displayName: "Bob Joe" }],
+                maxCapacity: 1,
+            },
         ]);
     } catch (error) {
         console.error(error);
