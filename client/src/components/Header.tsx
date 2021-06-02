@@ -106,9 +106,11 @@ function UserNavDropdown(props: {
                                 height="30"
                                 className="img-profile rounded-circle"
                                 alt="profile"
-                                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                src={
+                                    user?.displayPictureURL ||
+                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                                }
                             />{" "}
-                            {/* TODO: Implement profile pics. This is a placeholder */}
                         </span>
                     }
                 >
