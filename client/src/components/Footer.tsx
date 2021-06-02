@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Header() {
+export default function Footer() {
     return (
         <footer className="footer fixed-bottom bg-primary text-white text-center p-3 text-lg-start">
             <svg

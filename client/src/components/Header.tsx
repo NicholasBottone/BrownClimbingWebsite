@@ -11,10 +11,9 @@ import { UserType } from "../types";
 export default function Header(props: {
     authenticated: boolean;
     user: UserType | undefined;
-    handleNotAuthenticated: () => void;
     loading: boolean;
 }) {
-    const { authenticated, user, handleNotAuthenticated, loading } = props;
+    const { authenticated, user, loading } = props;
 
     const handleLoginClick = () => {
         window.open(
@@ -28,7 +27,6 @@ export default function Header(props: {
             `${process.env.REACT_APP_API_BASE_URL}/auth/logout`,
             "_self"
         );
-        handleNotAuthenticated();
     };
 
     return (

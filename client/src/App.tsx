@@ -26,16 +26,11 @@ export default function App() {
         getUser();
     }, []);
 
-    const handleNotAuthenticated = () => {
-        setAuthenticated(false);
-    };
-
     return (
         <Router>
             <Header
                 authenticated={authenticated}
                 user={user}
-                handleNotAuthenticated={handleNotAuthenticated}
                 loading={loading}
             />
 
