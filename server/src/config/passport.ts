@@ -50,13 +50,16 @@ passport.use(
                 done(new Error("Invalid domain!"));
                 return;
             }
-
+            let displayPicURL = "";
+            if (profile.photos) {
+                displayPicURL = profile.photos[0].value;
+            }
             // creates a new user object
             const newUser: UserType = {
                 googleId: profile.id,
                 displayName: profile.displayName,
                 email: profile._json.email,
-                // TODO: add profile picture URL
+                displayPictureURL: displayPicURL || "",
             };
             try {
                 // searches for user in mongoDB collection by googleId

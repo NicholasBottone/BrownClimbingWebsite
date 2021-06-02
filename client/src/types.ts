@@ -2,7 +2,8 @@
 export type UserType = {
     googleId: string;
     displayName: string;
-    email?: string;
+    email: string;
+    displayPictureURL: string;
 };
 
 // types for Location Model

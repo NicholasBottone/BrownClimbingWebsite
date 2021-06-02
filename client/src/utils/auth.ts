@@ -21,6 +21,7 @@ export async function fetchUser(
         );
         if (res.status === 200) {
             const resJson = await res.json();
+            console.log(resJson.user);
             setAuthenticated(true);
             setUser(resJson.user);
         } else {
@@ -51,6 +52,7 @@ export async function checkAuth() {
 
         if (res.status === 200) {
             const resJson = await res.json();
+            console.log(resJson);
             console.log("user is authenticated");
         } else {
             throw new Error("user is not authenticated");
