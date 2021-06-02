@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { fetchUser } from "./utils/auth";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import HomePage from "./components/HomePage";
@@ -9,6 +8,9 @@ import PrivacyPage from "./components/PrivacyPage";
 import NotFoundPage from "./components/NotFoundPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import MyAccountPage from "./components/MyAccountPage";
+
+import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
 
 export default function App() {
@@ -53,6 +55,17 @@ export default function App() {
                         <CalendarPage
                             authenticated={authenticated}
                             user={user}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/myaccount"
+                    component={() => (
+                        <MyAccountPage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
                         />
                     )}
                 />

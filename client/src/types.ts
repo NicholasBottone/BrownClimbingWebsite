@@ -4,6 +4,8 @@ export type UserType = {
     displayName: string;
     email?: string;
     displayPictureURL?: string;
+    memberSince?: Date; // TODO Implement member since
+    lastLogin?: Date; // TODO Implement last login
 };
 
 // types for Location Model

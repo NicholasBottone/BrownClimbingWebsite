@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { checkAuth } from "../utils/auth";
+import { handleLoginClick, handleLogoutClick } from "../utils/auth";
 
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Badge from "react-bootstrap/Badge";
+import Image from "react-bootstrap/esm/Image";
+
 import { UserType } from "../types";
 
 export default function Header(props: {
@@ -14,20 +16,6 @@ export default function Header(props: {
     loading: boolean;
 }) {
     const { authenticated, user, loading } = props;
-
-    const handleLoginClick = () => {
-        window.open(
-            `${process.env.REACT_APP_API_BASE_URL}/auth/google`,
-            "_self"
-        );
-    };
-
-    const handleLogoutClick = () => {
-        window.open(
-            `${process.env.REACT_APP_API_BASE_URL}/auth/logout`,
-            "_self"
-        );
-    };
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -73,8 +61,6 @@ export default function Header(props: {
                         <UserNavDropdown
                             authenticated={authenticated}
                             user={user}
-                            handleLogoutClick={handleLogoutClick}
-                            handleLoginClick={handleLoginClick}
                         />
                     )}
                 </Nav>
@@ -86,10 +72,8 @@ export default function Header(props: {
 function UserNavDropdown(props: {
     authenticated: boolean;
     user: UserType | undefined;
-    handleLogoutClick: () => void;
-    handleLoginClick: () => void;
 }) {
-    const { authenticated, user, handleLogoutClick, handleLoginClick } = props;
+    const { authenticated, user } = props;
 
     return (
         <>
@@ -101,10 +85,10 @@ function UserNavDropdown(props: {
                     title={
                         <span>
                             {user?.displayName}{" "}
-                            <img
+                            <Image
                                 width="30"
                                 height="30"
-                                className="img-profile rounded-circle"
+                                roundedCircle
                                 alt="profile"
                                 src={
                                     user?.displayPictureURL ||
@@ -114,8 +98,8 @@ function UserNavDropdown(props: {
                         </span>
                     }
                 >
-                    <NavDropdown.Item onClick={checkAuth}>
-                        Check Auth
+                    <NavDropdown.Item as={Link} to="/myaccount">
+                        My Account
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleLogoutClick}>
                         Logout
