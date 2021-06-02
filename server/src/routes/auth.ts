@@ -51,9 +51,10 @@ authRouter.get(
         successRedirect: process.env.CLIENT_URL || "http://localhost:3000",
         failureMessage: "/auth/login/failed",
     })
+    // TODO: add a res.redirect to homepage on front end with an error message attached in json if login fails
 );
 
-// just to test if checkAuth actually works
+// just to test if authCheck actually works
 authRouter.get("/check-auth", authCheck, (req: Request, res: Response) => {
     console.log(req.user);
     res.status(200).json({

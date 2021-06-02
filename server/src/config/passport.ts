@@ -56,8 +56,8 @@ passport.use(
                 googleId: profile.id,
                 displayName: profile.displayName,
                 email: profile._json.email,
+                // TODO: add profile picture URL
             };
-
             try {
                 // searches for user in mongoDB collection by googleId
                 let user = await User.findOne({ googleId: profile.id });

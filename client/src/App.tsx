@@ -29,6 +29,7 @@ export default function App() {
 
     const handleNotAuthenticated = () => {
         setAuthenticated(false);
+        setLoading(false);
     };
 
     return (

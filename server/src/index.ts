@@ -3,12 +3,11 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 }
 
-import express, { Request, Response } from "express";
+import express from "express";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRouter from "./routes/auth";
-import { authCheck } from "./middleware/auth";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 
@@ -54,16 +53,6 @@ export function main() {
 
     // set up auth route
     app.use("/auth", authRouter);
-
-    // default route to check if user is authenticated
-    app.get("/", authCheck, (req: Request, res: Response) => {
-        res.status(200).json({
-            authenticated: true,
-            message: "user successfully authenticated",
-            user: req.user,
-            cookies: req.cookies,
-        });
-    });
 
     app.listen(process.env.PORT || 8080, () => {
         console.log(`Server running on port ${process.env.PORT}`);

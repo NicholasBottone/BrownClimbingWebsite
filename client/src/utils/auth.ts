@@ -51,7 +51,7 @@ export async function checkAuth() {
 
         if (res.status === 200) {
             const resJson = await res.json();
-            console.log(resJson.user);
+            console.log("user is authenticated");
         } else {
             throw new Error("user is not authenticated");
         }
