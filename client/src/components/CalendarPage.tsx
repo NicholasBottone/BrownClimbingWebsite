@@ -59,6 +59,9 @@ export default function HomePage(props: {
     );
 }
 
+// TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
+// TODO: Look into embeding Google Maps (https://www.embed-map.com/)
+
 function EventElement(props: { event: EventType; user: UserType | undefined }) {
     const { event, user } = props;
 
@@ -74,7 +77,7 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                     {event.location.state})<br />
                     {event.startTime.toLocaleString()}
                     <br />
-                    {event.transportType}
+                    {event.transportInfo}
                     <br />
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}

@@ -10,7 +10,11 @@ export async function fetchCalendar(
             {
                 eventTitle: "Test Event",
                 description: "Test Description",
-                hostUser: { googleId: "", displayName: "John Smith" },
+                hostUser: {
+                    googleId: "",
+                    displayName: "John Smith",
+                    displayPictureURL: "",
+                },
                 location: {
                     name: "Pro Rock Climbing Inc",
                     streetAddress: "",
@@ -19,14 +23,18 @@ export async function fetchCalendar(
                 },
                 startTime: new Date("05/23/2021, 5:00 PM"),
                 durationMinutes: 120,
-                transportType: "John's Car",
+                transportInfo: "John's Car",
                 registeredUsers: [],
                 maxCapacity: 5,
             },
             {
                 eventTitle: "Test Event 2",
                 description: "Test Description",
-                hostUser: { googleId: "", displayName: "Bob Joe" },
+                hostUser: {
+                    googleId: "",
+                    displayName: "Bob Joe",
+                    displayPictureURL: "",
+                },
                 location: {
                     name: "Mount Everest",
                     streetAddress: "",
@@ -35,8 +43,14 @@ export async function fetchCalendar(
                 },
                 startTime: new Date("05/29/2021, 3:00 PM"),
                 durationMinutes: 180,
-                transportType: "RIPTA Bus",
-                registeredUsers: [{ googleId: "", displayName: "Bob Joe" }],
+                transportInfo: "RIPTA Bus",
+                registeredUsers: [
+                    {
+                        googleId: "",
+                        displayName: "Bob Joe",
+                        displayPictureURL: "",
+                    },
+                ],
                 maxCapacity: 1,
             },
         ]);

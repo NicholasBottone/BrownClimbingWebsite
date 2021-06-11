@@ -21,13 +21,13 @@ export default function Header(props: {
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand as={Link} to="/">
                 <img
-                    alt=""
+                    alt="logo"
                     src="/logo192.png"
                     width="30"
                     height="30"
                     className="d-inline-block align-top"
                 />{" "}
-                Brown Climbing <Badge variant="primary">In Development</Badge>
+                Brown Climbing <Badge variant="primary">Dev</Badge>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">

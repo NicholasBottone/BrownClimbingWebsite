@@ -7,6 +7,7 @@ export const authCheck = (req: Request, res: Response, next: NextFunction) => {
             authenticated: false,
             message: "user has not been authenticated",
         });
+        // TODO: Look into creating a done function
     } else {
         next();
     }
