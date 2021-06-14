@@ -10,6 +10,7 @@ import cors from "cors";
 import authRouter from "./routes/auth";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import eventRouter from "./routes/calendar"
 
 import * as passportConfig from "./config/passport";
 import { mongoConnection } from "./config/mongo";
@@ -53,6 +54,7 @@ export function main() {
 
     // set up auth route
     app.use("/auth", authRouter);
+    app.use("/calendar", eventRouter)
 
     app.listen(process.env.PORT || 8080, () => {
         console.log(`Server running on port ${process.env.PORT}`);
