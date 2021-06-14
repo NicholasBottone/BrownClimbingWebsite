@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -11,11 +12,12 @@ import CardColumns from "react-bootstrap/CardColumns";
 import { EventType, UserType } from "../types";
 import { fetchCalendar } from "../utils/calendar";
 
-export default function HomePage(props: {
+export default function CalendarPage(props: {
     authenticated: boolean;
     user: UserType | undefined;
+    loading: boolean;
 }) {
-    const { authenticated, user } = props;
+    const { authenticated, user, loading } = props;
     const [eventList, setEventList] = useState<EventType[]>();
     const [error, setError] = useState("Loading calendar data...");
 
@@ -31,27 +33,18 @@ export default function HomePage(props: {
                     <h1>Events Calendar for Brown Climbing</h1>
                     <br />
                     <br />
-                    {eventList != null ? (
-                        <CardColumns style={{ columnCount: 1 }}>
-                            {eventList.map((event: EventType) => (
-                                <EventElement event={event} user={user} />
-                            ))}
-                        </CardColumns>
-                    ) : (
+                    {loading ? (
                         <div>
-                            <p>{error}</p>
                             <Spinner animation="border" role="status" />
-                        </div>
-                    )}
-
-                    <br />
-                    <br />
-                    {authenticated ? (
-                        <Button variant="primary">Create/Host an Event</Button>
+                            <p>Loading...</p>
+                        </div> // don't show user info until loading from backend is done
                     ) : (
-                        <Button variant="primary">
-                            Login to RSVP for Events
-                        </Button>
+                        <CalendarElement
+                            authenticated={authenticated}
+                            user={user}
+                            eventList={eventList}
+                            error={error}
+                        />
                     )}
                 </Jumbotron>
             </Container>
@@ -61,6 +54,42 @@ export default function HomePage(props: {
 
 // TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
 // TODO: Look into embeding Google Maps (https://www.embed-map.com/)
+
+function CalendarElement(props: {
+    authenticated: boolean;
+    user: UserType | undefined;
+    eventList: EventType[] | undefined;
+    error: string;
+}) {
+    const { authenticated, user, eventList, error } = props;
+
+    return (
+        <>
+            {eventList != null ? (
+                <CardColumns style={{ columnCount: 1 }}>
+                    {eventList.map((event: EventType) => (
+                        <EventElement event={event} user={user} />
+                    ))}
+                </CardColumns>
+            ) : (
+                <div>
+                    <p>{error}</p>
+                    <Spinner animation="border" role="danger" />
+                </div>
+            )}
+
+            <br />
+            <br />
+            {authenticated ? (
+                <Button as={Link} to="/calendar/create" variant="primary">
+                    Create/Host an Event
+                </Button>
+            ) : (
+                <Button variant="primary">Login to RSVP for Events</Button>
+            )}
+        </>
+    );
+}
 
 function EventElement(props: { event: EventType; user: UserType | undefined }) {
     const { event, user } = props;
