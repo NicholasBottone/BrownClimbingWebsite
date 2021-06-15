@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "redhat.fabric8-analytics",
+        "eamodio.gitlens",
+        "visualstudioexptteam.vscodeintellicode",
+        "rangav.vscode-thunder-client",
+        "sonarsource.sonarlint-vscode",
+        "esbenp.prettier-vscode",
+        "christian-kohler.npm-intellisense",
+        "eg2.vscode-npm-script"
+    ]
+}
