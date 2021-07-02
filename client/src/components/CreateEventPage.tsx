@@ -50,6 +50,9 @@ function FormElement(props: {
 }) {
     const { authenticated, user } = props;
 
+    // TODO: handle form sanitization on front end
+    // TODO: handler method for onSubmit form
+
     return (
         <div className="p-3 text-left">
             {authenticated ? (
