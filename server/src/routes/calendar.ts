@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
+import { Error } from "mongoose";
 import { authCheck } from "../middleware/auth";
 import Event from "../models/Event";
 const eventRouter = Router();
@@ -6,7 +7,7 @@ const eventRouter = Router();
 eventRouter.get(
     "/events",
     (_req: Request, res: Response, next: NextFunction) => {
-        Event.find((err, events) => {
+        Event.find((err: Error, events) => {
             if (err) next(err);
             return res.json({ events });
         })
@@ -33,7 +34,7 @@ eventRouter.post(
 
         // TODO: Look into Express-Validator (https://express-validator.github.io/)
 
-        event.save((err: any) => {
+        event.save((err: Error) => {
             if (err) next(err);
             res.status(200).json({
                 event,
