@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "dev",
+            "path": "server/",
+            "problemMatcher": [],
+            "label": "Backend dev server",
+            "detail": "nodemon --exec ts-node src/index.ts"
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "path": "client/",
+            "problemMatcher": [],
+            "label": "Frontend dev server",
+            "detail": "react-scripts start"
+        },
+        {
+            "label": "Launch dev servers",
+            "dependsOn": [
+                "Frontend dev server",
+                "Backend dev server"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

@@ -42,7 +42,7 @@ export default function CreateEventPage(props: {
     );
 }
 
-// TODO: Look into embeding Google Maps (https://www.embed-map.com/)
+// TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
 function FormElement(props: {
     authenticated: boolean;
