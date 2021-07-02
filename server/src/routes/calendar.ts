@@ -6,9 +6,9 @@ const eventRouter = Router();
 
 eventRouter.get(
     "/events",
-    (_req: Request, res: Response, next: NextFunction) => {
+    (_req: Request, res: Response, _next: NextFunction) => {
         Event.find((err: Error, events) => {
-            if (err) next(err); // TODO: figure out proper error handling
+            if (err) console.log(err); // TODO: figure out proper error handling
             return res.json({ events });
         })
             .populate("User")
@@ -19,7 +19,7 @@ eventRouter.get(
 eventRouter.post(
     "/events",
     authCheck,
-    (req: Request, res: Response, next: NextFunction) => {
+    (req: Request, res: Response, _next: NextFunction) => {
 
         // TODO: Look into Express-Validator (https://express-validator.github.io/)
         // Sanitize fields before creating new Event
@@ -38,7 +38,7 @@ eventRouter.post(
 
 
         event.save((err: Error) => {
-            if (err) next(err); // TODO: proper error handling
+            if (err) console.log(err); // TODO: proper error handling
             res.status(200).json({
                 event,
                 message: "Event created successfully",
