@@ -46,19 +46,46 @@ export default function CreateEventPage(props: {
 
 function FormElement(props: {
     authenticated: boolean;
-    user: UserType | undefined;
+    user: any;
 }) {
     const { authenticated, user } = props;
 
     // TODO: handle form sanitization on front end
     // TODO: handler method for onSubmit form
 
+    // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
+    const handleSubmit = async (form: any) => {
+        form.preventDefault();
+        // using async await and js fetch api to make post request to backend
+        // TODO: send ALL THE DATA in the POST request body
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/calendar/events`, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hostUser: user._id,
+                    description: form.target.elements.description.value
+                })
+            });
+            return response.json()
+        }
+        catch (e){
+            console.log(e);
+        }
+       
+    }
+
     return (
         <div className="p-3 text-left">
             {authenticated ? (
                 <Form
-                    action={`${process.env.REACT_APP_API_BASE_URL}/calendar/events`}
-                    method="POST"
+                    // action={`${process.env.REACT_APP_API_BASE_URL}/calendar/events`}
+                    // method="POST"
+                    onSubmit={handleSubmit}
                 >
                     <Form.Group as={Row} controlId="hostUser">
                         <Form.Label column sm={3}>
@@ -66,6 +93,7 @@ function FormElement(props: {
                         </Form.Label>
                         <Col sm={9}>
                             <Form.Control
+                                name="hostUser"
                                 type="text"
                                 defaultValue={user?.displayName}
                                 readOnly

@@ -35,8 +35,11 @@ export function main() {
             }),
         })
     );
-
+    
+    // parse incoming cookies of html requests
     app.use(cookieParser());
+    // parse body of http request
+    app.use(express.json());
 
     // initialize and set up passport to use sessions
     app.use(passport.initialize());

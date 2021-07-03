@@ -19,31 +19,32 @@ eventRouter.get(
 eventRouter.post(
     "/events",
     authCheck,
-    (req: Request, res: Response, _next: NextFunction) => {
+    (req: Request, _res: Response, _next: NextFunction) => {
 
         // TODO: Look into Express-Validator (https://express-validator.github.io/)
         // Sanitize fields before creating new Event
+        console.log(req.body)
 
-        const event = new Event({
-            eventTitle: req.body.eventTitle,
-            description: req.body.description,
-            hostUser: req.user, // TODO: Extract user properly (depending on final schema choice)
-            location: req.body.location,
-            startTime: req.body.startTime,
-            durationMinutes: req.body.durationMinutes,
-            transportInfo: req.body.transportInfo,
-            maxCapacity: req.body.maxCapacity,
-            registeredUsers: [req.user],
-        });
+        // const event = new Event({
+        //     eventTitle: req.body.eventTitle,
+        //     description: req.body.description,
+        //     hostUser: req.user, // TODO: Extract user properly (depending on final schema choice)
+        //     location: req.body.location,
+        //     startTime: req.body.startTime,
+        //     durationMinutes: req.body.durationMinutes,
+        //     transportInfo: req.body.transportInfo,
+        //     maxCapacity: req.body.maxCapacity,
+        //     registeredUsers: [req.user],
+        // });
 
 
-        event.save((err: Error) => {
-            if (err) console.log(err); // TODO: proper error handling
-            res.status(200).json({
-                event,
-                message: "Event created successfully",
-            });
-        });
+        // event.save((err: Error) => {
+        //     if (err) console.log(err); // TODO: proper error handling
+        //     res.status(200).json({
+        //         event,
+        //         message: "Event created successfully",
+        //     });
+        // });
     }
 );
 
