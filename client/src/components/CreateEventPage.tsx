@@ -53,6 +53,9 @@ function FormElement(props: {
     // TODO: handle form sanitization on front end
     // TODO: handler method for onSubmit form
 
+    // TODO: make sure users can only put dates that are current or in the future, i.e. no dates in the past (make sure to do this on backend too)
+    // TODO: figure out a better way to implement duration than in just minutes
+
     // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
     const handleSubmit = async (form: any) => {
         form.preventDefault();
