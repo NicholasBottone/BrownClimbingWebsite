@@ -79,7 +79,7 @@ function FormElement(props: {
     // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
     // TODO: find better way to handle duration than in just minutes (kinda confusing to count it - not the most user friendly experience)
     // TODO: find a way to get location of the rock climbing gym and send that info to the backend
-    
+
     const handleSubmit = async (form: React.SyntheticEvent) => {
         form.preventDefault();
         // using async await and js fetch api to make post request to backend
@@ -96,6 +96,7 @@ function FormElement(props: {
             return response.json()
         }
         catch (e){
+            // TODO: better error handling :)
             console.log(e);
         }
     }
