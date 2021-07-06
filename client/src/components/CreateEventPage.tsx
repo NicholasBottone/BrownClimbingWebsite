@@ -45,10 +45,7 @@ export default function CreateEventPage(props: {
 
 // TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
-function FormElement(props: {
-    authenticated: boolean;
-    user: any;
-}) {
+function FormElement(props: { authenticated: boolean; user: any }) {
     const { authenticated, user } = props;
     const [eventTitle, setEventTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -70,10 +67,10 @@ function FormElement(props: {
             startTime,
             durationAsNumber,
             transportInfo,
-            maxCapacityAsNumber 
-        }   
+            maxCapacityAsNumber,
+        };
         return data;
-    }
+    };
 
     // TODO: handle form sanitization on front end
     // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
@@ -84,29 +81,29 @@ function FormElement(props: {
         form.preventDefault();
         // using async await and js fetch api to make post request to backend
         try {
-            const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/calendar/events`, {
-                method: 'POST',
-                mode: 'cors',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(createJSONBody())
-            });
-            return response.json()
-        }
-        catch (e){
+            const response = await fetch(
+                `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
+                {
+                    method: "POST",
+                    mode: "cors",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(createJSONBody()),
+                }
+            );
+            return response.json();
+        } catch (e) {
             // TODO: better error handling :)
             console.log(e);
         }
-    }
+    };
 
     return (
         <div className="p-3 text-left">
             {authenticated ? (
-                <Form
-                    onSubmit={handleSubmit}
-                >
+                <Form onSubmit={handleSubmit}>
                     <Form.Group as={Row} controlId="hostUser">
                         <Form.Label column sm={3}>
                             Host
@@ -151,8 +148,10 @@ function FormElement(props: {
                             Date
                         </Form.Label>
                         <Col sm={9}>
-                            <Form.Control type="date" required 
-                                min={new Date().toISOString().split('T')[0]}
+                            <Form.Control
+                                type="date"
+                                required
+                                min={new Date().toISOString().split("T")[0]}
                                 onChange={(e) => setEventDate(e.target.value)}
                             />
                         </Col>
@@ -162,7 +161,9 @@ function FormElement(props: {
                             Start Time
                         </Form.Label>
                         <Col sm={9}>
-                            <Form.Control type="time" required 
+                            <Form.Control
+                                type="time"
+                                required
                                 onChange={(e) => setStartTime(e.target.value)}
                             />
                         </Col>
@@ -192,7 +193,9 @@ function FormElement(props: {
                                 type="text"
                                 placeholder="Transport Info"
                                 required
-                                onChange={(e) => setTransportInfo(e.target.value)}
+                                onChange={(e) =>
+                                    setTransportInfo(e.target.value)
+                                }
                             />
                             <Form.Text className="text-muted">
                                 How will the attendees be getting to the event?
