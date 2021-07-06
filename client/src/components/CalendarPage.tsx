@@ -68,7 +68,7 @@ function CalendarElement(props: {
             {eventList != null ? (
                 <CardColumns style={{ columnCount: 1 }}>
                     {eventList.map((event: EventType) => (
-                        <EventElement event={event} user={user} />
+                        <EventElement key={event.eventId} event={event} user={user} />
                     ))}
                 </CardColumns>
             ) : (

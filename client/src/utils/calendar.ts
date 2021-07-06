@@ -8,6 +8,7 @@ export async function fetchCalendar(
         // *** TODO (fake data for display purposes only) *** \\
         setEventList([
             {
+                eventId: "89j312j312",
                 eventTitle: "Test Event",
                 description: "Test Description",
                 hostUser: {
@@ -28,6 +29,7 @@ export async function fetchCalendar(
                 maxCapacity: 5,
             },
             {
+                eventId: "12k3kj21l",
                 eventTitle: "Test Event 2",
                 description: "Test Description",
                 hostUser: {

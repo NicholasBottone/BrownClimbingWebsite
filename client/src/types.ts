@@ -27,6 +27,7 @@ export type LocationType = {
 
 // types for Event Model
 export type EventType = {
+    eventId: string;
     eventTitle: string;
     description: string;
     hostUser: BasicUserType;
