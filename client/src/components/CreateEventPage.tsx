@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { useState } from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -49,18 +50,37 @@ function FormElement(props: {
     user: any;
 }) {
     const { authenticated, user } = props;
+    const [eventTitle, setEventTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [eventDate, setEventDate] = useState(""); // TODO: handle converting to date in the backend or figure out how to get as date on front end
+    const [startTime, setStartTime] = useState(""); // TODO: same as for eventDate
+    const [duration, setDuration] = useState(""); // TODO: convert to number before sending to backend
+    const [transportInfo, setTransportInfo] = useState("");
+    const [maxCapacity, setMaxCapacity] = useState(""); // TODO: convert to number before sending to backend
+
+    // TODO: helper function to create the json body
+    const createJSONBody = () => {
+        const durationAsNumber = Number(duration);
+        const maxCapacityAsNumber = Number(maxCapacity);
+        const data = {
+            hostUser: user._id,
+            eventTitle,
+            description,
+            eventDate,
+            startTime,
+            durationAsNumber,
+            transportInfo,
+            maxCapacityAsNumber 
+        }   
+        return data;
+    }
 
     // TODO: handle form sanitization on front end
-    // TODO: handler method for onSubmit form
-
-    // TODO: make sure users can only put dates that are current or in the future, i.e. no dates in the past (make sure to do this on backend too)
-    // TODO: figure out a better way to implement duration than in just minutes
-
     // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
-    const handleSubmit = async (form: any) => {
+    // TODO: find better way to handle duration than in just minutes (kinda confusing to count it - not the most user friendly experience)
+    const handleSubmit = async (form: React.SyntheticEvent) => {
         form.preventDefault();
         // using async await and js fetch api to make post request to backend
-        // TODO: send ALL THE DATA in the POST request body
         try {
             const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/calendar/events`, {
                 method: 'POST',
@@ -69,25 +89,19 @@ function FormElement(props: {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    hostUser: user._id,
-                    description: form.target.elements.description.value
-                })
+                body: JSON.stringify(createJSONBody())
             });
             return response.json()
         }
         catch (e){
             console.log(e);
         }
-       
     }
 
     return (
         <div className="p-3 text-left">
             {authenticated ? (
                 <Form
-                    // action={`${process.env.REACT_APP_API_BASE_URL}/calendar/events`}
-                    // method="POST"
                     onSubmit={handleSubmit}
                 >
                     <Form.Group as={Row} controlId="hostUser">
@@ -112,6 +126,7 @@ function FormElement(props: {
                                 type="text"
                                 placeholder="Event Title"
                                 required
+                                onChange={(e) => setEventTitle(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
@@ -124,6 +139,7 @@ function FormElement(props: {
                                 type="text"
                                 placeholder="Description"
                                 required
+                                onChange={(e) => setDescription(e.target.value)}
                             />
                         </Col>
                     </Form.Group>
@@ -132,7 +148,10 @@ function FormElement(props: {
                             Date
                         </Form.Label>
                         <Col sm={9}>
-                            <Form.Control type="date" required />
+                            <Form.Control type="date" required 
+                                min={new Date().toISOString().split('T')[0]}
+                                onChange={(e) => setEventDate(e.target.value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="startTime">
@@ -140,7 +159,9 @@ function FormElement(props: {
                             Start Time
                         </Form.Label>
                         <Col sm={9}>
-                            <Form.Control type="time" required />
+                            <Form.Control type="time" required 
+                                onChange={(e) => setStartTime(e.target.value)}
+                            />
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} controlId="durationMinutes">
@@ -152,6 +173,7 @@ function FormElement(props: {
                                 type="number"
                                 placeholder="Duration"
                                 required
+                                onChange={(e) => setDuration(e.target.value)}
                             />
                             <Form.Text className="text-muted">
                                 Estimated event duration in minutes
@@ -167,6 +189,7 @@ function FormElement(props: {
                                 type="text"
                                 placeholder="Transport Info"
                                 required
+                                onChange={(e) => setTransportInfo(e.target.value)}
                             />
                             <Form.Text className="text-muted">
                                 How will the attendees be getting to the event?
@@ -182,6 +205,7 @@ function FormElement(props: {
                                 type="number"
                                 placeholder="Max Capacity"
                                 required
+                                onChange={(e) => setMaxCapacity(e.target.value)}
                             />
                             <Form.Text className="text-muted">
                                 How many attendees should be allowed to

@@ -23,6 +23,8 @@ eventRouter.post(
 
         // TODO: Look into Express-Validator (https://express-validator.github.io/)
         // Sanitize fields before creating new Event
+        // TODO: convert the date to JS date (could use native JS API or Moment)
+
         console.log(req.body)
 
         // const event = new Event({
