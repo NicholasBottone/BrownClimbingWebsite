@@ -54,9 +54,9 @@ function FormElement(props: {
     const [description, setDescription] = useState("");
     const [eventDate, setEventDate] = useState(""); // TODO: handle converting to date in the backend or figure out how to get as date on front end
     const [startTime, setStartTime] = useState(""); // TODO: same as for eventDate
-    const [duration, setDuration] = useState(""); // TODO: convert to number before sending to backend
+    const [duration, setDuration] = useState("");
     const [transportInfo, setTransportInfo] = useState("");
-    const [maxCapacity, setMaxCapacity] = useState(""); // TODO: convert to number before sending to backend
+    const [maxCapacity, setMaxCapacity] = useState("");
 
     // TODO: helper function to create the json body
     const createJSONBody = () => {
