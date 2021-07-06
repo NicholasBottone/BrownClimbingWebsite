@@ -45,7 +45,10 @@ export default function CreateEventPage(props: {
 
 // TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
-function FormElement(props: { authenticated: boolean; user: any }) {
+function FormElement(props: {
+    authenticated: boolean;
+    user: UserType | undefined;
+}) {
     const { authenticated, user } = props;
     const [eventTitle, setEventTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -59,21 +62,24 @@ function FormElement(props: { authenticated: boolean; user: any }) {
     const createJSONBody = () => {
         const durationAsNumber = Number(duration);
         const maxCapacityAsNumber = Number(maxCapacity);
-        const data = {
-            hostUser: user._id,
-            eventTitle,
-            description,
-            eventDate,
-            startTime,
-            durationAsNumber,
-            transportInfo,
-            maxCapacityAsNumber,
-        };
-        return data;
+        if (user) {
+            const data = {
+                hostUser: user._id,
+                eventTitle,
+                description,
+                eventDate,
+                startTime,
+                durationAsNumber,
+                transportInfo,
+                maxCapacityAsNumber,
+            };
+            return data;
+        } else {
+            console.error("User is not authenticated");
+        }
     };
 
     // TODO: handle form sanitization on front end
-    // TODO: currently user type is any because I couldn't access user._id. Figure out how to properly export mongoose schemas
     // TODO: find better way to handle duration than in just minutes (kinda confusing to count it - not the most user friendly experience)
     // TODO: find a way to get location of the rock climbing gym and send that info to the backend
 

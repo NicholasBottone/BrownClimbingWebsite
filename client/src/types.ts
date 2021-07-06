@@ -7,6 +7,7 @@ export type BasicUserType = {
 
 // types for User Model
 export type UserType = {
+    _id: string;
     googleId: string;
     displayName: string;
     email: string;
