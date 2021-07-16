@@ -10,7 +10,8 @@ const EventSchema = new Schema({
         required: true,
     },
     hostUser: {
-        type: String, // TODO: Find a way to store User type (or perhaps string id)
+        type: Schema.Types.ObjectId,
+        ref: "User",
         required: true,
     },
     location: {
@@ -33,10 +34,9 @@ const EventSchema = new Schema({
         type: Number,
         required: true,
     },
-    registeredUsers: {
-        type: [String], // TODO: Find a way to store User types (or perhaps string ids)
-        required: true,
-    },
+    registeredUsers: [
+        { type: Schema.Types.ObjectId, ref: "User", required: true },
+    ],
 });
 
 const Event = model("Event", EventSchema);

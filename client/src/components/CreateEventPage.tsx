@@ -64,7 +64,7 @@ function FormElement(props: {
         const maxCapacityAsNumber = Number(maxCapacity);
         if (user) {
             const data = {
-                hostUser: user._id,
+                hostUser: user,
                 eventTitle,
                 description,
                 eventDate,
