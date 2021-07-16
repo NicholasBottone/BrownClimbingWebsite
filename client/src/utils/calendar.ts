@@ -4,6 +4,14 @@ export async function fetchCalendar(
     setEventList: (eventList: EventType[]) => void,
     setError: (error: string) => void
 ) {
+    // sets up the promise
+    const res = await fetch(
+        `${process.env.REACT_APP_API_BASE_URL}/calendar/events`
+    );
+    // actually gets the data and converts it a json
+    const resData = await res.json();
+    // prints it out -> figure out how to display
+    console.log(resData);
     try {
         // *** TODO (fake data for display purposes only) *** \\
         setEventList([
