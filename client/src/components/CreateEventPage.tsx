@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
-import { useState } from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -63,7 +62,7 @@ function FormElement(props: {
         const durationAsNumber = Number(duration);
         const maxCapacityAsNumber = Number(maxCapacity);
         if (user) {
-            const data = {
+            return {
                 hostUser: user,
                 eventTitle,
                 description,
@@ -73,7 +72,6 @@ function FormElement(props: {
                 transportInfo,
                 maxCapacityAsNumber,
             };
-            return data;
         } else {
             console.error("User is not authenticated");
         }

@@ -22,7 +22,7 @@ export default function CalendarPage(props: {
     const [error, setError] = useState("Loading calendar data...");
 
     // called once when components on page have rendered
-    useEffect(() => {
+    useEffect(() => { // FIXME: look into why this is called multiple times per page load
         fetchCalendar(setEventList, setError);
     }, []);
 
@@ -53,7 +53,7 @@ export default function CalendarPage(props: {
 }
 
 // TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
-// TODO: Look into embeding Google Maps (https://www.embed-map.com/)
+// TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
 function CalendarElement(props: {
     authenticated: boolean;
@@ -68,7 +68,11 @@ function CalendarElement(props: {
             {eventList != null ? (
                 <CardColumns style={{ columnCount: 1 }}>
                     {eventList.map((event: EventType) => (
-                        <EventElement key={event.eventId} event={event} user={user} />
+                        <EventElement
+                            key={event._id}
+                            event={event}
+                            user={user}
+                        />
                     ))}
                 </CardColumns>
             ) : (
@@ -102,8 +106,8 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                     Hosted by {event.hostUser.displayName}
                 </Card.Subtitle>
                 <Card.Text>
-                    {event.location.name} ({event.location.city},{" "}
-                    {event.location.state})<br />
+                    {/* {event.location.name} ({event.location.city},{" "}
+                    {event.location.state})<br /> */}
                     {event.startTime.toLocaleString()}
                     <br />
                     {event.transportInfo}

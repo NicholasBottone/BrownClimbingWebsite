@@ -28,11 +28,11 @@ export type LocationType = {
 
 // types for Event Model
 export type EventType = {
-    eventId: string;
+    _id: string;
     eventTitle: string;
     description: string;
     hostUser: BasicUserType;
-    location: LocationType;
+    location?: LocationType;
     startTime: Date;
     durationMinutes: number;
     transportInfo: string;
