@@ -22,7 +22,8 @@ export default function CalendarPage(props: {
     const [error, setError] = useState("Loading calendar data...");
 
     // called once when components on page have rendered
-    useEffect(() => { // FIXME: look into why this is called multiple times per page load
+    useEffect(() => {
+        // FIXME: look into why this is called multiple times per page load
         fetchCalendar(setEventList, setError);
     }, []);
 
@@ -106,8 +107,8 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                     Hosted by {event.hostUser.displayName}
                 </Card.Subtitle>
                 <Card.Text>
-                    {/* {event.location.name} ({event.location.city},{" "}
-                    {event.location.state})<br /> */}
+                    {event.location}
+                    <br />
                     {event.startTime.toLocaleString()}
                     <br />
                     {event.transportInfo}

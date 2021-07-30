@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { UserType } from "../types";
+import { locations, UserType } from "../types";
 
 export default function CreateEventPage(props: {
     authenticated: boolean;
@@ -51,6 +51,7 @@ function FormElement(props: {
     const { authenticated, user } = props;
     const [eventTitle, setEventTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [location, setLocation] = useState("");
     const [eventDate, setEventDate] = useState(""); // TODO: handle converting to date in the backend or figure out how to get as date on front end
     const [startTime, setStartTime] = useState(""); // TODO: same as for eventDate
     const [duration, setDuration] = useState("");
@@ -66,6 +67,7 @@ function FormElement(props: {
                 hostUser: user,
                 eventTitle,
                 description,
+                location,
                 eventDate,
                 startTime,
                 durationAsNumber,
@@ -147,6 +149,22 @@ function FormElement(props: {
                             />
                         </Col>
                     </Form.Group>
+                    <Form.Group as={Row} controlId="location">
+                        <Form.Label column sm={3}>
+                            Location
+                        </Form.Label>
+                        <Col sm={9}>
+                            <Form.Control
+                                as="select"
+                                required
+                                onChange={(e) => setLocation(e.target.value)}
+                            >
+                                {locations.map((loc) => (
+                                    <option>{loc}</option> // TODO: Consider adding a default option for "Please select"
+                                ))}
+                            </Form.Control>
+                        </Col>
+                    </Form.Group>
                     <Form.Group as={Row} controlId="formDate">
                         <Form.Label column sm={3}>
                             Date
@@ -223,7 +241,6 @@ function FormElement(props: {
                             </Form.Text>
                         </Col>
                     </Form.Group>
-                    {/* TODO: Location */}
                     <Button variant="primary" type="submit">
                         Submit
                     </Button>
