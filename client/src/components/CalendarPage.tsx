@@ -99,6 +99,7 @@ function CalendarElement(props: {
 function EventElement(props: { event: EventType; user: UserType | undefined }) {
     const { event, user } = props;
 
+    // TODO: Consider adding a visual flair to indicate which events you are registered for / own
     return (
         <Card>
             <Card.Body>
@@ -106,12 +107,13 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                 <Card.Subtitle>
                     Hosted by {event.hostUser.displayName}
                 </Card.Subtitle>
+                <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
-                    {event.location}
+                    Location: {event.location}
                     <br />
-                    {event.startTime.toLocaleString()}
+                    Event starts at {event.startTime.toLocaleString()}
                     <br />
-                    {event.transportInfo}
+                    Transport via {event.transportInfo}
                     <br />
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}

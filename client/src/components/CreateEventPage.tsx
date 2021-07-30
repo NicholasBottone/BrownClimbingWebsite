@@ -23,6 +23,7 @@ export default function CreateEventPage(props: {
             <Container className="p-3 text-center">
                 <Jumbotron>
                     <h1>Create an Event for Brown Climbing</h1>
+                    <p>All fields are required.</p>
                     <br />
                     <br />
                     {loading ? (
@@ -49,9 +50,12 @@ function FormElement(props: {
     user: UserType | undefined;
 }) {
     const { authenticated, user } = props;
+
+    const [redirect, setRedirect] = useState(false);
+
     const [eventTitle, setEventTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [location, setLocation] = useState("");
+    const [location, setLocation] = useState(locations[0]);
     const [eventDate, setEventDate] = useState(""); // TODO: handle converting to date in the backend or figure out how to get as date on front end
     const [startTime, setStartTime] = useState(""); // TODO: same as for eventDate
     const [duration, setDuration] = useState("");
@@ -87,7 +91,7 @@ function FormElement(props: {
         form.preventDefault();
         // using async await and js fetch api to make post request to backend
         try {
-            const response = await fetch(
+            await fetch(
                 `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
                 {
                     method: "POST",
@@ -99,155 +103,151 @@ function FormElement(props: {
                     body: JSON.stringify(createJSONBody()),
                 }
             );
-            return response.json();
+            setRedirect(true); // TODO: Potentially consider a success message/alert
         } catch (e) {
-            // TODO: better error handling :)
-            console.log(e);
+            console.log(e); // TODO: Better error reporting
         }
     };
 
+    if (!authenticated || redirect) {
+        return <Redirect to="/calendar" />;
+    }
+
     return (
         <div className="p-3 text-left">
-            {authenticated ? (
-                <Form onSubmit={handleSubmit}>
-                    <Form.Group as={Row} controlId="hostUser">
-                        <Form.Label column sm={3}>
-                            Host
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                name="hostUser"
-                                type="text"
-                                defaultValue={user?.displayName}
-                                readOnly
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="eventTitle">
-                        <Form.Label column sm={3}>
-                            Event Title
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="text"
-                                placeholder="Event Title"
-                                required
-                                onChange={(e) => setEventTitle(e.target.value)}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="description">
-                        <Form.Label column sm={3}>
-                            Description
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="text"
-                                placeholder="Description"
-                                required
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="location">
-                        <Form.Label column sm={3}>
-                            Location
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                as="select"
-                                required
-                                onChange={(e) => setLocation(e.target.value)}
-                            >
-                                {locations.map((loc) => (
-                                    <option>{loc}</option> // TODO: Consider adding a default option for "Please select"
-                                ))}
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="formDate">
-                        <Form.Label column sm={3}>
-                            Date
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="date"
-                                required
-                                min={new Date().toISOString().split("T")[0]}
-                                onChange={(e) => setEventDate(e.target.value)}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="startTime">
-                        <Form.Label column sm={3}>
-                            Start Time
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="time"
-                                required
-                                onChange={(e) => setStartTime(e.target.value)}
-                            />
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="durationMinutes">
-                        <Form.Label column sm={3}>
-                            Duration
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="number"
-                                placeholder="Duration"
-                                required
-                                onChange={(e) => setDuration(e.target.value)}
-                            />
-                            <Form.Text className="text-muted">
-                                Estimated event duration in minutes
-                            </Form.Text>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="transportInfo">
-                        <Form.Label column sm={3}>
-                            Transport Info
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="text"
-                                placeholder="Transport Info"
-                                required
-                                onChange={(e) =>
-                                    setTransportInfo(e.target.value)
-                                }
-                            />
-                            <Form.Text className="text-muted">
-                                How will the attendees be getting to the event?
-                            </Form.Text>
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} controlId="maxCapacity">
-                        <Form.Label column sm={3}>
-                            Max Capacity
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="number"
-                                placeholder="Max Capacity"
-                                required
-                                onChange={(e) => setMaxCapacity(e.target.value)}
-                            />
-                            <Form.Text className="text-muted">
-                                How many attendees should be allowed to
-                                register?
-                            </Form.Text>
-                        </Col>
-                    </Form.Group>
-                    <Button variant="primary" type="submit">
-                        Submit
-                    </Button>
-                </Form>
-            ) : (
-                <Redirect to="/calendar" />
-            )}
+            <Form onSubmit={handleSubmit}>
+                <Form.Group as={Row} controlId="hostUser">
+                    <Form.Label column sm={3}>
+                        Host
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            name="hostUser"
+                            type="text"
+                            defaultValue={user?.displayName}
+                            readOnly
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="eventTitle">
+                    <Form.Label column sm={3}>
+                        Event Title
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Event Title"
+                            required
+                            onChange={(e) => setEventTitle(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="description">
+                    <Form.Label column sm={3}>
+                        Description
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Description"
+                            required
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="location">
+                    <Form.Label column sm={3}>
+                        Location
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            as="select"
+                            required
+                            onChange={(e) => setLocation(e.target.value)}
+                        >
+                            {locations.map((loc) => (
+                                <option>{loc}</option> // TODO: Consider adding a default option for "Please select"
+                            ))}
+                        </Form.Control>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="formDate">
+                    <Form.Label column sm={3}>
+                        Date
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="date"
+                            required
+                            min={new Date().toISOString().split("T")[0]}
+                            onChange={(e) => setEventDate(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="startTime">
+                    <Form.Label column sm={3}>
+                        Start Time
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="time"
+                            required
+                            onChange={(e) => setStartTime(e.target.value)}
+                        />
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="durationMinutes">
+                    <Form.Label column sm={3}>
+                        Duration
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="number"
+                            placeholder="Duration"
+                            required
+                            onChange={(e) => setDuration(e.target.value)}
+                        />
+                        <Form.Text className="text-muted">
+                            Estimated event duration in minutes
+                        </Form.Text>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="transportInfo">
+                    <Form.Label column sm={3}>
+                        Transport Info
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="text"
+                            placeholder="Transport Info"
+                            required
+                            onChange={(e) => setTransportInfo(e.target.value)}
+                        />
+                        <Form.Text className="text-muted">
+                            How will the attendees be getting to the event?
+                        </Form.Text>
+                    </Col>
+                </Form.Group>
+                <Form.Group as={Row} controlId="maxCapacity">
+                    <Form.Label column sm={3}>
+                        Max Capacity
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Form.Control
+                            type="number"
+                            placeholder="Max Capacity"
+                            required
+                            onChange={(e) => setMaxCapacity(e.target.value)}
+                        />
+                        <Form.Text className="text-muted">
+                            How many attendees should be allowed to register?
+                        </Form.Text>
+                    </Col>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Submit
+                </Button>
+            </Form>
         </div>
     );
 }
