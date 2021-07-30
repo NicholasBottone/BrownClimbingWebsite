@@ -38,7 +38,7 @@ eventRouter.post(
             eventTitle: req.body.eventTitle,
             description: req.body.description,
             hostUser: req.user, // TODO: Extract user properly (depending on final schema choice)
-            //  location: req.body.location,
+            location: req.body.location,
             startTime: req.body.startTime,
             eventDate: req.body.eventDate,
             durationMinutes: parseInt(req.body.durationAsNumber),
