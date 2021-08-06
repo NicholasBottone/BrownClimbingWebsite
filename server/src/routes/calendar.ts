@@ -135,6 +135,8 @@ eventRouter.put(
 eventRouter.put(
     "/events/:eventid/edit",
     authCheck,
-    async (req: Request, res: Response, _next: NextFunction) => {}
+    async (req: Request, res: Response, _next: NextFunction) => {
+        // TODO: fill this in
+    }
 );
 export default eventRouter;
