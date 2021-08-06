@@ -16,7 +16,7 @@ const EventSchema = new Schema({
     },
     location: {
         type: String,
-        required: false, // TODO: change eventually
+        required: true, // TODO: change eventually
     },
     startTime: {
         type: String,
