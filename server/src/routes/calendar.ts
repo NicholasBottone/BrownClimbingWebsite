@@ -71,6 +71,7 @@ Example JSON for updating existing event:
 	const event = await mongoose.findByID(req.body.eventID)
 */
 
+// user registering for event
 eventRouter.put(
     "/events/:eventid", // :eventid is a placeholder and this value can be accessed by req.params.eventid (this is the url path from the frontend)
     authCheck,
@@ -122,4 +123,18 @@ eventRouter.put(
     }
 );
 
+/**
+ * assume you can access the eventid with req.params.eventid
+ * assume that the req.body looks the exact same as in the POST request for creating new events
+ * TODO: update the event with the new changes (could probably just update all the fields with everything you get in req.body). Could just create a new Event like I did in the POST request and pass it in as the second argument
+ *      to the findByIdAndUpdate method
+ * TODO: make sure the person trying to make the put request is infact the hostUser of the event (look at how I used query in the above PUT request to access the registeredUsers field,
+ *      will probably want to do something similar for the hostUser field and then compare that user that made the request (assume req.body.user) has the same ._id has the hostUser)
+ */
+// editing an event by its host user
+eventRouter.put(
+    "/events/:eventid/edit",
+    authCheck,
+    async (req: Request, res: Response, _next: NextFunction) => {}
+);
 export default eventRouter;
