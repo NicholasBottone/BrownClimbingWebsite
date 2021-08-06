@@ -75,12 +75,13 @@ eventRouter.put(
     "/events/:eventid", // :eventid is a placeholder and this value can be accessed by req.params.eventid (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response, _next: NextFunction) => {
-        if (!req.user) {
+        // checking if receieved user object from frontend (not receiving means something went wrong)
+        if (!req.body.user) {
             return res.status(400).json({
                 message: "Did not find a user",
             });
         }
-        // find the registered users field of the current event
+        // query the db to find the registeredUsers field of the current event
         const query = await Event.findById(
             { _id: req.params.eventid },
             "registeredUsers"
@@ -94,16 +95,20 @@ eventRouter.put(
                 message: "User is already registered for this event",
             });
         }
+
+        // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
+        // TODO: have a check for number of registered users so that we dont exceed capacity!!
+
         // user does not exist in registeredUsers so we can proceed
         else {
             const updateRes = await Event.findByIdAndUpdate(
-                { _id: req.params.eventid },
-                { $push: { registeredUsers: req.body.user } },
-                { new: true },
+                { _id: req.params.eventid }, // getting event by id
+                { $push: { registeredUsers: req.body.user } }, // pushing the user into registeredUsers array
+                { new: true }, // findByIdAndUpdate returns the mongoDB object AFTER the update has been applied
                 (err, result) => {
                     if (err) {
                         return res.status(400).json({
-                            err,
+                            error: err,
                         });
                     }
                     console.log(result);
