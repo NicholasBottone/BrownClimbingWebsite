@@ -38,7 +38,7 @@ eventRouter.post(
             eventTitle: req.body.eventTitle,
             description: req.body.description,
             hostUser: req.user, // TODO: Extract user properly (depending on final schema choice)
-            location: req.body.location,
+            //  location: req.body.location,
             startTime: req.body.startTime,
             eventDate: req.body.eventDate,
             durationMinutes: parseInt(req.body.durationAsNumber),
@@ -54,6 +54,63 @@ eventRouter.post(
                 message: "Event created successfully",
             });
         });
+    }
+);
+
+/*
+Example JSON for adding user:
+    eventID:
+	use req.user field
+	go into registered users field in mongoDB database w/ eventID and append req.user if not already registered
+	check maxCapacity isn't reached
+
+Example JSON for updating existing event:
+	check if event exists using eventID
+	check if user that sent request is the host user using mongoDB stuff _id of user == host user id (findByID)
+	then replace event stuff using whatever we find
+	const event = await mongoose.findByID(req.body.eventID)
+*/
+
+eventRouter.put(
+    "/events/:eventid",
+    authCheck,
+    async (req: Request, res: Response, _next: NextFunction) => {
+        if (!req.user) {
+            return res.status(400).json({
+                message: "Did not find a user",
+            });
+        }
+        // TODO: need a check to make sure user can't register twice
+        const query = await Event.findById(
+            { _id: req.params.eventid },
+            "registeredUsers"
+        );
+        if (
+            req.body.user._id &&
+            query.registeredUsers.includes(req.body.user._id)
+        ) {
+            return res.status(400).json({
+                message: "User is already registered for this event",
+            });
+        } else {
+            const updateRes = await Event.findByIdAndUpdate(
+                { _id: req.params.eventid },
+                { $push: { registeredUsers: req.body.user } },
+                { new: true },
+                (err, result) => {
+                    if (err) {
+                        return res.status(400).json({
+                            err,
+                        });
+                    }
+                    console.log(result);
+                    return res.status(200).json({
+                        message: "Sucessfully added user",
+                    });
+                }
+            );
+            return updateRes;
+        }
     }
 );
 

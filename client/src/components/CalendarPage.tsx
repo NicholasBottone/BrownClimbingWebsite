@@ -137,6 +137,31 @@ function RegisteredUserEventOptions(props: {
 }) {
     const { event, user } = props;
 
+    async function registerForEvent() {
+        try {
+            const response = await fetch(
+                `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${event._id}`,
+                {
+                    method: "PUT",
+                    mode: "cors",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        user,
+                    }),
+                }
+            );
+            const resJson = await response.json();
+            console.log(resJson);
+            return resJson;
+            // return response.json();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     return (
         <>
             <Button>View Registrants</Button>
@@ -145,6 +170,7 @@ function RegisteredUserEventOptions(props: {
             ) : (
                 <Button
                     disabled={event.registeredUsers.length >= event.maxCapacity}
+                    onClick={registerForEvent}
                 >
                     Registration
                 </Button>
