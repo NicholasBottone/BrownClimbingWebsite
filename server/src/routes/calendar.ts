@@ -80,11 +80,12 @@ eventRouter.put(
                 message: "Did not find a user",
             });
         }
-        // TODO: need a check to make sure user can't register twice
+        // find the registered users field of the current event
         const query = await Event.findById(
             { _id: req.params.eventid },
             "registeredUsers"
         );
+        // if the registeredUsers array does not already include the user that wants to register
         if (
             req.body.user._id &&
             query.registeredUsers.includes(req.body.user._id)
@@ -92,7 +93,9 @@ eventRouter.put(
             return res.status(400).json({
                 message: "User is already registered for this event",
             });
-        } else {
+        }
+        // user does not exist in registeredUsers so we can proceed
+        else {
             const updateRes = await Event.findByIdAndUpdate(
                 { _id: req.params.eventid },
                 { $push: { registeredUsers: req.body.user } },
