@@ -72,7 +72,7 @@ Example JSON for updating existing event:
 */
 
 eventRouter.put(
-    "/events/:eventid",
+    "/events/:eventid", // :eventid is a placeholder and this value can be accessed by req.params.eventid (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response, _next: NextFunction) => {
         if (!req.user) {
