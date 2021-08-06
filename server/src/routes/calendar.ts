@@ -57,4 +57,30 @@ eventRouter.post(
     }
 );
 
+/*
+Example JSON for adding user:
+    eventID:
+	use req.user field
+	go into registered users field in mongoDB database w/ eventID and append req.user if not already registered
+	check maxCapacity isn't reached
+
+Example JSON for updating existing event:
+	check if event exists using eventID
+	check if user that sent request is the host user using mongoDB stuff _id of user == host user id (findByID)
+	then replace event stuff using whatever we find
+	const event = await mongoose.findByID(req.body.eventID)
+*/
+
+eventRouter.put(
+	"/events",
+	authCheck,
+	(req: Request, res: Response, _next: NextFunction) => {
+		Event.findByIdAndUpdate({_id: req.body.eventID}, 
+                    {$push: {'registeredUsers': req.user}}, 
+                    {new: true}, (err, result) => {
+                        console.log(err)
+                   })
+	}
+)
+
 export default eventRouter;
