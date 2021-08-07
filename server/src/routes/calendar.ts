@@ -79,7 +79,7 @@ eventRouter.put(
         // checking if receieved user object from frontend (not receiving means something went wrong)
         if (!req.body.user) {
             return res.status(400).json({
-                message: "Did not find a user",
+                error: "Did not find a user",
             });
         }
         // query the db to find the registeredUsers field of the current event
@@ -90,7 +90,7 @@ eventRouter.put(
         // if the registeredUsers array does not already include the user that wants to register
         if (queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
             return res.status(400).json({
-                message: "User is already registered for this event",
+                error: "User is already registered for this event",
             });
         }
 
@@ -98,12 +98,15 @@ eventRouter.put(
             { _id: req.params.eventid },
             "maxCapacity"
         );
+        // TODO: check that this max capacity test works
         // checking if event is past max capacity
         if (
             queryMaxCapacity.maxCapacity ===
             queryRegisteredUsers.registeredUsers.length
         ) {
-            console.log("Max capacity exceeded!");
+            return res.status(400).json({
+                error: "Max Capacity Reached",
+            });
         }
         // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
         // TODO: have a check for number of registered users so that we dont exceed capacity!!
@@ -125,7 +128,6 @@ eventRouter.put(
                 });
             }
         );
-        // return updateRes;
         return;
     }
 );
@@ -139,6 +141,7 @@ eventRouter.put(
  *      will probably want to do something similar for the hostUser field and then compare that user that made the request (assume req.body.user) has the same ._id has the hostUser)
  */
 // editing an event by its host user
+// TODO: uncomment the method below and fill it in :)
 // eventRouter.put(
 //     "/events/:eventid/edit",
 //     authCheck,
