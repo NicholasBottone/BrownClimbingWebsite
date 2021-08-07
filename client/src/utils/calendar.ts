@@ -5,55 +5,27 @@ export async function fetchCalendar(
     setError: (error: string) => void
 ) {
     try {
-        // *** TODO (fake data for display purposes only) *** \\
-        setEventList([
+        // sets up the promise
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
             {
-                eventTitle: "Test Event",
-                description: "Test Description",
-                hostUser: {
-                    googleId: "",
-                    displayName: "John Smith",
-                    displayPictureURL: "",
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": "true",
                 },
-                location: {
-                    name: "Pro Rock Climbing Inc",
-                    streetAddress: "",
-                    city: "Providence",
-                    state: "RI",
-                },
-                startTime: new Date("05/23/2021, 5:00 PM"),
-                durationMinutes: 120,
-                transportInfo: "John's Car",
-                registeredUsers: [],
-                maxCapacity: 5,
-            },
-            {
-                eventTitle: "Test Event 2",
-                description: "Test Description",
-                hostUser: {
-                    googleId: "",
-                    displayName: "Bob Joe",
-                    displayPictureURL: "",
-                },
-                location: {
-                    name: "Mount Everest",
-                    streetAddress: "",
-                    city: "Kala Patthar",
-                    state: "Nepal",
-                },
-                startTime: new Date("05/29/2021, 3:00 PM"),
-                durationMinutes: 180,
-                transportInfo: "RIPTA Bus",
-                registeredUsers: [
-                    {
-                        googleId: "",
-                        displayName: "Bob Joe",
-                        displayPictureURL: "",
-                    },
-                ],
-                maxCapacity: 1,
-            },
-        ]);
+            }
+        );
+        if (res.status === 200) {
+            // actually gets the data and converts it a json
+            const resJson = await res.json();
+            // set the event list to be displayed
+            setEventList(resJson.events);
+        } else {
+            throw new Error("failed to authenticate user");
+        }
     } catch (error) {
         console.error(error);
         setError("Failed to fetch the calendar from the database.");

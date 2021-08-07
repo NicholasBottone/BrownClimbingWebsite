@@ -9,6 +9,7 @@ import NotFoundPage from "./components/NotFoundPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import MyAccountPage from "./components/MyAccountPage";
+import CreateEventPage from "./components/CreateEventPage";
 
 import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
@@ -55,6 +56,18 @@ export default function App() {
                         <CalendarPage
                             authenticated={authenticated}
                             user={user}
+                            loading={loading}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/create"
+                    component={() => (
+                        <CreateEventPage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
                         />
                     )}
                 />

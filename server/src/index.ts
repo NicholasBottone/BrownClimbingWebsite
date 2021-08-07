@@ -10,13 +10,14 @@ import cors from "cors";
 import authRouter from "./routes/auth";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import eventRouter from "./routes/calendar";
 
 import * as passportConfig from "./config/passport";
 import { mongoConnection } from "./config/mongo";
-passportConfig;
 
 // main function
 export function main() {
+    passportConfig.init();
     const app = express();
 
     mongoConnection();
@@ -34,8 +35,11 @@ export function main() {
             }),
         })
     );
-
+    
+    // parse incoming cookies of html requests
     app.use(cookieParser());
+    // parse body of http request
+    app.use(express.json());
 
     // initialize and set up passport to use sessions
     app.use(passport.initialize());
@@ -53,6 +57,7 @@ export function main() {
 
     // set up auth route
     app.use("/auth", authRouter);
+    app.use("/calendar", eventRouter);
 
     app.listen(process.env.PORT || 8080, () => {
         console.log(`Server running on port ${process.env.PORT}`);
