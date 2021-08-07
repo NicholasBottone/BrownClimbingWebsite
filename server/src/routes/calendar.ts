@@ -44,7 +44,7 @@ eventRouter.post(
             durationMinutes: parseInt(req.body.durationAsNumber),
             transportInfo: req.body.transportInfo,
             maxCapacity: parseInt(req.body.maxCapacityAsNumber),
-            registeredUsers: [req.user],
+            // registeredUsers: [req.user], // should we or should we not include the user that hosted the event in the registeredUsers thing
         });
 
         event.save((err: Error) => {
@@ -83,43 +83,50 @@ eventRouter.put(
             });
         }
         // query the db to find the registeredUsers field of the current event
-        const query = await Event.findById(
+        const queryRegisteredUsers = await Event.findById(
             { _id: req.params.eventid },
             "registeredUsers"
         );
         // if the registeredUsers array does not already include the user that wants to register
-        if (
-            req.body.user._id &&
-            query.registeredUsers.includes(req.body.user._id)
-        ) {
+        if (queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
             return res.status(400).json({
                 message: "User is already registered for this event",
             });
         }
 
+        const queryMaxCapacity = await Event.findById(
+            { _id: req.params.eventid },
+            "maxCapacity"
+        );
+        // checking if event is past max capacity
+        if (
+            queryMaxCapacity.maxCapacity ===
+            queryRegisteredUsers.registeredUsers.length
+        ) {
+            console.log("Max capacity exceeded!");
+        }
         // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
         // TODO: have a check for number of registered users so that we dont exceed capacity!!
 
         // user does not exist in registeredUsers so we can proceed
-        else {
-            const updateRes = await Event.findByIdAndUpdate(
-                { _id: req.params.eventid }, // getting event by id
-                { $push: { registeredUsers: req.body.user } }, // pushing the user into registeredUsers array
-                { new: true }, // findByIdAndUpdate returns the mongoDB object AFTER the update has been applied
-                (err, result) => {
-                    if (err) {
-                        return res.status(400).json({
-                            error: err,
-                        });
-                    }
-                    console.log(result);
-                    return res.status(200).json({
-                        message: "Sucessfully added user",
+        Event.findByIdAndUpdate(
+            { _id: req.params.eventid }, // getting event by id
+            { $push: { registeredUsers: req.body.user } }, // pushing the user into registeredUsers array
+            { new: true }, // findByIdAndUpdate returns the mongoDB object AFTER the update has been applied
+            (err, result) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: err,
                     });
                 }
-            );
-            return updateRes;
-        }
+                console.log(result);
+                return res.status(200).json({
+                    message: "Sucessfully added user",
+                });
+            }
+        );
+        // return updateRes;
+        return;
     }
 );
 
@@ -132,11 +139,11 @@ eventRouter.put(
  *      will probably want to do something similar for the hostUser field and then compare that user that made the request (assume req.body.user) has the same ._id has the hostUser)
  */
 // editing an event by its host user
-eventRouter.put(
-    "/events/:eventid/edit",
-    authCheck,
-    async (req: Request, res: Response, _next: NextFunction) => {
-        // TODO: fill this in
-    }
-);
+// eventRouter.put(
+//     "/events/:eventid/edit",
+//     authCheck,
+//     async (req: Request, res: Response, _next: NextFunction) => {
+//         // TODO: fill this in
+//     }
+// );
 export default eventRouter;
