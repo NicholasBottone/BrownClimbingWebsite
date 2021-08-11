@@ -205,6 +205,7 @@ function FormElement(props: {
                             type="number"
                             placeholder="Duration"
                             required
+                            min={1}
                             onChange={(e) => setDuration(e.target.value)}
                         />
                         <Form.Text className="text-muted">
@@ -237,6 +238,7 @@ function FormElement(props: {
                             type="number"
                             placeholder="Max Capacity"
                             required
+                            min={1}
                             onChange={(e) => setMaxCapacity(e.target.value)}
                         />
                         <Form.Text className="text-muted">
