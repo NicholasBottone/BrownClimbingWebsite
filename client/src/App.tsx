@@ -14,6 +14,8 @@ import EditEventPage from "./components/EditEventPage";
 
 import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
+import EventDetailsPage from "./components/EventDetailsPage";
+import EventRegistrationPage from "./components/EventRegistrationPage";
 
 export default function App() {
     const [user, setUser] = useState<UserType>();
@@ -77,6 +79,17 @@ export default function App() {
                     path="/calendar/edit/:eventId"
                     component={() => (
                         <EditEventPage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/event/:eventId"
+                    component={() => (
+                        <EventDetailsPage
                             authenticated={authenticated}
                             user={user}
                             loading={loading}
