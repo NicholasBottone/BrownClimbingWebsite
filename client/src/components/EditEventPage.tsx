@@ -45,9 +45,6 @@ export default function EditEventPage(props: {
                 <Jumbotron>
                     <h1>Edit an Existing Event</h1>
                     <p>All fields are required.</p>
-                    <Button variant="danger" onClick={handleDelete}>
-                        Delete Event
-                    </Button>
                     <br />
                     <br />
                     {loading || event == null ? (
@@ -56,11 +53,16 @@ export default function EditEventPage(props: {
                             <p>{error}</p>
                         </div> // don't show user info until loading from backend is done
                     ) : (
-                        <FormElement
-                            authenticated={authenticated}
-                            user={user}
-                            event={event}
-                        />
+                        <>
+                            <FormElement
+                                authenticated={authenticated}
+                                user={user}
+                                event={event}
+                            />
+                            <Button variant="danger" onClick={handleDelete}>
+                                Delete Event
+                            </Button>
+                        </>
                     )}
                 </Jumbotron>
             </Container>
