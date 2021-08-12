@@ -14,8 +14,11 @@ export default function AboutPage() {
                     <h4>
                         <code>{useLocation().pathname}</code> does not exist
                     </h4>
-                    <br />
-                    <br />
+                    <img
+                        alt="Blueno the bear"
+                        src="https://i.ibb.co/KhqZbYk/Blueno.webp"
+                        width="25%"
+                    />
                     <p>
                         The page you attempted to access does not exist. If you
                         believe this is an error, contact the website
