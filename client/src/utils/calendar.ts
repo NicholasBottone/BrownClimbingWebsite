@@ -18,12 +18,12 @@ export async function fetchCalendar(
             }
         );
         if (res.ok) {
-            // actually gets the data and converts it a json
+            // gets the data and converts it a json
             const resJson = await res.json();
             // set the event list to be displayed
             setEventList(resJson.events);
         } else {
-            throw new Error("failed to fetch calendar");
+            throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
         console.error(error);
@@ -50,13 +50,13 @@ export async function fetchEvent(
             }
         );
         if (res.ok) {
-            // actually gets the data and converts it a json
+            // gets the data and converts it a json
             const resJson = await res.json();
             // set the event to be displayed
             setEvent(resJson.event);
             return true;
         } else {
-            throw new Error("failed to fetch calendar");
+            throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
         console.error(error);
@@ -138,6 +138,26 @@ export async function updateEvent(event: EventType, jsonBody: any) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(jsonBody),
+            }
+        );
+        return res.ok;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+export async function deleteEvent(event: EventType) {
+    try {
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${event._id}`,
+            {
+                method: "DELETE",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             }
         );
         return res.ok;

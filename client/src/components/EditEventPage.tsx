@@ -10,7 +10,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
 import { EventType, locations, UserType } from "../types";
-import { fetchEvent, updateEvent } from "../utils/calendar";
+import { deleteEvent, fetchEvent, updateEvent } from "../utils/calendar";
 
 export default function EditEventPage(props: {
     authenticated: boolean;
@@ -29,12 +29,25 @@ export default function EditEventPage(props: {
         fetchEvent(eventId, setEvent, setError);
     }, [eventId]);
 
+    const handleDelete = () => {
+        if (!event) return;
+
+        if (window.confirm("Are you sure you want to delete this event?")) {
+            if (deleteEvent(event)) {
+                alert("Event deleted!");
+            }
+        }
+    };
+
     return (
         <div>
             <Container className="p-3 text-center">
                 <Jumbotron>
                     <h1>Edit an Existing Event</h1>
                     <p>All fields are required.</p>
+                    <Button variant="danger" onClick={handleDelete}>
+                        Delete Event
+                    </Button>
                     <br />
                     <br />
                     {loading || event == null ? (
