@@ -1,9 +1,6 @@
 import { EventType, UserType } from "../types";
 
-export async function fetchCalendar(
-    setEventList: (eventList: EventType[]) => void,
-    setError: (error: string) => void
-) {
+export async function fetchCalendar() {
     try {
         const res = await fetch(
             `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
@@ -21,21 +18,17 @@ export async function fetchCalendar(
             // gets the data and converts it a json
             const resJson = await res.json();
             // set the event list to be displayed
-            setEventList(resJson.events);
+            return resJson.events;
         } else {
             throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
         console.error(error);
-        setError("Failed to fetch the calendar from the database.");
+        return "Failed to fetch the calendar from the database.";
     }
 }
 
-export async function fetchEvent(
-    eventId: string,
-    setEvent: (event: EventType) => void,
-    setError: (error: string) => void
-) {
+export async function fetchEvent(eventId: string) {
     try {
         const res = await fetch(
             `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${eventId}`,
@@ -53,15 +46,13 @@ export async function fetchEvent(
             // gets the data and converts it a json
             const resJson = await res.json();
             // set the event to be displayed
-            setEvent(resJson.event);
-            return true;
+            return resJson.event;
         } else {
             throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
         console.error(error);
-        setError("Failed to fetch event data from the database.");
-        return false;
+        return "Failed to fetch event data from the database.";
     }
 }
 

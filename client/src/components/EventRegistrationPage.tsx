@@ -26,8 +26,18 @@ export default function EventRegistrationPage(props: {
 
     // called once when components on page have rendered
     useEffect(() => {
-        // FIXME: look into why this is called multiple times per page load
-        fetchEvent(eventId, setEvent, setError);
+        let mounted = true;
+        fetchEvent(eventId).then((result) => {
+            if (!mounted) return;
+            if (typeof result === "string") {
+                setError(result);
+            } else {
+                setEvent(result);
+            }
+        });
+        return () => {
+            mounted = false;
+        };
     }, [eventId]);
 
     return (

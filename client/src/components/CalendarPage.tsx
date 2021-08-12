@@ -19,13 +19,24 @@ export default function CalendarPage(props: {
     loading: boolean;
 }) {
     const { authenticated, user, loading } = props;
+
     const [eventList, setEventList] = useState<EventType[]>();
     const [error, setError] = useState("Loading calendar data...");
 
     // called once when components on page have rendered
     useEffect(() => {
-        // FIXME: look into why this is called multiple times per page load
-        fetchCalendar(setEventList, setError);
+        let mounted = true;
+        fetchCalendar().then((result) => {
+            if (!mounted) return;
+            if (typeof result === "string") {
+                setError(result);
+            } else {
+                setEventList(result);
+            }
+        });
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     return (
@@ -41,51 +52,59 @@ export default function CalendarPage(props: {
                             <p>{error}</p>
                         </div> // don't show user info until loading from backend is done
                     ) : (
-                        <Calendar />
+                        <Calendar
+                            authenticated={authenticated}
+                            user={user}
+                            error={error}
+                            eventList={eventList}
+                        />
                     )}
                 </Jumbotron>
             </Container>
         </div>
     );
+}
 
-    // TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
-    // TODO: Look into embedding Google Maps (https://www.embed-map.com/)
+// TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
+// TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
-    function Calendar() {
-        if (eventList == null) {
-            return <></>;
-        }
+function Calendar(props: {
+    authenticated: boolean;
+    user: UserType | undefined;
+    error: string;
+    eventList: EventType[];
+}) {
+    const { authenticated, user, error, eventList } = props;
 
-        return (
-            <>
-                <CardColumns style={{ columnCount: 1 }}>
-                    {eventList.map((event: EventType) => (
-                        <EventElement
-                            key={event._id}
-                            event={event}
-                            user={user}
-                        />
-                    ))}
-                </CardColumns>
-                <div>
-                    <p>{error}</p>
-                    <Spinner animation="border" role="status" />
-                </div>
-
-                <br />
-                <br />
-                {authenticated ? (
-                    <Button as={Link} to="/calendar/create" variant="primary">
-                        Create/Host an Event
-                    </Button>
-                ) : (
-                    <Button onClick={handleLoginClick} variant="primary">
-                        Login to RSVP for Events
-                    </Button>
-                )}
-            </>
-        );
+    if (eventList == null) {
+        return <></>;
     }
+
+    return (
+        <>
+            <CardColumns style={{ columnCount: 1 }}>
+                {eventList.map((event: EventType) => (
+                    <EventElement key={event._id} event={event} user={user} />
+                ))}
+            </CardColumns>
+            <div>
+                <p>{error}</p>
+                <Spinner animation="border" role="status" />
+            </div>
+
+            <br />
+            <br />
+            {authenticated ? (
+                <Button as={Link} to="/calendar/create" variant="primary">
+                    Create/Host an Event
+                </Button>
+            ) : (
+                <Button onClick={handleLoginClick} variant="primary">
+                    Login to RSVP for Events
+                </Button>
+            )}
+        </>
+    );
 }
 
 function EventElement(props: { event: EventType; user: UserType | undefined }) {
