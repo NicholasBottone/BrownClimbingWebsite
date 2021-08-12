@@ -19,6 +19,7 @@ export async function fetchUser(
                 },
             }
         );
+        // if the user is logged in, set the user and authenticated flag
         if (res.status === 200) {
             const resJson = await res.json();
             setAuthenticated(true);

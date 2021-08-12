@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Redirect, useParams } from "react-router-dom";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -9,33 +9,44 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { locations, UserType } from "../types";
-import { createEvent } from "../utils/calendar";
+import { EventType, locations, UserType } from "../types";
+import { fetchEvent, updateEvent } from "../utils/calendar";
 
-export default function CreateEventPage(props: {
+export default function EditEventPage(props: {
     authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
     const { authenticated, user, loading } = props;
+    const eventId: string = useParams();
+
+    const [event, setEvent] = useState<EventType>();
+    const [error, setError] = useState("Loading event data...");
+
+    // called once when components on page have rendered
+    useEffect(() => {
+        // FIXME: look into why this is called multiple times per page load
+        fetchEvent(eventId, setEvent, setError);
+    }, [eventId]);
 
     return (
         <div>
             <Container className="p-3 text-center">
                 <Jumbotron>
-                    <h1>Create an Event for Brown Climbing</h1>
+                    <h1>Edit an Existing Event</h1>
                     <p>All fields are required.</p>
                     <br />
                     <br />
-                    {loading ? (
+                    {loading || event == null ? (
                         <div>
                             <Spinner animation="border" role="status" />
-                            <p>Loading...</p>
+                            <p>{error}</p>
                         </div> // don't show user info until loading from backend is done
                     ) : (
                         <FormElement
                             authenticated={authenticated}
                             user={user}
+                            event={event}
                         />
                     )}
                 </Jumbotron>
@@ -47,21 +58,28 @@ export default function CreateEventPage(props: {
 function FormElement(props: {
     authenticated: boolean;
     user: UserType | undefined;
+    event: EventType;
 }) {
-    const { authenticated, user } = props;
+    const { authenticated, user, event } = props;
 
     const [redirect, setRedirect] = useState(false);
 
-    const [eventTitle, setEventTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [location, setLocation] = useState(locations[0]);
-    const [eventDate, setEventDate] = useState("");
-    const [startTime, setStartTime] = useState("");
-    const [duration, setDuration] = useState("");
-    const [transportInfo, setTransportInfo] = useState("");
-    const [maxCapacity, setMaxCapacity] = useState("");
+    const [eventTitle, setEventTitle] = useState(event.eventTitle);
+    const [description, setDescription] = useState(event.description);
+    const [location, setLocation] = useState(event.location);
+    const [eventDate, setEventDate] = useState(event.startTime.toISOString());
+    const [startTime, setStartTime] = useState(event.startTime.toISOString());
+    const [duration, setDuration] = useState(event.durationMinutes);
+    const [transportInfo, setTransportInfo] = useState(event.transportInfo);
+    const [maxCapacity, setMaxCapacity] = useState(event.maxCapacity);
 
-    if (!authenticated || redirect) {
+    if (
+        !authenticated ||
+        redirect ||
+        user?.googleId !== event.hostUser.googleId ||
+        user?.moderator
+    ) {
+        // if user is not logged in or is not the host of the event
         return <Redirect to="/calendar" />;
     }
 
@@ -85,15 +103,11 @@ function FormElement(props: {
         }
     };
 
-    // TODO: handle form sanitization on front end
-    // TODO: find better way to handle duration than in just minutes (kinda confusing to count it - not the most user friendly experience)
-    // TODO: find a way to get location of the rock climbing gym and send that info to the backend
-
     const handleSubmit = async (form: React.SyntheticEvent) => {
         form.preventDefault();
 
-        if (createEvent(createJSONBody())) {
-            alert(`Successfully created "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
+        if (updateEvent(event, createJSONBody())) {
+            alert(`Successfully edited "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
             setRedirect(true);
         }
     };
@@ -190,8 +204,7 @@ function FormElement(props: {
                             type="number"
                             placeholder="Duration"
                             required
-                            min={1}
-                            onChange={(e) => setDuration(e.target.value)}
+                            onChange={(e) => setDuration(+e.target.value)}
                         />
                         <Form.Text className="text-muted">
                             Estimated event duration in minutes
@@ -223,8 +236,7 @@ function FormElement(props: {
                             type="number"
                             placeholder="Max Capacity"
                             required
-                            min={1}
-                            onChange={(e) => setMaxCapacity(e.target.value)}
+                            onChange={(e) => setMaxCapacity(+e.target.value)}
                         />
                         <Form.Text className="text-muted">
                             How many attendees should be allowed to register?
