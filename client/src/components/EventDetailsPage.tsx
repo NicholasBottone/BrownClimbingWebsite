@@ -8,18 +8,13 @@ import Button from "react-bootstrap/esm/Button";
 import Card from "react-bootstrap/Card";
 
 import { BasicUserType, EventType, UserType } from "../types";
-import {
-    fetchEvent,
-    registerForEvent,
-    unregisterForEvent,
-} from "../utils/calendar";
+import { fetchEvent } from "../utils/calendar";
 
 export default function EventDetailsPage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
     const eventId: string = useParams();
 
     const [event, setEvent] = useState<EventType>();
@@ -35,16 +30,15 @@ export default function EventDetailsPage(props: {
         <div>
             <Container className="p-3 text-center">
                 <Jumbotron>
-                    <h1>
-                        {event?.eventTitle || "Brown Climbing Event Details"}
-                    </h1>
+                    <h1>{event?.eventTitle || "Brown Climbing Event"}</h1>
+                    <h3>Event Details</h3>
                     <br />
                     <br />
                     {loading || event == null ? (
                         <div>
                             <Spinner animation="border" role="status" />
                             <p>{error}</p>
-                        </div> // don't show user info until loading from backend is done
+                        </div>
                     ) : (
                         <EventDetails event={event} user={user} />
                     )}
@@ -73,6 +67,15 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                     <br />
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}
+                </Card.Text>
+                <Card.Text>
+                    Registrants:
+                    {event.registeredUsers.map((u) => (
+                        <>
+                            <br />
+                            u.displayName
+                        </>
+                    ))}
                 </Card.Text>
                 {user != null ? <RegisteredUserEventOptions /> : <></>}
             </Card.Body>
@@ -103,32 +106,17 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                 registrant.googleId === user?.googleId
         );
 
-        const register = async () => {
-            if (await registerForEvent(event, user)) {
-                alert(`You are now registered for ${event.eventTitle}!`);
-            } else {
-                console.error("Registration failed");
-            }
-        };
-        const unregister = async () => {
-            if (await unregisterForEvent(event, user)) {
-                alert(`You are no longer registered for ${event.eventTitle}.`);
-            } else {
-                console.error("Unregistration failed");
-            }
-        };
-
-        return isRegistered ? (
-            <Button variant="danger" onClick={unregister}>
-                Unregister
-            </Button>
-        ) : (
+        return (
             <Button
-                variant="success"
-                onClick={register}
-                disabled={event.registeredUsers.length >= event.maxCapacity}
+                as={Link}
+                to={`/calendar/register/${event._id}`}
+                variant={isRegistered ? "danger" : "success"}
+                disabled={
+                    isRegistered ||
+                    event.registeredUsers.length >= event.maxCapacity
+                }
             >
-                Register
+                {isRegistered ? "Unregister" : "Register"}
             </Button>
         );
     }

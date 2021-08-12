@@ -89,11 +89,14 @@ export default function App() {
                     exact
                     path="/calendar/event/:eventId"
                     component={() => (
-                        <EventDetailsPage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
+                        <EventDetailsPage user={user} loading={loading} />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/register/:eventId"
+                    component={() => (
+                        <EventRegistrationPage user={user} loading={loading} />
                     )}
                 />
                 <Route
