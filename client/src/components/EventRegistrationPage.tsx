@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Redirect, useParams } from "react-router-dom";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -56,6 +56,11 @@ function RegistrationConfirmation(props: {
     user: UserType | undefined;
 }) {
     const { event, user } = props;
+    const [redirect, setRedirect] = useState(false);
+
+    if (redirect) {
+        return <Redirect to={`/calendar/event/${event._id}`} />;
+    }
 
     return (
         <>
@@ -91,6 +96,7 @@ function RegistrationConfirmation(props: {
 
         const register = async () => {
             if (await registerForEvent(event, user)) {
+                setRedirect(true);
                 alert(`You are now registered for ${event.eventTitle}!`);
             } else {
                 console.error("Registration failed");
@@ -98,6 +104,7 @@ function RegistrationConfirmation(props: {
         };
         const unregister = async () => {
             if (await unregisterForEvent(event, user)) {
+                setRedirect(true);
                 alert(`You are no longer registered for ${event.eventTitle}.`);
             } else {
                 console.error("Unregistration failed");
