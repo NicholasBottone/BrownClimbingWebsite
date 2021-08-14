@@ -162,18 +162,35 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                 registrant.googleId === user?.googleId
         );
 
-        return (
-            <Button
-                as={Link}
-                to={`/calendar/register/${event._id}`}
-                variant={isRegistered ? "danger" : "success"}
-                disabled={
-                    isRegistered ||
-                    event.registeredUsers.length >= event.maxCapacity
-                }
-            >
-                {isRegistered ? "Unregister" : "Register"}
-            </Button>
-        );
+        if (isRegistered) {
+            // Unregister button
+            return (
+                <Button
+                    as={Link}
+                    to={`/calendar/register/${event._id}`}
+                    variant="danger"
+                >
+                    Unregister
+                </Button>
+            );
+        } else if (event.registeredUsers.length >= event.maxCapacity) {
+            // Disabled Register button
+            return (
+                <Button variant="success" disabled>
+                    Already Full
+                </Button>
+            );
+        } else {
+            // Enabled Register button
+            return (
+                <Button
+                    as={Link}
+                    to={`/calendar/register/${event._id}`}
+                    variant="success"
+                >
+                    Register
+                </Button>
+            );
+        }
     }
 }
