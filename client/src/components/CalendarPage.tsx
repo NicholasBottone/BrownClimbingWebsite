@@ -25,6 +25,7 @@ export default function CalendarPage(props: {
 
     // called once when components on page have rendered
     useEffect(() => {
+        if (loading) return;
         let mounted = true;
         fetchCalendar().then((result) => {
             if (!mounted) return;
@@ -37,7 +38,7 @@ export default function CalendarPage(props: {
         return () => {
             mounted = false;
         };
-    }, []);
+    }, [loading]);
 
     return (
         <div>

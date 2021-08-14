@@ -26,6 +26,7 @@ export default function EventRegistrationPage(props: {
 
     // called once when components on page have rendered
     useEffect(() => {
+        if (loading) return;
         let mounted = true;
         fetchEvent(eventId).then((result) => {
             if (!mounted) return;
@@ -38,7 +39,7 @@ export default function EventRegistrationPage(props: {
         return () => {
             mounted = false;
         };
-    }, [eventId]);
+    }, [loading, eventId]);
 
     return (
         <div>
