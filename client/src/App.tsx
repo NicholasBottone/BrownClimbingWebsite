@@ -10,9 +10,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import MyAccountPage from "./components/MyAccountPage";
 import CreateEventPage from "./components/CreateEventPage";
+import EditEventPage from "./components/EditEventPage";
 
 import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
+import EventDetailsPage from "./components/EventDetailsPage";
+import EventRegistrationPage from "./components/EventRegistrationPage";
 
 export default function App() {
     const [user, setUser] = useState<UserType>();
@@ -69,6 +72,31 @@ export default function App() {
                             user={user}
                             loading={loading}
                         />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/edit/:eventId"
+                    component={() => (
+                        <EditEventPage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/event/:eventId"
+                    component={() => (
+                        <EventDetailsPage user={user} loading={loading} />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/register/:eventId"
+                    component={() => (
+                        <EventRegistrationPage user={user} loading={loading} />
                     )}
                 />
                 <Route

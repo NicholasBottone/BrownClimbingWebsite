@@ -9,8 +9,9 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
 
-import { EventType, UserType } from "../types";
+import { BasicUserType, EventType, UserType } from "../types";
 import { fetchCalendar } from "../utils/calendar";
+import { handleLoginClick } from "../utils/auth";
 
 export default function CalendarPage(props: {
     authenticated: boolean;
@@ -18,13 +19,26 @@ export default function CalendarPage(props: {
     loading: boolean;
 }) {
     const { authenticated, user, loading } = props;
+
     const [eventList, setEventList] = useState<EventType[]>();
     const [error, setError] = useState("Loading calendar data...");
 
     // called once when components on page have rendered
     useEffect(() => {
-        fetchCalendar(setEventList, setError);
-    }, []);
+        if (loading) return;
+        let mounted = true;
+        fetchCalendar().then((result) => {
+            if (!mounted) return;
+            if (typeof result === "string") {
+                setError(result);
+            } else {
+                setEventList(result);
+            }
+        });
+        return () => {
+            mounted = false;
+        };
+    }, [loading]);
 
     return (
         <div>
@@ -33,17 +47,16 @@ export default function CalendarPage(props: {
                     <h1>Events Calendar for Brown Climbing</h1>
                     <br />
                     <br />
-                    {loading ? (
+                    {loading || eventList == null ? (
                         <div>
                             <Spinner animation="border" role="status" />
-                            <p>Loading...</p>
-                        </div> // don't show user info until loading from backend is done
+                            <p>{error}</p>
+                        </div>
                     ) : (
-                        <CalendarElement
+                        <Calendar
                             authenticated={authenticated}
                             user={user}
                             eventList={eventList}
-                            error={error}
                         />
                     )}
                 </Jumbotron>
@@ -53,39 +66,37 @@ export default function CalendarPage(props: {
 }
 
 // TODO: Look into Full Calendar (https://fullcalendar.io/) and Big Calendar (https://jquense.github.io/react-big-calendar/)
-// TODO: Look into embeding Google Maps (https://www.embed-map.com/)
+// TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
-function CalendarElement(props: {
+function Calendar(props: {
     authenticated: boolean;
     user: UserType | undefined;
-    eventList: EventType[] | undefined;
-    error: string;
+    eventList: EventType[];
 }) {
-    const { authenticated, user, eventList, error } = props;
+    const { authenticated, user, eventList } = props;
+
+    if (eventList == null) {
+        return <></>;
+    }
 
     return (
         <>
-            {eventList != null ? (
-                <CardColumns style={{ columnCount: 1 }}>
-                    {eventList.map((event: EventType) => (
-                        <EventElement key={event.eventId} event={event} user={user} />
-                    ))}
-                </CardColumns>
-            ) : (
-                <div>
-                    <p>{error}</p>
-                    <Spinner animation="border" role="danger" />
-                </div>
-            )}
+            <CardColumns style={{ columnCount: 1 }}>
+                {eventList.map((event: EventType) => (
+                    <EventElement key={event._id} event={event} user={user} />
+                ))}
+            </CardColumns>
 
             <br />
             <br />
             {authenticated ? (
                 <Button as={Link} to="/calendar/create" variant="primary">
-                    Create/Host an Event
+                    Host an Event
                 </Button>
             ) : (
-                <Button variant="primary">Login to RSVP for Events</Button>
+                <Button onClick={handleLoginClick} variant="primary">
+                    Login for the best experience
+                </Button>
             )}
         </>
     );
@@ -101,47 +112,80 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                 <Card.Subtitle>
                     Hosted by {event.hostUser.displayName}
                 </Card.Subtitle>
+                <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
-                    {event.location.name} ({event.location.city},{" "}
-                    {event.location.state})<br />
-                    {event.startTime.toLocaleString()}
+                    Location: {event.location}
                     <br />
-                    {event.transportInfo}
+                    Event starts at {event.startTime.toLocaleString()}
+                    <br />
+                    Transport via {event.transportInfo}
                     <br />
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}
                 </Card.Text>
                 <ButtonGroup>
-                    <Button>View Details</Button>
-                    {user != null ? (
-                        <RegisteredUserEventOptions event={event} user={user} />
-                    ) : (
-                        <></>
-                    )}
+                    <Button as={Link} to={`/calendar/event/${event._id}`}>
+                        View Details
+                    </Button>
+                    {user != null ? <RegisteredUserEventOptions /> : <></>}
                 </ButtonGroup>
             </Card.Body>
         </Card>
     );
-}
 
-function RegisteredUserEventOptions(props: {
-    event: EventType;
-    user: UserType | undefined;
-}) {
-    const { event, user } = props;
+    function RegisteredUserEventOptions() {
+        return (
+            <>
+                {event.hostUser.googleId === user?.googleId ? (
+                    <Button
+                        variant="warning"
+                        as={Link}
+                        to={`/calendar/edit/${event._id}`}
+                    >
+                        Edit Event
+                    </Button>
+                ) : (
+                    <RegisterButton />
+                )}
+            </>
+        );
+    }
 
-    return (
-        <>
-            <Button>View Registrants</Button>
-            {event.hostUser.googleId === user?.googleId ? (
-                <Button>Edit Event</Button>
-            ) : (
+    function RegisterButton() {
+        const isRegistered = event.registeredUsers.some(
+            (registrant: BasicUserType) =>
+                registrant.googleId === user?.googleId
+        );
+
+        if (isRegistered) {
+            // Unregister button
+            return (
                 <Button
-                    disabled={event.registeredUsers.length >= event.maxCapacity}
+                    as={Link}
+                    to={`/calendar/register/${event._id}`}
+                    variant="danger"
                 >
-                    Registration
+                    Unregister
                 </Button>
-            )}
-        </>
-    );
+            );
+        } else if (event.registeredUsers.length >= event.maxCapacity) {
+            // Disabled Register button
+            return (
+                <Button variant="success" disabled>
+                    Already Full
+                </Button>
+            );
+        } else {
+            // Enabled Register button
+            return (
+                <Button
+                    as={Link}
+                    to={`/calendar/register/${event._id}`}
+                    variant="success"
+                >
+                    Register
+                </Button>
+            );
+        }
+    }
 }

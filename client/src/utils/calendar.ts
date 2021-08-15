@@ -1,71 +1,159 @@
-import { EventType } from "../types";
+import { EventType, UserType } from "../types";
 
-export async function fetchCalendar(
-    setEventList: (eventList: EventType[]) => void,
-    setError: (error: string) => void
-) {
-    // sets up the promise
-    const res = await fetch(
-        `${process.env.REACT_APP_API_BASE_URL}/calendar/events`
-    );
-    // actually gets the data and converts it a json
-    const resData = await res.json();
-    // prints it out -> figure out how to display
-    console.log(resData);
+export async function fetchCalendar() {
     try {
-        // *** TODO (fake data for display purposes only) *** \\
-        setEventList([
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
             {
-                eventId: "89j312j312",
-                eventTitle: "Test Event",
-                description: "Test Description",
-                hostUser: {
-                    googleId: "",
-                    displayName: "John Smith",
-                    displayPictureURL: "",
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": "true",
                 },
-                location: {
-                    name: "Pro Rock Climbing Inc",
-                    streetAddress: "",
-                    city: "Providence",
-                    state: "RI",
-                },
-                startTime: new Date("05/23/2021, 5:00 PM"),
-                durationMinutes: 120,
-                transportInfo: "John's Car",
-                registeredUsers: [],
-                maxCapacity: 5,
-            },
-            {
-                eventId: "12k3kj21l",
-                eventTitle: "Test Event 2",
-                description: "Test Description",
-                hostUser: {
-                    googleId: "",
-                    displayName: "Bob Joe",
-                    displayPictureURL: "",
-                },
-                location: {
-                    name: "Mount Everest",
-                    streetAddress: "",
-                    city: "Kala Patthar",
-                    state: "Nepal",
-                },
-                startTime: new Date("05/29/2021, 3:00 PM"),
-                durationMinutes: 180,
-                transportInfo: "RIPTA Bus",
-                registeredUsers: [
-                    {
-                        googleId: "",
-                        displayName: "Bob Joe",
-                        displayPictureURL: "",
-                    },
-                ],
-                maxCapacity: 1,
-            },
-        ]);
+            }
+        );
+        if (res.ok) {
+            // gets the data and converts it a json
+            const resJson = await res.json();
+            // set the event list to be displayed
+            return resJson.events;
+        } else {
+            throw new Error("Could not fetch: Not OK response from server.");
+        }
     } catch (error) {
         console.error(error);
-        setError("Failed to fetch the calendar from the database.");
+        return "Failed to fetch the calendar from the database.";
+    }
+}
+
+export async function fetchEvent(eventId: string) {
+    try {
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${eventId}`,
+            {
+                method: "GET",
+                credentials: "include",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Credentials": "true",
+                },
+            }
+        );
+        if (res.ok) {
+            // gets the data and converts it a json
+            const resJson = await res.json();
+            // set the event to be displayed
+            return resJson.event;
+        } else {
+            throw new Error("Could not fetch: Not OK response from server.");
+        }
+    } catch (error) {
+        console.error(error);
+        return "Failed to fetch event data from the database.";
+    }
+}
+
+async function registrationPutRequest(
+    path: string,
+    event: EventType,
+    user?: UserType
+) {
+    try {
+        const res = await fetch(path, {
+            method: "PUT",
+            mode: "cors",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user,
+            }),
+        });
+        return res.ok;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+export async function registerForEvent(event: EventType, user?: UserType) {
+    return registrationPutRequest(
+        `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${event._id}/register`,
+        event,
+        user
+    );
+}
+
+export async function unregisterForEvent(event: EventType, user?: UserType) {
+    return registrationPutRequest(
+        `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${event._id}/unregister`,
+        event,
+        user
+    );
+}
+
+export async function createEvent(jsonBody: any) {
+    try {
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/events`,
+            {
+                method: "POST",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(jsonBody),
+            }
+        );
+        return res.ok;
+    } catch (e) {
+        console.error(e); // TODO: Better error reporting
+        return false;
+    }
+}
+
+export async function updateEvent(event: EventType, jsonBody: any) {
+    try {
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${event._id}`,
+            {
+                method: "PUT",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(jsonBody),
+            }
+        );
+        return res.ok;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+export async function deleteEvent(event: EventType) {
+    try {
+        const res = await fetch(
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${event._id}`,
+            {
+                method: "DELETE",
+                mode: "cors",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
+        return res.ok;
+    } catch (e) {
+        console.error(e);
+        return false;
     }
 }
