@@ -59,43 +59,43 @@ eventRouter.post(
 
 /*
 Example JSON for adding user:
-    eventID:
+    eventId:
 	use req.user field
-	go into registered users field in mongoDB database w/ eventID and append req.user if not already registered
+	go into registered users field in mongoDB database w/ eventId and append req.user if not already registered
 	check maxCapacity isn't reached
 
 Example JSON for updating existing event:
-	check if event exists using eventID
+	check if event exists using eventId
 	check if user that sent request is the host user using mongoDB stuff _id of user == host user id (findByID)
 	then replace event stuff using whatever we find
-	const event = await mongoose.findByID(req.body.eventID)
+	const event = await mongoose.findByID(req.body.eventId)
 */
 
 // user registering for event
 eventRouter.put(
-    "/events/:eventid", // :eventid is a placeholder and this value can be accessed by req.params.eventid (this is the url path from the frontend)
+    "/events/:eventId/register", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response, _next: NextFunction) => {
-        // checking if receieved user object from frontend (not receiving means something went wrong)
+        // checking if received user object from frontend (not receiving means something went wrong)
         if (!req.body.user) {
-            return res.status(400).json({
-                error: "Did not find a user",
+            res.status(400).json({
+                error: "User information not passed with request",
             });
         }
         // query the db to find the registeredUsers field of the current event
         const queryRegisteredUsers = await Event.findById(
-            { _id: req.params.eventid },
+            { _id: req.params.eventId },
             "registeredUsers"
         );
         // if the registeredUsers array does not already include the user that wants to register
         if (queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: "User is already registered for this event",
             });
         }
 
         const queryMaxCapacity = await Event.findById(
-            { _id: req.params.eventid },
+            { _id: req.params.eventId },
             "maxCapacity"
         );
         // TODO: check that this max capacity test works
@@ -104,36 +104,35 @@ eventRouter.put(
             queryMaxCapacity.maxCapacity ===
             queryRegisteredUsers.registeredUsers.length
         ) {
-            return res.status(400).json({
+            res.status(400).json({
                 error: "Max Capacity Reached",
             });
         }
         // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
-        // TODO: have a check for number of registered users so that we dont exceed capacity!!
+        // TODO: have a check for number of registered users so that we don't exceed capacity!!
 
         // user does not exist in registeredUsers so we can proceed
         Event.findByIdAndUpdate(
-            { _id: req.params.eventid }, // getting event by id
+            { _id: req.params.eventId }, // getting event by id
             { $push: { registeredUsers: req.body.user } }, // pushing the user into registeredUsers array
             { new: true }, // findByIdAndUpdate returns the mongoDB object AFTER the update has been applied
             (err, result) => {
                 if (err) {
-                    return res.status(400).json({
+                    res.status(400).json({
                         error: err,
                     });
                 }
                 console.log(result);
-                return res.status(200).json({
-                    message: "Sucessfully added user",
+                res.status(200).json({
+                    message: "Successfully added user",
                 });
             }
         );
-        return;
     }
 );
 
 /**
- * assume you can access the eventid with req.params.eventid
+ * assume you can access the eventId with req.params.eventId
  * assume that the req.body looks the exact same as in the POST request for creating new events
  * TODO: update the event with the new changes (could probably just update all the fields with everything you get in req.body). Could just create a new Event like I did in the POST request and pass it in as the second argument
  *      to the findByIdAndUpdate method
@@ -143,7 +142,7 @@ eventRouter.put(
 // editing an event by its host user
 // TODO: uncomment the method below and fill it in :)
 // eventRouter.put(
-//     "/events/:eventid/edit",
+//     "/events/:eventId/edit",
 //     authCheck,
 //     async (req: Request, res: Response, _next: NextFunction) => {
 //         // TODO: fill this in
