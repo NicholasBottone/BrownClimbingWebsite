@@ -51,12 +51,11 @@ export default function CalendarPage(props: {
                         <div>
                             <Spinner animation="border" role="status" />
                             <p>{error}</p>
-                        </div> // don't show user info until loading from backend is done
+                        </div>
                     ) : (
                         <Calendar
                             authenticated={authenticated}
                             user={user}
-                            error={error}
                             eventList={eventList}
                         />
                     )}
@@ -72,10 +71,9 @@ export default function CalendarPage(props: {
 function Calendar(props: {
     authenticated: boolean;
     user: UserType | undefined;
-    error: string;
     eventList: EventType[];
 }) {
-    const { authenticated, user, error, eventList } = props;
+    const { authenticated, user, eventList } = props;
 
     if (eventList == null) {
         return <></>;
@@ -88,20 +86,16 @@ function Calendar(props: {
                     <EventElement key={event._id} event={event} user={user} />
                 ))}
             </CardColumns>
-            <div>
-                <p>{error}</p>
-                <Spinner animation="border" role="status" />
-            </div>
 
             <br />
             <br />
             {authenticated ? (
                 <Button as={Link} to="/calendar/create" variant="primary">
-                    Create/Host an Event
+                    Host an Event
                 </Button>
             ) : (
                 <Button onClick={handleLoginClick} variant="primary">
-                    Login to RSVP for Events
+                    Login for the best experience
                 </Button>
             )}
         </>
