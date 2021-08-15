@@ -20,6 +20,7 @@ export async function fetchCalendar() {
             // set the event list to be displayed
             return resJson.events;
         } else {
+            console.error(res);
             throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
@@ -31,7 +32,7 @@ export async function fetchCalendar() {
 export async function fetchEvent(eventId: string) {
     try {
         const res = await fetch(
-            `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${eventId}`,
+            `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${eventId}`,
             {
                 method: "GET",
                 credentials: "include",
@@ -48,6 +49,7 @@ export async function fetchEvent(eventId: string) {
             // set the event to be displayed
             return resJson.event;
         } else {
+            console.error(res);
             throw new Error("Could not fetch: Not OK response from server.");
         }
     } catch (error) {
@@ -82,7 +84,7 @@ async function registrationPutRequest(
 
 export async function registerForEvent(event: EventType, user?: UserType) {
     return registrationPutRequest(
-        `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${event._id}/register`,
+        `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${event._id}/register`,
         event,
         user
     );
@@ -90,7 +92,7 @@ export async function registerForEvent(event: EventType, user?: UserType) {
 
 export async function unregisterForEvent(event: EventType, user?: UserType) {
     return registrationPutRequest(
-        `${process.env.REACT_APP_API_BASE_URL}/calendar/events/${event._id}/unregister`,
+        `${process.env.REACT_APP_API_BASE_URL}/calendar/event/${event._id}/unregister`,
         event,
         user
     );

@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { EventType, locations, UserType } from "../types";
+import { EventType, IdParams, locations, UserType } from "../types";
 import { deleteEvent, fetchEvent, updateEvent } from "../utils/calendar";
 
 export default function EditEventPage(props: {
@@ -18,7 +18,7 @@ export default function EditEventPage(props: {
     loading: boolean;
 }) {
     const { authenticated, user, loading } = props;
-    const eventId: string = useParams();
+    const { eventId } = useParams<IdParams>();
 
     const [event, setEvent] = useState<EventType>();
     const [error, setError] = useState("Loading event data...");

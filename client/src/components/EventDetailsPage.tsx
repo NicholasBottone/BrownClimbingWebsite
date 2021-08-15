@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/esm/Button";
 import Card from "react-bootstrap/Card";
 
-import { BasicUserType, EventType, UserType } from "../types";
+import { BasicUserType, EventType, IdParams, UserType } from "../types";
 import { fetchEvent } from "../utils/calendar";
 
 export default function EventDetailsPage(props: {
@@ -15,7 +15,7 @@ export default function EventDetailsPage(props: {
     loading: boolean;
 }) {
     const { user, loading } = props;
-    const eventId: string = useParams();
+    const { eventId } = useParams<IdParams>();
 
     const [event, setEvent] = useState<EventType>();
     const [error, setError] = useState("Loading event data...");

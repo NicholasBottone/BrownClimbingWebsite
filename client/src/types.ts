@@ -31,6 +31,10 @@ export type EventType = {
     maxCapacity: number;
 };
 
+export type IdParams = {
+    eventId: string;
+};
+
 export const locations = [
     "Gym 1",
     "Another one",

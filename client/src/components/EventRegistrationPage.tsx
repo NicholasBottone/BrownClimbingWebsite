@@ -6,7 +6,7 @@ import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/esm/Button";
 
-import { BasicUserType, EventType, UserType } from "../types";
+import { BasicUserType, EventType, IdParams, UserType } from "../types";
 import {
     fetchEvent,
     registerForEvent,
@@ -19,7 +19,7 @@ export default function EventRegistrationPage(props: {
     loading: boolean;
 }) {
     const { user, loading } = props;
-    const eventId: string = useParams();
+    const { eventId } = useParams<IdParams>();
 
     const [event, setEvent] = useState<EventType>();
     const [error, setError] = useState("Loading event data...");
