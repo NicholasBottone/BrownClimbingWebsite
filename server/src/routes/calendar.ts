@@ -18,12 +18,12 @@ eventRouter.get("/events", (_req: Request, res: Response) => {
         res.json({ events });
     })
         .populate("hostUser")
+        .populate("registeredUsers")
         .sort([["startTime", -1]]);
 });
 
 // GET request that retrieves a specific event
 eventRouter.get("/event/:eventId", (req: Request, res: Response) => {
-    console.log(req);
     Event.findById(req.params.eventId, (err: Error, event: EventType) => {
         if (err) {
             console.error(err); // TODO: figure out proper error handling
@@ -31,7 +31,9 @@ eventRouter.get("/event/:eventId", (req: Request, res: Response) => {
             return;
         }
         res.json({ event });
-    });
+    })
+        .populate("hostUser")
+        .populate("registeredUsers");
 });
 
 // POST request that allows user to input event and handles possible error for ill formatted event

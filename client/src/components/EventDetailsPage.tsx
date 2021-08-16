@@ -82,10 +82,10 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                 <Card.Text>
                     Registrants:
                     {event.registeredUsers.map((u) => (
-                        <>
+                        <span key={u.googleId}>
                             <br />
-                            u.displayName
-                        </>
+                            {u.displayName}
+                        </span>
                     ))}
                 </Card.Text>
                 {user != null ? <RegisteredUserEventOptions /> : <></>}
