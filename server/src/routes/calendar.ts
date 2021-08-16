@@ -94,7 +94,7 @@ Example JSON for updating existing event:
 
 // user registering for event
 eventRouter.put(
-    "/events/:eventId/register", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
+    "/event/:eventId/register", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response) => {
         // checking if received user object from frontend (not receiving means something went wrong)
@@ -142,6 +142,47 @@ eventRouter.put(
                 }
                 res.status(200).json({
                     message: "Successfully registered user for event",
+                });
+            }
+        );
+    }
+);
+
+// user unregistering from event
+eventRouter.put(
+    "/event/:eventId/unregister", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
+    authCheck,
+    async (req: Request, res: Response) => {
+        // checking if received user object from frontend (not receiving means something went wrong)
+        if (!req.body.user) {
+            res.status(400).json({
+                message: "User information not passed with request",
+            });
+        }
+
+        // check if the user is already registered for the event
+        const queryRegisteredUsers = await Event.findById(
+            { _id: req.params.eventId },
+            "registeredUsers"
+        );
+        if (!queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
+            res.status(400).json({
+                message: "User is not registered for this event",
+            });
+        }
+
+        // update the registeredUsers field of the current event in the db
+        Event.findByIdAndUpdate(
+            { _id: req.params.eventId }, // getting event by id
+            { $pull: { registeredUsers: req.body.user._id } }, // pulling the user from registeredUsers array
+            (err) => {
+                if (err) {
+                    console.error(err); // TODO: figure out proper error handling
+                    res.status(500).send(err);
+                    return;
+                }
+                res.status(200).json({
+                    message: "Successfully unregistered user from event",
                 });
             }
         );
