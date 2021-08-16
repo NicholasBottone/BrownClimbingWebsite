@@ -16,7 +16,7 @@ export default function MyAccountPage(props: {
     const { authenticated, user, loading } = props;
 
     if (!loading && !authenticated) {
-        // unauthed users are redirected to homepage
+        // unauthenticated users are redirected to login page
         handleLoginClick();
         return <></>;
     }
@@ -27,11 +27,11 @@ export default function MyAccountPage(props: {
                 <Jumbotron>
                     <h1>My Account</h1>
                     <br />
-                    {loading ? (
+                    {loading || !user ? (
                         <div>
                             <Spinner animation="border" role="status" />
                             <p>Loading...</p>
-                        </div> // don't show user info until loading from backend is done
+                        </div>
                     ) : (
                         <UserAccountProfile user={user} />
                     )}
@@ -44,6 +44,10 @@ export default function MyAccountPage(props: {
 function UserAccountProfile(props: { user: UserType | undefined }) {
     const { user } = props;
 
+    if (!user) {
+        return <></>;
+    }
+
     return (
         <div>
             <Image
@@ -52,22 +56,25 @@ function UserAccountProfile(props: { user: UserType | undefined }) {
                 height="200"
                 alt="profile"
                 src={
-                    user?.displayPictureURL ||
+                    user.displayPictureURL ||
                     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                 }
             />
             <br />
             <br />
             <p>
-                Display Name: <b>{user?.displayName}</b>
+                Display Name: <b>{user.displayName}</b>
                 <br />
-                Email address: <b>{user?.email}</b>
+                Email address: <b>{user.email}</b>
                 <br />
-                Member since: <b>{user?.memberSince}</b>
+                Member since: <b>{new Date(user.createdAt).toLocaleString()}</b>
                 <br />
-                Last login: <b>{user?.lastLogin}</b>
+                Last login:{" "}
+                <b>{new Date(user.lastLoggedIn).toLocaleString()}</b>
                 <br />
-                User ID: <b>{user?.googleId}</b>
+                User ID: <b>{user.googleId}</b>
+                <br />
+                {user.moderator ? <>You are a site moderator.</> : <></>}
                 <br />
                 <br />
                 Your display name, user ID, email address, and profile picture

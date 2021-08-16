@@ -12,9 +12,9 @@ export type UserType = {
     displayName: string;
     email: string;
     displayPictureURL: string;
-    memberSince: Date; // TODO Implement member since
-    lastLogin: Date; // TODO Implement last login
-    moderator: boolean; // TODO Implement moderator
+    createdAt: Date;
+    lastLoggedIn: Date;
+    moderator: boolean;
 };
 
 // types for Event Model
