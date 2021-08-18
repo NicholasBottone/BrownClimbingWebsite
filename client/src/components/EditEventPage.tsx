@@ -4,13 +4,11 @@ import { Redirect, useParams } from "react-router-dom";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
-import { EventType, IdParams, locations, UserType } from "../types";
+import { EventType, IdParams, UserType } from "../types";
 import { deleteEvent, fetchEvent, updateEvent } from "../utils/calendar";
+import EventForm from "./EventForm";
 
 export default function EditEventPage(props: {
     authenticated: boolean;
@@ -40,16 +38,6 @@ export default function EditEventPage(props: {
         };
     }, [loading, eventId]);
 
-    const handleDelete = () => {
-        if (!event) return;
-
-        if (window.confirm("Are you sure you want to delete this event?")) {
-            if (deleteEvent(event)) {
-                alert("Event deleted!");
-            }
-        }
-    };
-
     return (
         <div>
             <Container className="p-3 text-center">
@@ -62,18 +50,13 @@ export default function EditEventPage(props: {
                         <div>
                             <Spinner animation="border" role="status" />
                             <p>{error}</p>
-                        </div> // don't show user info until loading from backend is done
+                        </div>
                     ) : (
-                        <>
-                            <FormElement
-                                authenticated={authenticated}
-                                user={user}
-                                event={event}
-                            />
-                            <Button variant="danger" onClick={handleDelete}>
-                                Delete Event
-                            </Button>
-                        </>
+                        <FormElement
+                            authenticated={authenticated}
+                            user={user}
+                            event={event}
+                        />
                     )}
                 </Jumbotron>
             </Container>
@@ -138,141 +121,47 @@ function FormElement(props: {
         }
     };
 
+    const handleDelete = () => {
+        if (!event) return;
+
+        if (window.confirm("Are you sure you want to delete this event?")) {
+            if (deleteEvent(event)) {
+                alert("Event deleted!");
+            }
+        }
+    };
+
     return (
-        <div className="p-3 text-left">
-            <Form onSubmit={handleSubmit}>
-                <Form.Group as={Row} controlId="hostUser">
-                    <Form.Label column sm={3}>
-                        Host
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            name="hostUser"
-                            type="text"
-                            defaultValue={user?.displayName}
-                            readOnly
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="eventTitle">
-                    <Form.Label column sm={3}>
-                        Event Title
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="text"
-                            placeholder="Event Title"
-                            required
-                            onChange={(e) => setEventTitle(e.target.value)}
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="description">
-                    <Form.Label column sm={3}>
-                        Description
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="text"
-                            placeholder="Description"
-                            required
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="location">
-                    <Form.Label column sm={3}>
-                        Location
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            as="select"
-                            required
-                            onChange={(e) => setLocation(e.target.value)}
-                        >
-                            {locations.map((loc) => (
-                                <option>{loc}</option> // TODO: Consider adding a default option for "Please select"
-                            ))}
-                        </Form.Control>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="formDate">
-                    <Form.Label column sm={3}>
-                        Date
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="date"
-                            required
-                            min={new Date().toISOString().split("T")[0]}
-                            onChange={(e) => setEventDate(e.target.value)}
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="startTime">
-                    <Form.Label column sm={3}>
-                        Start Time
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="time"
-                            required
-                            onChange={(e) => setStartTime(e.target.value)}
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="durationMinutes">
-                    <Form.Label column sm={3}>
-                        Duration
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="number"
-                            placeholder="Duration"
-                            required
-                            onChange={(e) => setDuration(+e.target.value)}
-                        />
-                        <Form.Text className="text-muted">
-                            Estimated event duration in minutes
-                        </Form.Text>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="transportInfo">
-                    <Form.Label column sm={3}>
-                        Transport Info
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="text"
-                            placeholder="Transport Info"
-                            required
-                            onChange={(e) => setTransportInfo(e.target.value)}
-                        />
-                        <Form.Text className="text-muted">
-                            How will the attendees be getting to the event?
-                        </Form.Text>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="maxCapacity">
-                    <Form.Label column sm={3}>
-                        Max Capacity
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control
-                            type="number"
-                            placeholder="Max Capacity"
-                            required
-                            onChange={(e) => setMaxCapacity(+e.target.value)}
-                        />
-                        <Form.Text className="text-muted">
-                            How many attendees should be allowed to register?
-                        </Form.Text>
-                    </Col>
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        </div>
+        <>
+            <Button variant="danger" onClick={handleDelete}>
+                Delete Event
+            </Button>
+            <br />
+            <EventForm
+                handleSubmit={handleSubmit}
+                defaultValues={[
+                    user?.displayName,
+                    eventTitle,
+                    description,
+                    location,
+                    eventDate,
+                    startTime,
+                    duration,
+                    transportInfo,
+                    maxCapacity,
+                ]}
+                setValues={[
+                    () => null,
+                    setEventTitle,
+                    setDescription,
+                    setLocation,
+                    setEventDate,
+                    setStartTime,
+                    setDuration,
+                    setTransportInfo,
+                    setMaxCapacity,
+                ]}
+            />
+        </>
     );
 }
