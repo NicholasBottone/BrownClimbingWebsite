@@ -36,7 +36,7 @@ eventRouter.get("/event/:eventId", (req: Request, res: Response) => {
         .populate("registeredUsers");
 });
 
-// POST request that allows user to input event and handles possible error for ill formatted event
+// POST request that creates new event
 eventRouter.post(
     "/events",
     authCheck,
@@ -45,7 +45,7 @@ eventRouter.post(
     body("hostUser").trim().escape(),
     body("location").trim().escape(),
     body("startTime").trim().escape(),
-    body("durationAsNumber").trim().escape(),
+    body("durationAsNumber").trim().escape().isInt({ min: 1, max: 1000 }),
     body("transportInfo").trim().escape(),
     body("maxCapacityAsNumber").trim().escape().isInt({ min: 1, max: 100 }),
     (req: Request, res: Response) => {
