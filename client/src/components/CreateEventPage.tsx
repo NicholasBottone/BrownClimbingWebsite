@@ -182,6 +182,7 @@ export default function CreateEventPage(props: {
                                 placeholder="Duration"
                                 required
                                 min={1}
+                                max={1000}
                                 onChange={(e) => setDuration(e.target.value)}
                             />
                             <Form.Text className="text-muted">
@@ -217,6 +218,7 @@ export default function CreateEventPage(props: {
                                 placeholder="Max Capacity"
                                 required
                                 min={1}
+                                max={100}
                                 onChange={(e) => setMaxCapacity(e.target.value)}
                             />
                             <Form.Text className="text-muted">
