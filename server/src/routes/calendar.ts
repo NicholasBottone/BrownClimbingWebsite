@@ -42,26 +42,25 @@ eventRouter.post(
     authCheck,
     body("eventTitle").trim().escape(),
     body("description").trim().escape(),
-    body("hostUser").trim().escape(),
     body("location").trim().escape(),
     body("startTime").trim().escape(),
-    body("durationAsNumber").trim().escape().isInt({ min: 1, max: 1000 }),
+    body("duration").trim().escape().isInt({ min: 1, max: 1000 }),
     body("transportInfo").trim().escape(),
-    body("maxCapacityAsNumber").trim().escape().isInt({ min: 1, max: 100 }),
+    body("maxCapacity").trim().escape().isInt({ min: 1, max: 100 }),
     (req: Request, res: Response) => {
         // Sanitize fields before creating new Event
         //TODO: convert the date to JS date (could use native JS API or Moment)
         const event = new Event({
             eventTitle: req.body.eventTitle,
             description: req.body.description,
-            hostUser: req.user, // TODO: Extract user properly (depending on final schema choice)
+            hostUser: req.user,
             location: req.body.location,
             startTime: req.body.startTime,
             eventDate: req.body.eventDate,
-            durationMinutes: parseInt(req.body.durationAsNumber),
+            durationMinutes: parseInt(req.body.duration),
             transportInfo: req.body.transportInfo,
-            maxCapacity: parseInt(req.body.maxCapacityAsNumber),
-            // registeredUsers: [req.user], // should we or should we not include the user that hosted the event in the registeredUsers thing
+            maxCapacity: parseInt(req.body.maxCapacity),
+            registeredUsers: [req.user], // include the host user in registeredUsers
         });
 
         event.save((err: Error) => {

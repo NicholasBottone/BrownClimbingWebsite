@@ -64,9 +64,9 @@ export default function CreateEventPage(props: {
                     location,
                     eventDate,
                     startTime,
-                    durationAsNumber,
+                    duration: durationAsNumber,
                     transportInfo,
-                    maxCapacityAsNumber,
+                    maxCapacity: maxCapacityAsNumber,
                 };
             } else {
                 console.error("User is not authenticated");
