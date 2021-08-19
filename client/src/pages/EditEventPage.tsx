@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 
 import { EventType, IdParams, UserType } from "../types";
 import { deleteEvent, fetchEvent, updateEvent } from "../utils/calendar";
-import EventForm from "./EventForm";
+import EventForm from "../components/EventForm";
 
 export default function EditEventPage(props: {
     authenticated: boolean;

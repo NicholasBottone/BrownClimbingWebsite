@@ -7,7 +7,7 @@ import Spinner from "react-bootstrap/Spinner";
 
 import { locations, UserType } from "../types";
 import { createEvent } from "../utils/calendar";
-import EventForm from "./EventForm";
+import EventForm from "../components/EventForm";
 
 export default function CreateEventPage(props: {
     authenticated: boolean;
