@@ -114,9 +114,9 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                 </Card.Subtitle>
                 <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
-                    Location: {event.location}
+                    Event starts at {new Date(event.startTime).toLocaleString()}
                     <br />
-                    Event starts at {event.startTime.toLocaleString()}
+                    Location: {event.location}
                     <br />
                     Transport via {event.transportInfo}
                     <br />

@@ -70,12 +70,16 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                 </Card.Subtitle>
                 <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
+                    Event starts at {new Date(event.startTime).toLocaleString()}
+                    <br />
+                    Event duration: {event.durationMinutes} minutes
+                </Card.Text>
+                <Card.Text>
                     Location: {event.location}
                     <br />
-                    Event starts at {event.startTime.toLocaleString()}
-                    <br />
                     Transport via {event.transportInfo}
-                    <br />
+                </Card.Text>
+                <Card.Text>
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}
                 </Card.Text>

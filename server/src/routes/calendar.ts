@@ -48,21 +48,25 @@ eventRouter.post(
     body("transportInfo").trim().escape(),
     body("maxCapacity").trim().escape().isInt({ min: 1, max: 100 }),
     (req: Request, res: Response) => {
-        // Sanitize fields before creating new Event
-        //TODO: convert the date to JS date (could use native JS API or Moment)
+        // Combine startTime and eventDate to create a new Date object
+        const startTime = new Date(
+            req.body.eventDate + " " + req.body.startTime
+        );
+
+        // Create new Event object
         const event = new Event({
             eventTitle: req.body.eventTitle,
             description: req.body.description,
-            hostUser: req.user,
+            hostUser: req.user, // host user is the logged in user
             location: req.body.location,
-            startTime: req.body.startTime,
-            eventDate: req.body.eventDate,
+            startTime: startTime,
             durationMinutes: parseInt(req.body.duration),
             transportInfo: req.body.transportInfo,
             maxCapacity: parseInt(req.body.maxCapacity),
             registeredUsers: [req.user], // include the host user in registeredUsers
         });
 
+        // Save the new event
         event.save((err: Error) => {
             if (err) {
                 console.error(err); // TODO: figure out proper error handling
