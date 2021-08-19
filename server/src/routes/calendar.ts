@@ -188,6 +188,37 @@ eventRouter.put(
     }
 );
 
+// delete an existing event
+eventRouter.delete(
+    "/event/:eventId", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
+    authCheck,
+    async (req: Request, res: Response) => {
+        // check if the user is the host of the event or a moderator
+        const queryHost = await Event.findById(
+            { _id: req.params.eventId },
+            "hostUser"
+        );
+        if (queryHost.hostUser !== req.user) {
+            // TODO: check if user is a moderator
+            res.status(401).json({
+                message: "User is not the host of this event",
+            });
+        }
+
+        // delete the event from the db
+        Event.findByIdAndRemove({ _id: req.params.eventId }, null, (err) => {
+            if (err) {
+                console.error(err); // TODO: figure out proper error handling
+                res.status(500).send(err);
+                return;
+            }
+            res.status(200).json({
+                message: "Successfully deleted event",
+            });
+        });
+    }
+);
+
 /**
  * assume you can access the eventId with req.params.eventId
  * assume that the req.body looks the exact same as in the POST request for creating new events
