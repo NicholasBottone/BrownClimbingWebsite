@@ -70,10 +70,9 @@ eventRouter.post(
         event.save((err: Error) => {
             if (err) {
                 console.error(err); // TODO: figure out proper error handling
-                res.status(500).send(err);
-                return;
+                return res.status(500).send(err);
             }
-            res.status(200).json({
+            return res.status(200).json({
                 event,
                 message: "Event created successfully",
             });
@@ -102,7 +101,7 @@ eventRouter.put(
     async (req: Request, res: Response) => {
         // checking if received user object from frontend (not receiving means something went wrong)
         if (!req.body.user) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "User information not passed with request",
             });
         }
@@ -113,7 +112,7 @@ eventRouter.put(
             "registeredUsers"
         );
         if (queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "User is already registered for this event",
             });
         }
@@ -127,7 +126,7 @@ eventRouter.put(
             queryMaxCapacity.maxCapacity <=
             queryRegisteredUsers.registeredUsers.length
         ) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Max event capacity reached",
             });
         }
@@ -140,14 +139,15 @@ eventRouter.put(
             (err) => {
                 if (err) {
                     console.error(err); // TODO: figure out proper error handling
-                    res.status(500).send(err);
-                    return;
+                    return res.status(500).send(err);
+                    // return;
                 }
-                res.status(200).json({
+                return res.status(200).json({
                     message: "Successfully registered user for event",
                 });
             }
         );
+        return; // bandaid fix for return paths but should figure out why not all code paths return a value
     }
 );
 
@@ -158,7 +158,7 @@ eventRouter.put(
     async (req: Request, res: Response) => {
         // checking if received user object from frontend (not receiving means something went wrong)
         if (!req.body.user) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "User information not passed with request",
             });
         }
@@ -169,7 +169,7 @@ eventRouter.put(
             "registeredUsers"
         );
         if (!queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "User is not registered for this event",
             });
         }
@@ -181,14 +181,14 @@ eventRouter.put(
             (err) => {
                 if (err) {
                     console.error(err); // TODO: figure out proper error handling
-                    res.status(500).send(err);
-                    return;
+                    return res.status(500).send(err);
                 }
-                res.status(200).json({
+                return res.status(200).json({
                     message: "Successfully unregistered user from event",
                 });
             }
         );
+        return; // again bandaid fix but figure out return paths
     }
 );
 
@@ -204,7 +204,7 @@ eventRouter.delete(
         );
         if (queryHost.hostUser !== req.user) {
             // TODO: check if user is a moderator
-            res.status(401).json({
+            return res.status(401).json({
                 message: "User is not the host of this event",
             });
         }
@@ -213,13 +213,13 @@ eventRouter.delete(
         Event.findByIdAndRemove({ _id: req.params.eventId }, null, (err) => {
             if (err) {
                 console.error(err); // TODO: figure out proper error handling
-                res.status(500).send(err);
-                return;
+                return res.status(500).send(err);
             }
-            res.status(200).json({
+            return res.status(200).json({
                 message: "Successfully deleted event",
             });
         });
+        return; // bandaid fix
     }
 );
 
