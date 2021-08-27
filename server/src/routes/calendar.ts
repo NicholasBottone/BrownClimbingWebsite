@@ -111,6 +111,7 @@ eventRouter.put(
             res.status(400).json({
                 message: "User information not passed with request",
             });
+            return;
         }
 
         // check if the user is already registered for the event
@@ -122,6 +123,7 @@ eventRouter.put(
             res.status(400).json({
                 message: "User is already registered for this event",
             });
+            return;
         }
 
         // check if the event is full
@@ -136,6 +138,7 @@ eventRouter.put(
             res.status(400).json({
                 message: "Max event capacity reached",
             });
+            return;
         }
         // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
 
@@ -167,6 +170,7 @@ eventRouter.put(
             res.status(400).json({
                 message: "User information not passed with request",
             });
+            return;
         }
 
         // check if the user is already registered for the event
@@ -178,6 +182,7 @@ eventRouter.put(
             res.status(400).json({
                 message: "User is not registered for this event",
             });
+            return;
         }
 
         // update the registeredUsers field of the current event in the db
@@ -209,10 +214,10 @@ eventRouter.delete(
             "hostUser"
         );
         if (queryHost.hostUser !== req.user) {
+            // FIXME: not working, need to compare express user object to mongo user object
             // TODO: check if user is a moderator
-            res.status(401).json({
-                message: "User is not the host of this event",
-            });
+            res.status(401).send("Unauthorized - Not the host of this event");
+            return;
         }
 
         // delete the event from the db
