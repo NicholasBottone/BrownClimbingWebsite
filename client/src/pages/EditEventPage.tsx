@@ -72,14 +72,12 @@ function FormElement(props: {
     const { authenticated, user, event } = props;
 
     const [redirect, setRedirect] = useState(false);
-    const isoEventDate = new Date(event.startTime);
-    console.log(typeof isoEventDate);
 
     const [eventTitle, setEventTitle] = useState(event.eventTitle);
     const [description, setDescription] = useState(event.description);
     const [location, setLocation] = useState(event.location);
-    const [eventDate, setEventDate] = useState(isoEventDate.toISOString());
-    const [startTime, setStartTime] = useState(isoEventDate.toISOString());
+    const [eventDate, setEventDate] = useState(event.startTime.toISOString());
+    const [startTime, setStartTime] = useState(event.startTime.toISOString());
     const [duration, setDuration] = useState(event.durationMinutes);
     const [transportInfo, setTransportInfo] = useState(event.transportInfo);
     const [maxCapacity, setMaxCapacity] = useState(event.maxCapacity);
