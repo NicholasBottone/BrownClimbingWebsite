@@ -53,6 +53,12 @@ eventRouter.post(
             req.body.eventDate + " " + req.body.startTime
         );
 
+        // validate startTime to be in future
+        if (startTime < new Date()) {
+            res.status(400).send("Start time must be in the future.");
+            return;
+        }
+
         // Create new Event object
         const event = new Event({
             eventTitle: req.body.eventTitle,
