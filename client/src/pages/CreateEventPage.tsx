@@ -80,7 +80,7 @@ export default function CreateEventPage(props: {
         const handleSubmit = async (form: React.SyntheticEvent) => {
             form.preventDefault();
 
-            if (createEvent(createJSONBody())) {
+            if (await createEvent(createJSONBody())) {
                 alert(`Successfully created "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
                 setRedirect(true);
             }

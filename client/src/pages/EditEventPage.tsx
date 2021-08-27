@@ -73,11 +73,17 @@ function FormElement(props: {
 
     const [redirect, setRedirect] = useState(false);
 
+    // convert the date to an ISO-like string in the locale time zone
+    const date = new Date(event.startTime);
+    const timeOffset = date.getTimezoneOffset() * 60 * 1000;
+    const localISOString = new Date(date.getTime() - timeOffset).toISOString();
+
+    // setup the states for the form elements using the event data
     const [eventTitle, setEventTitle] = useState(event.eventTitle);
     const [description, setDescription] = useState(event.description);
     const [location, setLocation] = useState(event.location);
-    const [eventDate, setEventDate] = useState(event.startTime.toISOString());
-    const [startTime, setStartTime] = useState(event.startTime.toISOString());
+    const [eventDate, setEventDate] = useState(localISOString);
+    const [startTime, setStartTime] = useState(date.toTimeString());
     const [duration, setDuration] = useState(event.durationMinutes);
     const [transportInfo, setTransportInfo] = useState(event.transportInfo);
     const [maxCapacity, setMaxCapacity] = useState(event.maxCapacity);
@@ -115,18 +121,19 @@ function FormElement(props: {
     const handleSubmit = async (form: React.SyntheticEvent) => {
         form.preventDefault();
 
-        if (updateEvent(event, createJSONBody())) {
+        if (await updateEvent(event, createJSONBody())) {
             alert(`Successfully edited "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
             setRedirect(true);
         }
     };
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         if (!event) return;
 
         if (window.confirm("Are you sure you want to delete this event?")) {
-            if (deleteEvent(event)) {
+            if (await deleteEvent(event)) {
                 alert("Event deleted!");
+                setRedirect(true);
             }
         }
     };
@@ -136,6 +143,7 @@ function FormElement(props: {
             <Button variant="danger" onClick={handleDelete}>
                 Delete Event
             </Button>
+            <br />
             <br />
             <EventForm
                 handleSubmit={handleSubmit}

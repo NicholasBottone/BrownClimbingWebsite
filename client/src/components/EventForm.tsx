@@ -70,7 +70,7 @@ export default function EventForm(props: {
                             onChange={(e) => setValues[3](e.target.value)}
                         >
                             {locations.map((loc) => (
-                                <option>{loc}</option> // TODO: Consider adding a default option for "Please select"
+                                <option key={loc}>{loc}</option> // TODO: Consider adding a default option for "Please select"
                             ))}
                         </Form.Control>
                     </Col>
@@ -84,7 +84,7 @@ export default function EventForm(props: {
                             type="date"
                             required
                             min={new Date().toISOString().split("T")[0]}
-                            defaultValue={defaultValues[4]}
+                            defaultValue={defaultValues[4].split("T")[0]}
                             onChange={(e) => setValues[4](e.target.value)}
                         />
                     </Col>
@@ -97,7 +97,7 @@ export default function EventForm(props: {
                         <Form.Control
                             type="time"
                             required
-                            defaultValue={defaultValues[5]}
+                            value={defaultValues[5].substring(0, 5)}
                             onChange={(e) => setValues[5](e.target.value)}
                         />
                     </Col>

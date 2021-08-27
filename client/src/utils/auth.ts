@@ -28,7 +28,6 @@ export async function fetchUser(
             throw new Error("failed to authenticate user");
         }
     } catch (error) {
-        console.error(error);
         setAuthenticated(false);
         setError("Failed to authenticate user");
     }
