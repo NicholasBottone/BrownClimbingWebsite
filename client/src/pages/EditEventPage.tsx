@@ -124,6 +124,8 @@ function FormElement(props: {
         if (await updateEvent(event, createJSONBody())) {
             alert(`Successfully edited "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
             setRedirect(true);
+        } else {
+            alert("Error updating event!");
         }
     };
 
@@ -134,6 +136,8 @@ function FormElement(props: {
             if (await deleteEvent(event)) {
                 alert("Event deleted!");
                 setRedirect(true);
+            } else {
+                alert("Error deleting event!");
             }
         }
     };

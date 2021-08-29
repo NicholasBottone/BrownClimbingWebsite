@@ -110,7 +110,7 @@ function RegistrationConfirmation(props: {
                 setRedirect(true);
                 alert(`You are now registered for ${event.eventTitle}!`);
             } else {
-                console.error("Registration failed");
+                alert("Error registering for event!");
             }
         };
         const unregister = async () => {
@@ -118,7 +118,7 @@ function RegistrationConfirmation(props: {
                 setRedirect(true);
                 alert(`You are no longer registered for ${event.eventTitle}.`);
             } else {
-                console.error("Unregistration failed");
+                alert("Error registering for event!");
             }
         };
 
