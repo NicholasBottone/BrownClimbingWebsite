@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import HomePage from "./components/HomePage";
-import CalendarPage from "./components/CalendarPage";
-import AboutPage from "./components/AboutPage";
-import PrivacyPage from "./components/PrivacyPage";
-import NotFoundPage from "./components/NotFoundPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import MyAccountPage from "./components/MyAccountPage";
-import CreateEventPage from "./components/CreateEventPage";
+
+import HomePage from "./pages/HomePage";
+import CalendarPage from "./pages/CalendarPage";
+import AboutPage from "./pages/AboutPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import MyAccountPage from "./pages/MyAccountPage";
+import CreateEventPage from "./pages/CreateEventPage";
+import EditEventPage from "./pages/EditEventPage";
+import EventDetailsPage from "./pages/EventDetailsPage";
+import EventRegistrationPage from "./pages/EventRegistrationPage";
 
 import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
@@ -69,6 +73,31 @@ export default function App() {
                             user={user}
                             loading={loading}
                         />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/edit/:eventId"
+                    component={() => (
+                        <EditEventPage
+                            authenticated={authenticated}
+                            user={user}
+                            loading={loading}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/event/:eventId"
+                    component={() => (
+                        <EventDetailsPage user={user} loading={loading} />
+                    )}
+                />
+                <Route
+                    exact
+                    path="/calendar/register/:eventId"
+                    component={() => (
+                        <EventRegistrationPage user={user} loading={loading} />
                     )}
                 />
                 <Route

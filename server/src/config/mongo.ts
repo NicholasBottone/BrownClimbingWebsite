@@ -7,6 +7,7 @@ export function mongoConnection() {
         {
             useUnifiedTopology: true,
             useNewUrlParser: true,
+            useFindAndModify: false,
         },
         () => {
             console.log("connected to mongodb");

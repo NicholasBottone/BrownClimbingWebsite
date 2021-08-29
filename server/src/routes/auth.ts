@@ -4,7 +4,7 @@ import { authCheck } from "../middleware/auth";
 
 const authRouter = Router();
 
-// when login success, retrive user info
+// when login success, retrieve user info
 authRouter.get("/login/success", (req: Request, res: Response) => {
     if (req.user) {
         res.status(200).json({

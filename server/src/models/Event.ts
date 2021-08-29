@@ -16,14 +16,10 @@ const EventSchema = new Schema({
     },
     location: {
         type: String,
-        required: true, // TODO: change eventually
-    },
-    startTime: {
-        type: String,
         required: true,
     },
-    eventDate: {
-        type: String,
+    startTime: {
+        type: Date,
         required: true,
     },
     durationMinutes: {

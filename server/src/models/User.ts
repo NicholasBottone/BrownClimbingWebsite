@@ -5,6 +5,10 @@ export interface IUser extends Document {
     googleId: string;
     displayName: string;
     email: string;
+    displayPictureURL: string;
+    createdAt: Date;
+    lastLoggedIn: Date;
+    moderator: boolean;
 }
 
 const UserSchema = new Schema({
@@ -27,6 +31,14 @@ const UserSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    },
+    lastLoggedIn: {
+        type: Date,
+        default: Date.now,
+    },
+    moderator: {
+        type: Boolean,
+        default: false,
     },
 });
 
