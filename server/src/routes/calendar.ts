@@ -3,7 +3,7 @@ import { Error } from "mongoose";
 import { authCheck } from "../middleware/auth";
 import { body } from "express-validator";
 import Event from "../models/Event";
-import { EventType } from "src/types";
+import { EventType } from "../types";
 
 const eventRouter = Router();
 
@@ -213,10 +213,13 @@ eventRouter.delete(
             { _id: req.params.eventId },
             "hostUser"
         );
-        if (queryHost.hostUser !== req.user) {
-            // FIXME: not working, need to compare express user object to mongo user object
-            // TODO: check if user is a moderator
+        const user: any = req.user; // FIXME: this is a hacky way to get the user id (shouldn't be using any)
+        if (
+            queryHost.hostUser._id.toString() !== user._id.toString() ||
+            user.moderator
+        ) {
             res.status(401).send("Unauthorized - Not the host of this event");
+            console.log("401 on delete");
             return;
         }
 
@@ -233,13 +236,6 @@ eventRouter.delete(
         });
     }
 );
-
-/**
- * TODO: update the event with the new changes (could probably just update all the fields with everything you get in req.body). Could just create a new Event like I did in the POST request and pass it in as the second argument
- *      to the findByIdAndUpdate method
- * TODO: make sure the person trying to make the put request is in fact the hostUser of the event (look at how I used query in the above PUT request to access the registeredUsers field,
- *      will probably want to do something similar for the hostUser field and then compare that user that made the request (assume req.body.user) has the same ._id has the hostUser)
- */
 
 // PUT request for editing an event
 eventRouter.put(
@@ -258,9 +254,11 @@ eventRouter.put(
             { _id: req.params.eventId },
             "hostUser"
         );
-        if (queryHost.hostUser !== req.user) {
-            // FIXME: not working, need to compare express user object to mongo user object
-            // TODO: check if user is a moderator
+        const user: any = req.user; // FIXME: this is a hacky way to get the user id (shouldn't be using any)
+        if (
+            queryHost.hostUser._id.toString() !== user._id.toString() ||
+            user.moderator
+        ) {
             res.status(401).send("Unauthorized - Not the host of this event");
             return;
         }
