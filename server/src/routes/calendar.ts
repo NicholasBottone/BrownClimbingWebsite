@@ -101,7 +101,7 @@ Example JSON for updating existing event:
 	const event = await mongoose.findByID(req.body.eventId)
 */
 
-// user registering for event
+// PUT request for user registering for event
 eventRouter.put(
     "/event/:eventId/register", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
@@ -160,7 +160,7 @@ eventRouter.put(
     }
 );
 
-// user unregistering from event
+// PUT request for user unregistering from event
 eventRouter.put(
     "/event/:eventId/unregister", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
@@ -203,7 +203,7 @@ eventRouter.put(
     }
 );
 
-// delete an existing event
+// DELETE request for deleting an existing event
 eventRouter.delete(
     "/event/:eventId", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
@@ -235,20 +235,73 @@ eventRouter.delete(
 );
 
 /**
- * assume you can access the eventId with req.params.eventId
- * assume that the req.body looks the exact same as in the POST request for creating new events
  * TODO: update the event with the new changes (could probably just update all the fields with everything you get in req.body). Could just create a new Event like I did in the POST request and pass it in as the second argument
  *      to the findByIdAndUpdate method
  * TODO: make sure the person trying to make the put request is in fact the hostUser of the event (look at how I used query in the above PUT request to access the registeredUsers field,
  *      will probably want to do something similar for the hostUser field and then compare that user that made the request (assume req.body.user) has the same ._id has the hostUser)
  */
-// editing an event by its host user
-// TODO: uncomment the method below and fill it in :)
-// eventRouter.put(
-//     "/events/:eventId/edit",
-//     authCheck,
-//     async (req: Request, res: Response, _next: NextFunction) => {
-//         // TODO: fill this in
-//     }
-// );
+
+// PUT request for editing an event
+eventRouter.put(
+    "/event/:eventId", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
+    authCheck,
+    body("eventTitle").trim().escape(),
+    body("description").trim().escape(),
+    body("location").trim().escape(),
+    body("startTime").trim().escape(),
+    body("duration").trim().escape().isInt({ min: 1, max: 1000 }),
+    body("transportInfo").trim().escape(),
+    body("maxCapacity").trim().escape().isInt({ min: 1, max: 100 }),
+    async (req: Request, res: Response) => {
+        // check if the user is the host of the event or a moderator
+        const queryHost = await Event.findById(
+            { _id: req.params.eventId },
+            "hostUser"
+        );
+        if (queryHost.hostUser !== req.user) {
+            // FIXME: not working, need to compare express user object to mongo user object
+            // TODO: check if user is a moderator
+            res.status(401).send("Unauthorized - Not the host of this event");
+            return;
+        }
+
+        // Combine startTime and eventDate to create a new Date object
+        const startTime = new Date(
+            req.body.eventDate + " " + req.body.startTime
+        );
+
+        // validate startTime to be in future
+        if (startTime < new Date()) {
+            res.status(400).send("Start time must be in the future.");
+            return;
+        }
+
+        // update the event in the db
+        Event.findByIdAndUpdate(
+            { _id: req.params.eventId }, // getting event by id
+            {
+                $set: {
+                    eventTitle: req.body.eventTitle,
+                    description: req.body.description,
+                    location: req.body.location,
+                    startTime: startTime,
+                    duration: req.body.duration,
+                    transportInfo: req.body.transportInfo,
+                    maxCapacity: req.body.maxCapacity,
+                },
+            },
+            (err) => {
+                if (err) {
+                    console.error(err); // TODO: figure out proper error handling
+                    res.status(500).send(err);
+                    return;
+                }
+                res.status(200).json({
+                    message: "Successfully updated event",
+                });
+            }
+        );
+    }
+);
+
 export default eventRouter;
