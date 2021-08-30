@@ -35,21 +35,9 @@ export default function Header(props: {
                     <Nav.Link as={Link} to="/">
                         Home
                     </Nav.Link>
-                    <NavDropdown title="About" id="collasible-nav-dropdown">
-                        <NavDropdown.Item as={Link} to="/about">
-                            About Us
-                        </NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="#staff">
-                            Staff
-                        </NavDropdown.Item>
-                        <NavDropdown.Item as={Link} to="#history">
-                            History
-                        </NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item as={Link} to="#something">
-                            Something
-                        </NavDropdown.Item>
-                    </NavDropdown>
+                    <Nav.Link as={Link} to="/about">
+                        About
+                    </Nav.Link>
                     <Nav.Link as={Link} to="/calendar">
                         Calendar
                     </Nav.Link>
