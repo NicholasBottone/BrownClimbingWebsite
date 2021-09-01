@@ -1,5 +1,8 @@
 import nodemailer, { SentMessageInfo } from "nodemailer";
 import { EventType } from "src/types";
+import { getICS } from "./ics";
+
+// TODO: Separate the email messages into their own files
 
 // Setup nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -24,73 +27,102 @@ function sendEmail(
     });
 }
 
-export function sendConfirmationEmail(
+function sendEmailWithICAL(
     to: string,
-    event: EventType
+    subject: string,
+    text: string,
+    ics: string
 ): Promise<SentMessageInfo> {
-    const eventURL = `${process.env.CLIENT_URL}/calendar/event/${event._id}`;
-    return sendEmail(
+    return transporter.sendMail({
+        from: `"Brown Climbing" ${process.env.SMTP_USERNAME}`,
         to,
-        `${event.eventTitle} - Confirmation`,
-        `Hey!
-        
-        You have successfully registered for ${event.eventTitle}.
-        
-        ${event.startTime.toLocaleString()}
-        
-        For more information, or to cancel, visit ${eventURL}
-        See you there!
-        
-        --
-        Brown Climbing Automated Message`
-    );
+        subject,
+        text,
+        icalEvent: {
+            content: ics,
+        },
+    });
 }
 
-export function sendCreationEmail(
-    to: string,
-    event: EventType
-): Promise<SentMessageInfo> {
+export function sendConfirmationEmail(to: string, event: EventType) {
     const eventURL = `${process.env.CLIENT_URL}/calendar/event/${event._id}`;
-    return sendEmail(
-        to,
-        `${event.eventTitle} - Confirmation`,
-        `Hey!
-        
-        You have created a new event: ${event.eventTitle}.
-
-        ${event.startTime.toLocaleString()}
-
-        You can edit and update information about your event at ${eventURL}
-        Registrants will receive an email confirmation when they register and a reminder email 24 hours prior to the event.
-        You can see who has registered on the event details page.
-        Note that you are responsible for keeping the event information up to date and communicating with the registrants.
-        You can edit or delete/cancel your event at any time from the details page above.
-        
-        Good luck hosting your event!
-        
-        --
-        Brown Climbing Automated Message`
-    );
+    getICS(event, (err, ics) => {
+        if (err) {
+            console.error(err);
+            sendEmail(
+                to,
+                `${event.eventTitle} - Confirmation`,
+                `Hey!
+                \nYou have successfully registered for ${event.eventTitle}.
+                \n${event.startTime.toLocaleString()}
+                \nFor more information, or to cancel, visit ${eventURL}\nSee you there!
+                \n--\nBrown Climbing Automated Message`
+            );
+        } else {
+            sendEmailWithICAL(
+                to,
+                `${event.eventTitle} - Confirmation`,
+                `Hey!
+                \nYou have successfully registered for ${event.eventTitle}.
+                \n${event.startTime.toLocaleString()}
+                \nFor more information, or to cancel, visit ${eventURL}
+                \nA calendar file is attached for your convenience.\nSee you there!
+                \n--\nBrown Climbing Automated Message`,
+                ics
+            );
+        }
+    });
 }
 
-export function sendReminderEmail(
-    to: string,
-    event: EventType
-): Promise<SentMessageInfo> {
+export function sendCreationEmail(to: string, event: EventType) {
     const eventURL = `${process.env.CLIENT_URL}/calendar/event/${event._id}`;
-    return sendEmail(
+    getICS(event, (err, ics) => {
+        if (err) {
+            console.error(err);
+            sendEmail(
+                to,
+                `${event.eventTitle} - Confirmation`,
+                `Hey!
+                \nYou have created a new event: ${event.eventTitle}.
+                \n${event.startTime.toLocaleString()}
+                \nYou can edit and update information about your event at ${eventURL}
+                \nRegistrants will receive an email confirmation when they register and a reminder email 24 hours prior to the event.
+                \nYou can see who has registered on the event details page.
+                \nNote that you are responsible for keeping the event information up to date and communicating with the registrants.
+                \nYou can edit or delete/cancel your event at any time from the details page above.
+                \nGood luck hosting your event!
+                \n--\nBrown Climbing Automated Message`
+            );
+        } else {
+            sendEmailWithICAL(
+                to,
+                `${event.eventTitle} - Confirmation`,
+                `Hey!
+                \nYou have created a new event: ${event.eventTitle}.
+                \n${event.startTime.toLocaleString()}
+                \nYou can edit and update information about your event at ${eventURL}
+                \nA calendar file is attached for your convenience.
+                \nRegistrants will receive an email confirmation when they register and a reminder email 24 hours prior to the event.
+                \nYou can see who has registered on the event details page.
+                \nNote that you are responsible for keeping the event information up to date and communicating with the registrants.
+                \nYou can edit or delete/cancel your event at any time from the details page above.
+                \nGood luck hosting your event!
+                \n--\nBrown Climbing Automated Message`,
+                ics
+            );
+        }
+    });
+}
+
+export function sendReminderEmail(to: string, event: EventType) {
+    const eventURL = `${process.env.CLIENT_URL}/calendar/event/${event._id}`;
+    sendEmail(
         to,
         `${event.eventTitle} - Reminder`,
         `Hey!
-        
-        This is a reminder that ${event.eventTitle} is coming up soon!
-        
-        ${event.startTime.toLocaleString()}
-        
-        For more information, or to cancel, visit ${eventURL}
-        See you there!
-        
-        --
-        Brown Climbing Automated Message`
+        \nThis is a reminder that ${event.eventTitle} is coming up soon!
+        \n${event.startTime.toLocaleString()}
+        \nFor more information, or to cancel, visit ${eventURL}\nSee you there!
+        \n--\nBrown Climbing Automated Message`
     );
 }
