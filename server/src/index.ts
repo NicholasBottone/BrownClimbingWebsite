@@ -20,6 +20,7 @@ export function main() {
     passportConfig.init();
     const app = express();
 
+    // connect to DB
     mongoConnection();
 
     // express session
@@ -35,7 +36,7 @@ export function main() {
             }),
         })
     );
-    
+
     // parse incoming cookies of html requests
     app.use(cookieParser());
     // parse body of http request
@@ -45,7 +46,6 @@ export function main() {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // set up cors
     // set up cors to allow us to accept requests from front end client
     app.use(
         cors({
@@ -59,6 +59,7 @@ export function main() {
     app.use("/auth", authRouter);
     app.use("/calendar", eventRouter);
 
+    // server starts listening
     app.listen(process.env.PORT || 8080, () => {
         console.log(`Server running on port ${process.env.PORT}`);
     });

@@ -109,16 +109,12 @@ function RegistrationConfirmation(props: {
             if (await registerForEvent(event, user)) {
                 setRedirect(true);
                 alert(`You are now registered for ${event.eventTitle}!`);
-            } else {
-                alert("Error registering for event!");
             }
         };
         const unregister = async () => {
             if (await unregisterForEvent(event, user)) {
                 setRedirect(true);
                 alert(`You are no longer registered for ${event.eventTitle}.`);
-            } else {
-                alert("Error registering for event!");
             }
         };
 

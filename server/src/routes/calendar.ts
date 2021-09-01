@@ -5,13 +5,20 @@ import { body } from "express-validator";
 import Event from "../models/Event";
 import { EventType } from "../types";
 
+// FIXME: This is a hacky way to get info from the express user object.
+//         We should probably use TypeScript namespaces instead.
+export function u(user: any) {
+    return user;
+}
+
+// Setup router
 const eventRouter = Router();
 
 // GET request that retrieves events, populates with User Schema, and sorts start time of event
 eventRouter.get("/events", (_req: Request, res: Response) => {
     Event.find((err: Error, events: EventType[]) => {
         if (err) {
-            console.error(err); // TODO: figure out proper error handling
+            console.error(err);
             res.status(500).send(err);
             return;
         }
@@ -26,8 +33,9 @@ eventRouter.get("/events", (_req: Request, res: Response) => {
 eventRouter.get("/event/:eventId", (req: Request, res: Response) => {
     Event.findById(req.params.eventId, (err: Error, event: EventType) => {
         if (err) {
-            console.error(err); // TODO: figure out proper error handling
-            res.status(500).send(err);
+            err.name === "CastError"
+                ? res.status(404).send("Event not found")
+                : res.status(500).send(err.message);
             return;
         }
         res.json({ event });
@@ -75,8 +83,9 @@ eventRouter.post(
         // Save the new event
         event.save((err: Error) => {
             if (err) {
-                console.error(err); // TODO: figure out proper error handling
-                res.status(500).send(err);
+                err.name === "ValidationError"
+                    ? res.status(400).send(err.message)
+                    : res.status(500).send(err.message);
                 return;
             }
             res.status(200).json({
@@ -87,42 +96,18 @@ eventRouter.post(
     }
 );
 
-/*
-Example JSON for adding user:
-    eventId:
-	use req.user field
-	go into registered users field in mongoDB database w/ eventId and append req.user if not already registered
-	check maxCapacity isn't reached
-
-Example JSON for updating existing event:
-	check if event exists using eventId
-	check if user that sent request is the host user using mongoDB stuff _id of user == host user id (findByID)
-	then replace event stuff using whatever we find
-	const event = await mongoose.findByID(req.body.eventId)
-*/
-
 // PUT request for user registering for event
 eventRouter.put(
     "/event/:eventId/register", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response) => {
-        // checking if received user object from frontend (not receiving means something went wrong)
-        if (!req.body.user) {
-            res.status(400).json({
-                message: "User information not passed with request",
-            });
-            return;
-        }
-
         // check if the user is already registered for the event
         const queryRegisteredUsers = await Event.findById(
             { _id: req.params.eventId },
             "registeredUsers"
         );
-        if (queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
-            res.status(400).json({
-                message: "User is already registered for this event",
-            });
+        if (queryRegisteredUsers.registeredUsers.includes(u(req.user)._id)) {
+            res.status(400).send("User is already registered for this event.");
             return;
         }
 
@@ -135,9 +120,7 @@ eventRouter.put(
             queryMaxCapacity.maxCapacity <=
             queryRegisteredUsers.registeredUsers.length
         ) {
-            res.status(400).json({
-                message: "Max event capacity reached",
-            });
+            res.status(400).send("Event is full.");
             return;
         }
         // TODO: clean up the if else statements (could probably be more concise and figure out how to handle any errors)
@@ -145,16 +128,15 @@ eventRouter.put(
         // update the registeredUsers field of the current event in the db
         Event.findByIdAndUpdate(
             { _id: req.params.eventId }, // getting event by id
-            { $push: { registeredUsers: req.body.user } }, // pushing the user into registeredUsers array
-            (err) => {
+            { $push: { registeredUsers: u(req.user) } }, // pushing the user into registeredUsers array
+            (err, event: EventType) => {
                 if (err) {
-                    console.error(err); // TODO: figure out proper error handling
-                    res.status(500).send(err);
+                    err.name === "CastError"
+                        ? res.status(404).send("Event not found")
+                        : res.status(500).send(err.message);
                     return;
                 }
-                res.status(200).json({
-                    message: "Successfully registered user for event",
-                });
+                res.status(200).send("User registered successfully");
             }
         );
     }
@@ -165,39 +147,32 @@ eventRouter.put(
     "/event/:eventId/unregister", // :eventId is a placeholder and this value can be accessed by req.params.eventId (this is the url path from the frontend)
     authCheck,
     async (req: Request, res: Response) => {
-        // checking if received user object from frontend (not receiving means something went wrong)
-        if (!req.body.user) {
-            res.status(400).json({
-                message: "User information not passed with request",
-            });
-            return;
-        }
-
         // check if the user is already registered for the event
         const queryRegisteredUsers = await Event.findById(
             { _id: req.params.eventId },
             "registeredUsers"
         );
-        if (!queryRegisteredUsers.registeredUsers.includes(req.body.user._id)) {
-            res.status(400).json({
-                message: "User is not registered for this event",
-            });
+        console.log(queryRegisteredUsers);
+        console.log(u(req.user)._id);
+        if (!queryRegisteredUsers.registeredUsers.includes(u(req.user)._id)) {
+            res.status(400).send("User is not registered for this event");
             return;
         }
 
         // update the registeredUsers field of the current event in the db
         Event.findByIdAndUpdate(
             { _id: req.params.eventId }, // getting event by id
-            { $pull: { registeredUsers: req.body.user._id } }, // pulling the user from registeredUsers array
+            { $pull: { registeredUsers: u(req.user)._id } }, // pulling the user from registeredUsers array
             (err) => {
                 if (err) {
-                    console.error(err); // TODO: figure out proper error handling
-                    res.status(500).send(err);
+                    err.name === "CastError"
+                        ? res.status(404).send("Event not found")
+                        : res.status(500).send(err.message);
                     return;
                 }
-                res.status(200).json({
-                    message: "Successfully unregistered user from event",
-                });
+                res.status(200).send(
+                    "Successfully unregistered user from event"
+                );
             }
         );
     }
@@ -213,10 +188,9 @@ eventRouter.delete(
             { _id: req.params.eventId },
             "hostUser"
         );
-        const user: any = req.user; // FIXME: this is a hacky way to get the user id (shouldn't be using any)
         if (
-            queryHost.hostUser._id.toString() !== user._id.toString() ||
-            user.moderator
+            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() ||
+            u(req.user).moderator
         ) {
             res.status(401).send("Unauthorized - Not the host of this event");
             console.log("401 on delete");
@@ -226,13 +200,12 @@ eventRouter.delete(
         // delete the event from the db
         Event.findByIdAndRemove({ _id: req.params.eventId }, null, (err) => {
             if (err) {
-                console.error(err); // TODO: figure out proper error handling
-                res.status(500).send(err);
+                err.name === "CastError"
+                    ? res.status(404).send("Event not found")
+                    : res.status(500).send(err.message);
                 return;
             }
-            res.status(200).json({
-                message: "Successfully deleted event",
-            });
+            res.status(200).send("Successfully deleted event");
         });
     }
 );
@@ -254,10 +227,9 @@ eventRouter.put(
             { _id: req.params.eventId },
             "hostUser"
         );
-        const user: any = req.user; // FIXME: this is a hacky way to get the user id (shouldn't be using any)
         if (
-            queryHost.hostUser._id.toString() !== user._id.toString() ||
-            user.moderator
+            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() ||
+            u(req.user).moderator
         ) {
             res.status(401).send("Unauthorized - Not the host of this event");
             return;
@@ -290,13 +262,12 @@ eventRouter.put(
             },
             (err) => {
                 if (err) {
-                    console.error(err); // TODO: figure out proper error handling
-                    res.status(500).send(err);
+                    err.name === "CastError"
+                        ? res.status(404).send("Event not found")
+                        : res.status(500).send(err.message);
                     return;
                 }
-                res.status(200).json({
-                    message: "Successfully updated event",
-                });
+                res.status(200).send("Successfully updated event");
             }
         );
     }

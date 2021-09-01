@@ -83,8 +83,6 @@ export default function CreateEventPage(props: {
             if (await createEvent(createJSONBody())) {
                 alert(`Successfully created "${eventTitle}" event!`); // TODO: Potentially consider a better success message/alert
                 setRedirect(true);
-            } else {
-                alert("Error creating event!");
             }
         };
 

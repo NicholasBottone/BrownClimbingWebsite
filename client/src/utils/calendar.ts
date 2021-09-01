@@ -21,7 +21,8 @@ export async function fetchCalendar() {
             return resJson.events;
         } else {
             console.error(res);
-            throw new Error("Could not fetch: Not OK response from server.");
+            return `Error fetching the event: ${res.status} - ${res.statusText}
+            - ${await res.text()}`;
         }
     } catch (error) {
         console.error(error);
@@ -50,7 +51,8 @@ export async function fetchEvent(eventId: string) {
             return resJson.event;
         } else {
             console.error(res);
-            throw new Error("Could not fetch: Not OK response from server.");
+            return `Error fetching the event: ${res.status} - ${res.statusText}
+            - ${await res.text()}`;
         }
     } catch (error) {
         console.error(error);
@@ -71,10 +73,12 @@ async function registrationPutRequest(
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-                user,
-            }),
         });
+        if (!res.ok) {
+            console.error(res.statusText);
+            alert(`Error registering: ${res.status} - ${res.statusText}
+            - ${await res.text()}`);
+        }
         return res.ok;
     } catch (e) {
         console.error(e);
@@ -112,9 +116,14 @@ export async function createEvent(jsonBody: any) {
                 body: JSON.stringify(jsonBody),
             }
         );
+        if (!res.ok) {
+            console.error(res.statusText);
+            alert(`Error creating event: ${res.status} - ${res.statusText}
+            - ${await res.text()}`);
+        }
         return res.ok;
     } catch (e) {
-        console.error(e); // TODO: Better error reporting
+        console.error(e);
         return false;
     }
 }
@@ -133,6 +142,11 @@ export async function updateEvent(event: EventType, jsonBody: any) {
                 body: JSON.stringify(jsonBody),
             }
         );
+        if (!res.ok) {
+            console.error(res.statusText);
+            alert(`Error updating event: ${res.status} - ${res.statusText}
+            - ${await res.text()}`);
+        }
         return res.ok;
     } catch (e) {
         console.error(e);
@@ -153,6 +167,11 @@ export async function deleteEvent(event: EventType) {
                 },
             }
         );
+        if (!res.ok) {
+            console.error(res.statusText);
+            alert(`Error deleting event: ${res.status} - ${res.statusText}
+            - ${await res.text()}`);
+        }
         return res.ok;
     } catch (e) {
         console.error(e);

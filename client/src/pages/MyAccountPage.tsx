@@ -55,10 +55,7 @@ function UserAccountProfile(props: { user: UserType | undefined }) {
                 width="200"
                 height="200"
                 alt="profile"
-                src={
-                    user.displayPictureURL ||
-                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                }
+                src={user.displayPictureURL}
             />
             <br />
             <br />
