@@ -27,12 +27,7 @@ export function getICS(
             {
                 action: "display",
                 description: "Reminder",
-                trigger: { minutes: 30, before: true },
-            },
-            {
-                action: "display",
-                description: "Reminder",
-                trigger: { hours: 24, before: true },
+                trigger: { hours: 3, before: true },
             },
         ],
     };
