@@ -26,16 +26,22 @@ Create a file named '.env' inside /server
 Put all environment variables in .env file.
 Environment Variables:
 
-### `PORT=`
+### `PORT=` (port to host the backend on)
 
-### `GOOGLE_CLIENT_ID=`
+### `GOOGLE_CLIENT_ID=` (client safe)
 
-### `GOOGLE_CLIENT_SECRET=`
+### `GOOGLE_CLIENT_SECRET=` (not client safe)
 
-### `MONGODB_URI=`
+### `MONGODB_URI=` (not client safe)
 
-### `COOKIE_KEY=`
+### `COOKIE_KEY=` (not client safe)
 
 ### `CLIENT_URL=` (frontend URL)
 
-### `SESSION_SECRET=`
+### `SESSION_SECRET=` (not client safe)
+
+### `SMTP_USERNAME=` (email address to send confirmation emails from)
+
+### `SMTP_PASSWORD=` (not client safe)
+
+### `SMTP_HOSTNAME=` (SMTP server for sending emails)
