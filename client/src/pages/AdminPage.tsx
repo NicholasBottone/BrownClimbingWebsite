@@ -163,6 +163,13 @@ function EventsPanel() {
                         >
                             View
                         </Button>
+                        <Button
+                            as={Link}
+                            to={`/calendar/edit/${event._id}`}
+                            variant="warning"
+                        >
+                            Edit
+                        </Button>
                         <Button variant="danger" onClick={onDeleteClick}>
                             Delete
                         </Button>
