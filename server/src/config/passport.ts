@@ -43,15 +43,16 @@ export function init() {
                 done: VerifyCallback
             ) => {
                 // Error checking
-                if (profile === undefined) {
+                if (!profile) {
                     done(new Error("Profile is undefined"));
+                    return;
                 }
                 if (profile._json.hd !== "brown.edu") {
                     // ensures email domain is brown.edu
                     done(new Error("Invalid domain!"));
                     return;
                 }
-                let displayPicURL = "";
+                let displayPicURL = "https://i.ibb.co/WKq909Y/profile.webp";
                 if (profile.photos) {
                     displayPicURL = profile.photos[0].value;
                 }
@@ -60,7 +61,7 @@ export function init() {
                     googleId: profile.id,
                     displayName: profile.displayName,
                     email: profile._json.email,
-                    displayPictureURL: displayPicURL || "",
+                    displayPictureURL: displayPicURL,
                 };
                 try {
                     // searches for user in mongoDB collection by googleId
