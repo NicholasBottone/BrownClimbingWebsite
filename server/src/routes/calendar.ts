@@ -12,11 +12,12 @@ export function u(user: any) {
     return user;
 }
 
-// Setup router
 const eventRouter = Router();
 
 // GET request that retrieves events, populates with User Schema, and sorts start time of event
 eventRouter.get("/events", (_req: Request, res: Response) => {
+    // TODO: Filter by events that are in the future
+    // TODO: Consider adding pagination
     Event.find((err: Error, events: EventType[]) => {
         if (err) {
             console.error(err);

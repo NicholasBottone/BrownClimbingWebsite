@@ -14,6 +14,7 @@ import eventRouter from "./routes/calendar";
 
 import * as passportConfig from "./config/passport";
 import { mongoConnection } from "./config/mongo";
+import adminRouter from "./routes/admin";
 
 // main function
 export function main() {
@@ -58,6 +59,7 @@ export function main() {
     // set up auth route
     app.use("/auth", authRouter);
     app.use("/calendar", eventRouter);
+    app.use("/admin", adminRouter);
 
     // server starts listening
     app.listen(process.env.PORT || 8080, () => {
