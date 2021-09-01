@@ -4,6 +4,7 @@ import { authCheck } from "../middleware/auth";
 import { body } from "express-validator";
 import Event from "../models/Event";
 import { EventType } from "../types";
+import { sendConfirmationEmail, sendCreationEmail } from "../config/mailer";
 
 // FIXME: This is a hacky way to get info from the express user object.
 //         We should probably use TypeScript namespaces instead.
@@ -92,6 +93,13 @@ eventRouter.post(
                 event,
                 message: "Event created successfully",
             });
+
+            // Send confirmation email to host user
+            sendCreationEmail(
+                `"${u(req.user).displayName}" ${u(req.user).email}`,
+                event
+            );
+            // TODO: Schedule reminder email to be sent
         });
     }
 );
@@ -137,6 +145,13 @@ eventRouter.put(
                     return;
                 }
                 res.status(200).send("User registered successfully");
+
+                // send confirmation email to user
+                sendConfirmationEmail(
+                    `"${u(req.user).displayName}" ${u(req.user).email}`,
+                    event
+                );
+                // TODO: Schedule reminder email to be sent
             }
         );
     }
