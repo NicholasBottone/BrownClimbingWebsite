@@ -6,6 +6,7 @@ import Container from "react-bootstrap/Container";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Image from "react-bootstrap/Image";
 
 import { BasicUserType, EventType, IdParams, UserType } from "../types";
 import { fetchEvent } from "../utils/calendar";
@@ -66,7 +67,13 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
             <Card.Body>
                 <Card.Title>{event.eventTitle}</Card.Title>
                 <Card.Subtitle>
-                    Hosted by {event.hostUser.displayName}
+                    Hosted by {event.hostUser.displayName}{" "}
+                    <Image
+                        roundedCircle
+                        src={event.hostUser.displayPictureURL}
+                        alt={event.hostUser.displayName}
+                        width="25"
+                    />
                 </Card.Subtitle>
                 <Card.Text>{event.description}</Card.Text>
                 <Card.Text>
@@ -88,6 +95,12 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                     {event.registeredUsers.map((u) => (
                         <span key={u.googleId}>
                             <br />
+                            <Image
+                                roundedCircle
+                                src={u.displayPictureURL}
+                                alt={u.displayName}
+                                width="25"
+                            />{" "}
                             {u.displayName}
                         </span>
                     ))}
