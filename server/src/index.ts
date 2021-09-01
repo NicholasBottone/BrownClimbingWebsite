@@ -7,14 +7,15 @@ import express from "express";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import authRouter from "./routes/auth";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+
+import authRouter from "./routes/auth";
 import eventRouter from "./routes/calendar";
+import adminRouter from "./routes/admin";
 
 import * as passportConfig from "./config/passport";
 import { mongoConnection } from "./config/mongo";
-import adminRouter from "./routes/admin";
 
 // main function
 export function main() {

@@ -1,8 +1,11 @@
 import { Router, Request, Response } from "express";
-import { modCheck } from "src/middleware/auth";
-import Event from "src/models/Event";
-import User from "src/models/User";
-import { EventType, UserType } from "src/types";
+
+import { modCheck } from "../middleware/auth";
+
+import Event from "../models/Event";
+import User from "../models/User";
+
+import { EventType, UserType } from "../types";
 
 const adminRouter = Router();
 
