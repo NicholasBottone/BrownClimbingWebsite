@@ -9,13 +9,12 @@ import { UserType } from "../types";
 import { handleLoginClick } from "../utils/auth";
 
 export default function MyAccountPage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
 
-    if (!loading && !authenticated) {
+    if (!loading && !user) {
         // unauthenticated users are redirected to login page
         handleLoginClick();
         return <></>;

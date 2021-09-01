@@ -11,11 +11,10 @@ import Image from "react-bootstrap/esm/Image";
 import { UserType } from "../types";
 
 export default function Header(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -46,10 +45,7 @@ export default function Header(props: {
                     {loading ? (
                         <Navbar.Text>Loading...</Navbar.Text>
                     ) : (
-                        <UserNavDropdown
-                            authenticated={authenticated}
-                            user={user}
-                        />
+                        <UserNavDropdown user={user} />
                     )}
                 </Nav>
             </Navbar.Collapse>
@@ -57,31 +53,26 @@ export default function Header(props: {
     );
 }
 
-function UserNavDropdown(props: {
-    authenticated: boolean;
-    user: UserType | undefined;
-}) {
-    const { authenticated, user } = props;
+function UserNavDropdown(props: { user: UserType | undefined }) {
+    const { user } = props;
+
 
     return (
         <>
-            {authenticated ? (
+            {user ? (
                 <NavDropdown
-                    id="collasible-nav-dropdown"
+                    id="collapsible-nav-dropdown"
                     data-display="static"
                     className="dropdown-menu-lg-right"
                     title={
                         <span>
-                            {user?.displayName}{" "}
+                            {user.displayName}{" "}
                             <Image
                                 width="30"
                                 height="30"
                                 roundedCircle
                                 alt="profile"
-                                src={
-                                    user?.displayPictureURL ||
-                                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
-                                }
+                                src={user.displayPictureURL}
                             />{" "}
                         </span>
                     }

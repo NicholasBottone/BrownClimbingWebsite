@@ -8,11 +8,10 @@ import Spinner from "react-bootstrap/Spinner";
 import { UserType } from "../types";
 
 export default function HomePage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
 
     return (
         <div>
@@ -28,10 +27,7 @@ export default function HomePage(props: {
                             <p>Loading...</p>
                         </div> // don't show user info until loading from backend is done
                     ) : (
-                        <WelcomeMessage
-                            authenticated={authenticated}
-                            user={user}
-                        />
+                        <WelcomeMessage user={user} />
                     )}
                 </Jumbotron>
             </Container>
@@ -39,17 +35,14 @@ export default function HomePage(props: {
     );
 }
 
-function WelcomeMessage(props: {
-    authenticated: boolean;
-    user: UserType | undefined;
-}) {
-    const { authenticated, user } = props;
+function WelcomeMessage(props: { user: UserType | undefined }) {
+    const { user } = props;
 
     return (
         <>
-            {authenticated ? (
+            {user ? (
                 <div>
-                    <h2>Welcome {user?.displayName}!</h2>
+                    <h2>Welcome {user.displayName}!</h2>
                     <h3>You have logged in successfully!</h3>
                 </div>
             ) : (

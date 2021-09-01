@@ -11,11 +11,10 @@ import { deleteEvent, fetchEvent, updateEvent } from "../utils/calendar";
 import EventForm from "../components/EventForm";
 
 export default function EditEventPage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
     const { eventId } = useParams<IdParams>();
 
     const [event, setEvent] = useState<EventType>();
@@ -52,11 +51,7 @@ export default function EditEventPage(props: {
                             <p>{error}</p>
                         </div>
                     ) : (
-                        <FormElement
-                            authenticated={authenticated}
-                            user={user}
-                            event={event}
-                        />
+                        <FormElement user={user} event={event} />
                     )}
                 </Jumbotron>
             </Container>
@@ -64,12 +59,8 @@ export default function EditEventPage(props: {
     );
 }
 
-function FormElement(props: {
-    authenticated: boolean;
-    user: UserType | undefined;
-    event: EventType;
-}) {
-    const { authenticated, user, event } = props;
+function FormElement(props: { user: UserType | undefined; event: EventType }) {
+    const { user, event } = props;
 
     const [redirect, setRedirect] = useState(false);
 
@@ -89,7 +80,7 @@ function FormElement(props: {
     const [maxCapacity, setMaxCapacity] = useState(event.maxCapacity);
 
     if (
-        !authenticated ||
+        !user ||
         redirect ||
         user?.googleId !== event.hostUser.googleId ||
         user?.moderator

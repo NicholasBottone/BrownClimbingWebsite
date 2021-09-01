@@ -10,11 +10,10 @@ import { createEvent } from "../utils/calendar";
 import EventForm from "../components/EventForm";
 
 export default function CreateEventPage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
 
     return (
         <div>
@@ -49,7 +48,7 @@ export default function CreateEventPage(props: {
         const [transportInfo, setTransportInfo] = useState("");
         const [maxCapacity, setMaxCapacity] = useState("");
 
-        if (!authenticated || redirect) {
+        if (!user || redirect) {
             return <Redirect to="/calendar" />;
         }
 

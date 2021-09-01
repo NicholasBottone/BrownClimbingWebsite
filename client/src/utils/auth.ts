@@ -2,7 +2,6 @@ import { UserType } from "../types";
 
 // fetches the user if the user is logged in on the backend
 export async function fetchUser(
-    setAuthenticated: (authenticated: boolean) => void,
     setUser: (user: UserType) => void,
     setError: (error: string) => void
 ) {
@@ -22,13 +21,11 @@ export async function fetchUser(
         // if the user is logged in, set the user and authenticated flag
         if (res.status === 200) {
             const resJson = await res.json();
-            setAuthenticated(true);
             setUser(resJson.user);
         } else {
             throw new Error("failed to authenticate user");
         }
     } catch (error) {
-        setAuthenticated(false);
         setError("Failed to authenticate user");
     }
 }

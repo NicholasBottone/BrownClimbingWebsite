@@ -14,11 +14,10 @@ import { fetchCalendar } from "../utils/calendar";
 import { handleLoginClick } from "../utils/auth";
 
 export default function CalendarPage(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     loading: boolean;
 }) {
-    const { authenticated, user, loading } = props;
+    const { user, loading } = props;
 
     const [eventList, setEventList] = useState<EventType[]>();
     const [error, setError] = useState("Loading calendar data...");
@@ -53,11 +52,7 @@ export default function CalendarPage(props: {
                             <p>{error}</p>
                         </div>
                     ) : (
-                        <Calendar
-                            authenticated={authenticated}
-                            user={user}
-                            eventList={eventList}
-                        />
+                        <Calendar user={user} eventList={eventList} />
                     )}
                 </Jumbotron>
             </Container>
@@ -69,11 +64,10 @@ export default function CalendarPage(props: {
 // TODO: Look into embedding Google Maps (https://www.embed-map.com/)
 
 function Calendar(props: {
-    authenticated: boolean;
     user: UserType | undefined;
     eventList: EventType[];
 }) {
-    const { authenticated, user, eventList } = props;
+    const { user, eventList } = props;
 
     if (eventList == null) {
         return <></>;
@@ -89,7 +83,7 @@ function Calendar(props: {
 
             <br />
             <br />
-            {authenticated ? (
+            {user ? (
                 <Button as={Link} to="/calendar/create" variant="primary">
                     Host an Event
                 </Button>

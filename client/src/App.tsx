@@ -14,6 +14,7 @@ import CreateEventPage from "./pages/CreateEventPage";
 import EditEventPage from "./pages/EditEventPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import EventRegistrationPage from "./pages/EventRegistrationPage";
+import AdminPage from "./pages/AdminPage";
 
 import { fetchUser } from "./utils/auth";
 import { UserType } from "./types";
@@ -21,13 +22,12 @@ import { UserType } from "./types";
 export default function App() {
     const [user, setUser] = useState<UserType>();
     const [, setError] = useState("");
-    const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
 
     // called once when components on page have rendered
     useEffect(() => {
         async function getUser() {
-            await fetchUser(setAuthenticated, setUser, setError);
+            await fetchUser(setUser, setError);
             setLoading(false);
         }
         getUser();
@@ -35,55 +35,33 @@ export default function App() {
 
     return (
         <Router>
-            <Header
-                authenticated={authenticated}
-                user={user}
-                loading={loading}
-            />
+            <Header user={user} loading={loading} />
 
             <Switch>
                 <Route
                     exact
                     path="/"
-                    component={() => (
-                        <HomePage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
-                    )}
+                    component={() => <HomePage user={user} loading={loading} />}
                 />
                 <Route
                     exact
                     path="/calendar"
                     component={() => (
-                        <CalendarPage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
+                        <CalendarPage user={user} loading={loading} />
                     )}
                 />
                 <Route
                     exact
                     path="/calendar/create"
                     component={() => (
-                        <CreateEventPage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
+                        <CreateEventPage user={user} loading={loading} />
                     )}
                 />
                 <Route
                     exact
                     path="/calendar/edit/:eventId"
                     component={() => (
-                        <EditEventPage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
+                        <EditEventPage user={user} loading={loading} />
                     )}
                 />
                 <Route
@@ -104,13 +82,10 @@ export default function App() {
                     exact
                     path="/myaccount"
                     component={() => (
-                        <MyAccountPage
-                            authenticated={authenticated}
-                            user={user}
-                            loading={loading}
-                        />
+                        <MyAccountPage user={user} loading={loading} />
                     )}
                 />
+
                 <Route exact path="/about" component={AboutPage} />
                 <Route exact path="/privacy" component={PrivacyPage} />
 
