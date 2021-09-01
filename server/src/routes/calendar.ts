@@ -168,8 +168,6 @@ eventRouter.put(
             { _id: req.params.eventId },
             "registeredUsers"
         );
-        console.log(queryRegisteredUsers);
-        console.log(u(req.user)._id);
         if (!queryRegisteredUsers.registeredUsers.includes(u(req.user)._id)) {
             res.status(400).send("User is not registered for this event");
             return;
@@ -205,11 +203,10 @@ eventRouter.delete(
             "hostUser"
         );
         if (
-            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() ||
-            u(req.user).moderator
+            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() &&
+            !u(req.user).moderator
         ) {
             res.status(401).send("Unauthorized - Not the host of this event");
-            console.log("401 on delete");
             return;
         }
 
@@ -244,8 +241,8 @@ eventRouter.put(
             "hostUser"
         );
         if (
-            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() ||
-            u(req.user).moderator
+            queryHost.hostUser._id.toString() !== u(req.user)._id.toString() &&
+            !u(req.user).moderator
         ) {
             res.status(401).send("Unauthorized - Not the host of this event");
             return;
