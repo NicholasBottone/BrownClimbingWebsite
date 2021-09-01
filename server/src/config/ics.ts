@@ -23,10 +23,6 @@ export function getICS(
         url: url,
         status: "CONFIRMED",
         busyStatus: "BUSY",
-        organizer: {
-            name: event.hostUser.displayName,
-            email: event.hostUser.email,
-        },
         alarms: [
             {
                 action: "display",
