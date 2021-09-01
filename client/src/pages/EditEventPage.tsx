@@ -82,8 +82,7 @@ function FormElement(props: { user: UserType | undefined; event: EventType }) {
     if (
         !user ||
         redirect ||
-        user?.googleId !== event.hostUser.googleId ||
-        user?.moderator
+        (user.googleId !== event.hostUser.googleId && !user.moderator)
     ) {
         // if user is not logged in or is not the host of the event
         return <Redirect to="/calendar" />;
@@ -139,7 +138,7 @@ function FormElement(props: { user: UserType | undefined; event: EventType }) {
             <EventForm
                 handleSubmit={handleSubmit}
                 defaultValues={[
-                    user?.displayName,
+                    event.hostUser.displayName,
                     eventTitle,
                     description,
                     location,
