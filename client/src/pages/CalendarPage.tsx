@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Card from "react-bootstrap/Card";
 import CardColumns from "react-bootstrap/CardColumns";
+import Image from "react-bootstrap/Image";
 
 import { BasicUserType, EventType, UserType } from "../types";
 import { fetchCalendar } from "../utils/calendar";
@@ -116,6 +117,16 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
                     <br />
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}
+                    <br />
+                    {event.registeredUsers.map((u: BasicUserType) => (
+                        <Image
+                            roundedCircle
+                            key={u.googleId}
+                            src={u.displayPictureURL}
+                            alt={u.displayName}
+                            width="25"
+                        />
+                    ))}
                 </Card.Text>
                 <ButtonGroup>
                     <Button as={Link} to={`/calendar/event/${event._id}`}>
