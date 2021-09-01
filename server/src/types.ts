@@ -1,10 +1,3 @@
-// types for BasicUser Model
-export type BasicUserType = {
-    googleId: string;
-    displayName: string;
-    displayPictureURL: string;
-};
-
 // types for User Model
 export type UserType = {
     _id?: string;
@@ -22,11 +15,11 @@ export type EventType = {
     _id: string;
     eventTitle: string;
     description: string;
-    hostUser: BasicUserType;
+    hostUser: UserType;
     location: string;
     startTime: Date;
     durationMinutes: number;
     transportInfo: string;
-    registeredUsers: BasicUserType[];
+    registeredUsers: UserType[];
     maxCapacity: number;
 };

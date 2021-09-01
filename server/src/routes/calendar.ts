@@ -5,6 +5,7 @@ import { body } from "express-validator";
 import Event from "../models/Event";
 import { EventType } from "../types";
 import { sendConfirmationEmail, sendCreationEmail } from "../config/mailer";
+import { getICS } from "../config/ics";
 
 // FIXME: This is a hacky way to get info from the express user object.
 //         We should probably use TypeScript namespaces instead.
@@ -44,6 +45,32 @@ eventRouter.get("/event/:eventId", (req: Request, res: Response) => {
     })
         .populate("hostUser")
         .populate("registeredUsers");
+});
+
+// GET request that retrieves the ICS file for an event
+eventRouter.get("/event/:eventId/ics", (req: Request, res: Response) => {
+    Event.findById(req.params.eventId, (err: Error, event: EventType) => {
+        if (err) {
+            err.name === "CastError"
+                ? res.status(404).send("Event not found")
+                : res.status(500).send(err.message);
+            return;
+        }
+        getICS(event, (error, ics) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send(error.message);
+                return;
+            }
+            // Return the ICS file with the correct headers
+            res.set("Content-Type", "text/calendar");
+            res.set(
+                "Content-Disposition",
+                `attachment; filename="${event.eventTitle}.ics"`
+            );
+            res.send(ics);
+        });
+    }).populate("hostUser");
 });
 
 // POST request that creates new event
