@@ -3,7 +3,7 @@ import React from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import { Link, useLocation } from "react-router-dom";
-import Button from "react-bootstrap/esm/Button";
+import Button from "react-bootstrap/Button";
 
 export default function AboutPage() {
     return (

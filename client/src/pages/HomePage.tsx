@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/esm/Spinner";
+import Spinner from "react-bootstrap/Spinner";
 
 import { UserType } from "../types";
 

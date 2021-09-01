@@ -2,7 +2,7 @@ import React from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
-import Spinner from "react-bootstrap/esm/Spinner";
+import Spinner from "react-bootstrap/Spinner";
 import Image from "react-bootstrap/Image";
 
 import { UserType } from "../types";
