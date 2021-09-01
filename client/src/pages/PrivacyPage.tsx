@@ -2,6 +2,7 @@ import React from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
+import { Link } from "react-router-dom";
 
 export default function AboutPage() {
     return (
@@ -188,8 +189,9 @@ export default function AboutPage() {
                     information we collect from you, change that information, or
                     delete it in some circumstances. You may view instantly view
                     all information we have stored for your account{" "}
-                    <a href="/account">here</a>. To request to review, update,
-                    or delete your personal information, please send an email to{" "}
+                    <Link to="/myaccount">here</Link>. To request to review,
+                    update, or delete your personal information, please send an
+                    email to{" "}
                     <a href="mailto:climbing@brown.edu">climbing@brown.edu</a>.
                     We will respond to your request within 30 days.
                 </p>
