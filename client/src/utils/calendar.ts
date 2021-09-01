@@ -17,7 +17,7 @@ export async function fetchCalendar() {
         if (res.ok) {
             // gets the data and converts it a json
             const resJson = await res.json();
-            // set the event list to be displayed
+            // return the event list to be displayed
             return resJson.events;
         } else {
             console.error(res);
@@ -47,7 +47,7 @@ export async function fetchEvent(eventId: string) {
         if (res.ok) {
             // gets the data and converts it a json
             const resJson = await res.json();
-            // set the event to be displayed
+            // return the event to be displayed
             return resJson.event;
         } else {
             console.error(res);

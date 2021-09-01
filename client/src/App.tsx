@@ -85,7 +85,13 @@ export default function App() {
                         <MyAccountPage user={user} loading={loading} />
                     )}
                 />
-
+                <Route
+                    exact
+                    path="/admin"
+                    component={() => (
+                        <AdminPage user={user} loading={loading} />
+                    )}
+                />
                 <Route exact path="/about" component={AboutPage} />
                 <Route exact path="/privacy" component={PrivacyPage} />
 

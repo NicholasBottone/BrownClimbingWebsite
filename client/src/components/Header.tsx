@@ -56,6 +56,15 @@ export default function Header(props: {
 function UserNavDropdown(props: { user: UserType | undefined }) {
     const { user } = props;
 
+    const AdminPanelItem = () => {
+        return user?.moderator ? (
+            <NavDropdown.Item as={Link} to="/admin">
+                Admin Panel
+            </NavDropdown.Item>
+        ) : (
+            <></>
+        );
+    };
 
     return (
         <>
@@ -80,6 +89,7 @@ function UserNavDropdown(props: { user: UserType | undefined }) {
                     <NavDropdown.Item as={Link} to="/myaccount">
                         My Account
                     </NavDropdown.Item>
+                    <AdminPanelItem />
                     <NavDropdown.Item onClick={handleLogoutClick}>
                         Logout
                     </NavDropdown.Item>
