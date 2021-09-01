@@ -27,7 +27,7 @@ eventRouter.get("/events", (_req: Request, res: Response) => {
     })
         .populate("hostUser")
         .populate("registeredUsers")
-        .sort([["startTime", -1]]);
+        .sort([["startTime", 1]]);
 });
 
 // GET request that retrieves a specific event
