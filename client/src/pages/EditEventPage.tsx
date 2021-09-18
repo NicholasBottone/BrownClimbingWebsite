@@ -91,21 +91,17 @@ function FormElement(props: { user: UserType | undefined; event: EventType }) {
     const createJSONBody = () => {
         const durationAsNumber = Number(duration);
         const maxCapacityAsNumber = Number(maxCapacity);
-        if (user) {
-            return {
-                hostUser: user,
-                eventTitle,
-                description,
-                location,
-                eventDate,
-                startTime,
-                duration: durationAsNumber,
-                transportInfo,
-                maxCapacity: maxCapacityAsNumber,
-            };
-        } else {
-            console.error("User is not authenticated");
-        }
+        return {
+            hostUser: user,
+            eventTitle,
+            description,
+            location,
+            eventDate,
+            startTime,
+            duration: durationAsNumber,
+            transportInfo,
+            maxCapacity: maxCapacityAsNumber,
+        };
     };
 
     const handleSubmit = async (form: React.SyntheticEvent) => {

@@ -75,7 +75,7 @@ function RegistrationConfirmation(props: {
 
     return (
         <>
-            {user != null ? (
+            {user ? (
                 <>
                     <p>
                         Are you sure you would like to change your registration

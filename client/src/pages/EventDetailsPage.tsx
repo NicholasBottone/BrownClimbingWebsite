@@ -105,7 +105,7 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                         </span>
                     ))}
                 </Card.Text>
-                {user != null ? <RegisteredUserEventOptions /> : <></>}
+                {user ? <RegisteredUserEventOptions /> : <></>}
             </Card.Body>
         </Card>
     );
