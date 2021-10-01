@@ -17,7 +17,7 @@ export default function Header(props: {
     const { user, loading } = props;
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
             <Navbar.Brand as={Link} to="/">
                 <img
                     alt="logo"

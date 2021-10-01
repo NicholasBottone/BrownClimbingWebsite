@@ -63,7 +63,7 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
     const { event, user } = props;
 
     return (
-        <Card>
+        <Card border="danger">
             <Card.Body>
                 <Card.Title>{event.eventTitle}</Card.Title>
                 <Card.Subtitle>
@@ -105,7 +105,7 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                         </span>
                     ))}
                 </Card.Text>
-                {user != null ? <RegisteredUserEventOptions /> : <></>}
+                {user ? <RegisteredUserEventOptions /> : <></>}
             </Card.Body>
         </Card>
     );

@@ -55,21 +55,17 @@ export default function CreateEventPage(props: {
         const createJSONBody = () => {
             const durationAsNumber = Number(duration);
             const maxCapacityAsNumber = Number(maxCapacity);
-            if (user) {
-                return {
-                    hostUser: user,
-                    eventTitle,
-                    description,
-                    location,
-                    eventDate,
-                    startTime,
-                    duration: durationAsNumber,
-                    transportInfo,
-                    maxCapacity: maxCapacityAsNumber,
-                };
-            } else {
-                console.error("User is not authenticated");
-            }
+            return {
+                hostUser: user,
+                eventTitle,
+                description,
+                location,
+                eventDate,
+                startTime,
+                duration: durationAsNumber,
+                transportInfo,
+                maxCapacity: maxCapacityAsNumber,
+            };
         };
 
         // TODO: handle form sanitization on front end
@@ -89,7 +85,7 @@ export default function CreateEventPage(props: {
             <EventForm
                 handleSubmit={handleSubmit}
                 defaultValues={[
-                    user?.displayName,
+                    user.displayName,
                     eventTitle,
                     description,
                     location,
