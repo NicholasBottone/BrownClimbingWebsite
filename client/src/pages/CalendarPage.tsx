@@ -101,7 +101,7 @@ function EventElement(props: { event: EventType; user: UserType | undefined }) {
     const { event, user } = props;
 
     return (
-        <Card>
+        <Card border="danger">
             <Card.Body>
                 <Card.Title>{event.eventTitle}</Card.Title>
                 <Card.Subtitle>
