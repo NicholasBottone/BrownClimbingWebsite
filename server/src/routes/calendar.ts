@@ -18,14 +18,17 @@ const eventRouter = Router();
 // GET request that retrieves events, populates with User Schema, and sorts start time of event
 eventRouter.get("/events", (_req: Request, res: Response) => {
     // TODO: Consider adding pagination
-    Event.find({ startTime: { $gt: new Date() } }, (err: Error, events: EventType[]) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send(err);
-            return;
+    Event.find(
+        { startTime: { $gt: new Date() } },
+        (err: Error, events: EventType[]) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send(err);
+                return;
+            }
+            res.json({ events });
         }
-        res.json({ events });
-    })
+    )
         .populate("hostUser")
         .populate("registeredUsers")
         .sort([["startTime", 1]]);
