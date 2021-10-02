@@ -17,9 +17,8 @@ const eventRouter = Router();
 
 // GET request that retrieves events, populates with User Schema, and sorts start time of event
 eventRouter.get("/events", (_req: Request, res: Response) => {
-    // TODO: Filter by events that are in the future
     // TODO: Consider adding pagination
-    Event.find((err: Error, events: EventType[]) => {
+    Event.find({ startTime: { $gt: new Date() } }, (err: Error, events: EventType[]) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);

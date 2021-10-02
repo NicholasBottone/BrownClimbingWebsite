@@ -11,6 +11,7 @@ const adminRouter = Router();
 
 // GET request that returns list of all users
 adminRouter.get("/users", modCheck, (_req: Request, res: Response) => {
+    // TODO: add pagination
     User.find((err: Error, users: UserType[]) => {
         if (err) {
             console.error(err);
@@ -23,6 +24,7 @@ adminRouter.get("/users", modCheck, (_req: Request, res: Response) => {
 
 // GET request that returns list of all events
 adminRouter.get("/events", modCheck, (_req: Request, res: Response) => {
+    // TODO: add pagination
     Event.find((err: Error, events: EventType[]) => {
         if (err) {
             console.error(err);
