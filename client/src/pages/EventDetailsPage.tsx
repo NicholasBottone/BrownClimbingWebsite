@@ -65,8 +65,10 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
     return (
         <Card border="danger">
             <Card.Body>
-                <Card.Title>{event.eventTitle}</Card.Title>
-                <Card.Subtitle>
+                <Card.Title style={{ fontSize: "1.8em" }}>
+                    {event.eventTitle}
+                </Card.Title>
+                <Card.Subtitle style={{ fontSize: "1.3em" }}>
                     Hosted by {event.hostUser.displayName}{" "}
                     <Image
                         roundedCircle
@@ -75,22 +77,24 @@ function EventDetails(props: { event: EventType; user: UserType | undefined }) {
                         width="25"
                     />
                 </Card.Subtitle>
-                <Card.Text>{event.description}</Card.Text>
-                <Card.Text>
+                <Card.Text style={{ fontSize: "1.1em" }}>
+                    {event.description}
+                </Card.Text>
+                <Card.Text style={{ fontSize: "1.1em" }}>
                     Event starts at {new Date(event.startTime).toLocaleString()}
                     <br />
                     Event duration: {event.durationMinutes} minutes
                 </Card.Text>
-                <Card.Text>
+                <Card.Text style={{ fontSize: "1.1em" }}>
                     Location: {event.location}
                     <br />
                     Transport via {event.transportInfo}
                 </Card.Text>
-                <Card.Text>
+                <Card.Text style={{ fontSize: "1.1em" }}>
                     Registered: {event.registeredUsers.length}/
                     {event.maxCapacity}
                 </Card.Text>
-                <Card.Text>
+                <Card.Text style={{ fontSize: "1.1em" }}>
                     Registrants:
                     {event.registeredUsers.map((u) => (
                         <span key={u.googleId}>

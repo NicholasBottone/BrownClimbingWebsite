@@ -21,21 +21,18 @@ export default function Header(props: {
             <Navbar.Brand as={Link} to="/">
                 <img
                     alt="logo"
-                    src="/logo192.png"
+                    src="https://i.ibb.co/Cmj09tc/logo192.webp"
                     width="30"
                     height="30"
                     className="d-inline-block align-top"
                 />{" "}
-                Brown Climbing <Badge variant="primary">Dev</Badge>
+                Brown Climbing <Badge variant="primary">Beta</Badge>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link as={Link} to="/">
                         Home
-                    </Nav.Link>
-                    <Nav.Link as={Link} to="/about">
-                        About
                     </Nav.Link>
                     <Nav.Link as={Link} to="/calendar">
                         Calendar

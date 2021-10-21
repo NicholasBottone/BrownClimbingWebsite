@@ -1,77 +1,63 @@
-import React, { useState } from "react";
+import React from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
-import Alert from "react-bootstrap/Alert";
-import Spinner from "react-bootstrap/Spinner";
+import Carousel from "react-bootstrap/Carousel";
+import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
-import { UserType } from "../types";
+const carouselImages = [
+    { src: "https://i.ibb.co/pRXv7kC/Divisonals.webp", alt: "divisionals" },
+    { src: "https://i.ibb.co/42fztq0/steep-angle-wall.webp", alt: "steep" },
+    { src: "https://i.ibb.co/fxLXJDd/rope-climb.webp", alt: "rope climb" },
+    { src: "https://i.ibb.co/ygVbmFB/gym-wall.webp", alt: "climb gym wall" },
+    { src: "https://i.ibb.co/WDCHM0b/hanging-from-rock.webp", alt: "rock" },
+    { src: "https://i.ibb.co/Pc75C5s/rockwall.webp", alt: "rock wall" },
+    { src: "https://i.ibb.co/09V8M50/rope-climb-2.webp", alt: "rope climb" },
+    { src: "https://i.ibb.co/vhYfcVH/hanging.webp", alt: "hanging from table" },
+];
 
-export default function HomePage(props: {
-    user: UserType | undefined;
-    loading: boolean;
-}) {
-    const { user, loading } = props;
-
+export default function HomePage() {
     return (
         <div>
             <Container className="p-3 text-center">
-                <AlertDismissible />
                 <Jumbotron>
                     <h1>Brown Climbing</h1>
                     <br />
                     <br />
-                    {loading ? (
-                        <div>
-                            <Spinner animation="border" role="status" />
-                            <p>Loading...</p>
-                        </div> // don't show user info until loading from backend is done
-                    ) : (
-                        <WelcomeMessage user={user} />
-                    )}
+                    <p className="lead">
+                        Brown Climbing is a community built around the love of
+                        all disciplines of climbing (bouldering, top rope, lead,
+                        and speed). Brown Climbing aims to provide recreational
+                        climbers with greater opportunities to travel to local
+                        gyms through shared transportation and aims to provide
+                        competitive climbers with an opportunity to compete on
+                        the USA Collegiate Climbing circuit through our
+                        competitive team. In addition, Brown Climbing will
+                        create a supportive space where members can improve
+                        their strength and technique in all disciplines.
+                        Finally, Brown Climbing aims to spread awareness of rock
+                        climbing on campus to new climbers and increase the
+                        overall accessibility of climbing to all Brown students.
+                    </p>
+                    <Button as={Link} to="/calendar" variant="primary">
+                        View our events calendar
+                    </Button>
+                    <br />
+                    <br />
+                    <Carousel>
+                        {carouselImages.map((image) => (
+                            <Carousel.Item>
+                                <img
+                                    className="d-block w-100"
+                                    src={image.src}
+                                    alt={image.alt}
+                                />
+                            </Carousel.Item>
+                        ))}
+                    </Carousel>
                 </Jumbotron>
             </Container>
         </div>
     );
-}
-
-function WelcomeMessage(props: { user: UserType | undefined }) {
-    const { user } = props;
-
-    return (
-        <>
-            {user ? (
-                <div>
-                    <h2>Welcome {user.displayName}!</h2>
-                    <h3>You have logged in successfully!</h3>
-                </div>
-            ) : (
-                <div>
-                    <h2>Welcome unauthenticated user!</h2>
-                    <h3>You are not currently logged in!</h3>
-                </div>
-            )}
-        </>
-    );
-}
-
-function AlertDismissible() {
-    const [show, setShow] = useState(true);
-
-    if (show) {
-        return (
-            <Alert variant="warning" onClose={() => setShow(false)} dismissible>
-                <Alert.Heading>🚧 Under construction! 🏗</Alert.Heading>
-                <p>
-                    👷 Heads up! This website is being actively developed by the
-                    Full Stack at Brown team, and is not currently completed.
-                    <br />
-                    <a href="https://github.com/NicholasBottone/BrownClimbingWebsite/projects/1">
-                        Watch our progress!
-                    </a>
-                </p>
-            </Alert>
-        );
-    }
-    return <></>;
 }

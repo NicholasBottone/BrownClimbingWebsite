@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 
 import HomePage from "./pages/HomePage";
 import CalendarPage from "./pages/CalendarPage";
-import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import MyAccountPage from "./pages/MyAccountPage";
@@ -38,11 +37,7 @@ export default function App() {
             <Header user={user} loading={loading} />
 
             <Switch>
-                <Route
-                    exact
-                    path="/"
-                    component={() => <HomePage user={user} loading={loading} />}
-                />
+                <Route exact path="/" component={() => <HomePage />} />
                 <Route
                     exact
                     path="/calendar"
@@ -92,7 +87,6 @@ export default function App() {
                         <AdminPage user={user} loading={loading} />
                     )}
                 />
-                <Route exact path="/about" component={AboutPage} />
                 <Route exact path="/privacy" component={PrivacyPage} />
 
                 <Route path="*" component={NotFoundPage} />

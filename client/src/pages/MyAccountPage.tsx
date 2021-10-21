@@ -34,6 +34,12 @@ export default function MyAccountPage(props: {
                     ) : (
                         <UserAccountProfile user={user} />
                     )}
+                    {/* <br />
+                    <img
+                        className="img-fluid"
+                        src="https://i.ibb.co/3zNM7Zn/don-t-climb-on-rocks.webp"
+                        alt="don't climb on rocks"
+                    /> */}
                 </Jumbotron>
             </Container>
         </div>
