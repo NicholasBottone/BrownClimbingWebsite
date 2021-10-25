@@ -4,6 +4,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Carousel from "react-bootstrap/Carousel";
 import Button from "react-bootstrap/Button";
+import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 
 const carouselImages = [
@@ -22,7 +23,16 @@ export default function HomePage() {
         <div>
             <Container className="p-3 text-center">
                 <Jumbotron>
-                    <h1>Brown Climbing</h1>
+                    <h1>
+                        <Image src="https://i.ibb.co/Cmj09tc/logo192.webp" />
+                        <br />
+                        Brown Climbing
+                    </h1>
+                    <br />
+                    <Button as={Link} to="/calendar" variant="primary">
+                        View our events calendar
+                    </Button>
+                    <br />
                     <br />
                     <br />
                     <p className="lead">
@@ -40,14 +50,10 @@ export default function HomePage() {
                         climbing on campus to new climbers and increase the
                         overall accessibility of climbing to all Brown students.
                     </p>
-                    <Button as={Link} to="/calendar" variant="primary">
-                        View our events calendar
-                    </Button>
-                    <br />
                     <br />
                     <Carousel>
                         {carouselImages.map((image) => (
-                            <Carousel.Item>
+                            <Carousel.Item key={image.src}>
                                 <img
                                     className="d-block w-100"
                                     src={image.src}
