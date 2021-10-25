@@ -26,22 +26,14 @@ adminRouter.get("/users", modCheck, (_req: Request, res: Response) => {
 adminRouter.get("/events", modCheck, (_req: Request, res: Response) => {
     // TODO: add pagination
 
-    // Only return events that are within the last 30 days or are upcoming
-    const thirtyDaysAgo = new Date(
-        new Date().getTime() - 30 * 24 * 60 * 60 * 1000
-    );
-
-    Event.find(
-        { startDate: { $gte: thirtyDaysAgo } },
-        (err: Error, events: EventType[]) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send(err);
-                return;
-            }
-            res.json({ events });
+    Event.find((err: Error, events: EventType[]) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+            return;
         }
-    )
+        res.json({ events });
+    })
         .populate("hostUser")
         .populate("registeredUsers")
         .sort([["startTime", -1]]);
