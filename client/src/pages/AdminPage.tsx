@@ -6,12 +6,12 @@ import Spinner from "react-bootstrap/Spinner";
 import Pagination from "react-bootstrap/Pagination";
 import CardColumns from "react-bootstrap/CardColumns";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 import { EventType, UserType } from "../types";
 import { Link, Redirect } from "react-router-dom";
 import { fetchEvents, fetchUsers } from "../utils/admin";
-import Button from "react-bootstrap/esm/Button";
-import ButtonGroup from "react-bootstrap/esm/ButtonGroup";
 import { deleteEvent } from "../utils/calendar";
 
 export default function AdminPage(props: {
