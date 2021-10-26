@@ -1,10 +1,8 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
-import Carousel from "react-bootstrap/Carousel";
 import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
 import { Link } from "react-router-dom";
 
 const carouselImages = [
@@ -19,12 +17,18 @@ const carouselImages = [
 ];
 
 export default function HomePage() {
+    const Carousel = lazy(() => import("react-bootstrap/Carousel"));
+    const CarouselItem = lazy(() => import("react-bootstrap/CarouselItem"));
+
     return (
         <div>
             <Container className="p-3 text-center">
                 <Jumbotron>
                     <h1>
-                        <Image src="https://i.ibb.co/Cmj09tc/logo192.webp" />
+                        <img
+                            src="https://i.ibb.co/Cmj09tc/logo192.webp"
+                            alt="logo"
+                        />
                         <br />
                         Brown Climbing
                     </h1>
@@ -51,17 +55,19 @@ export default function HomePage() {
                         overall accessibility of climbing to all Brown students.
                     </p>
                     <br />
-                    <Carousel>
-                        {carouselImages.map((image) => (
-                            <Carousel.Item key={image.src}>
-                                <img
-                                    className="d-block w-100"
-                                    src={image.src}
-                                    alt={image.alt}
-                                />
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Carousel>
+                            {carouselImages.map((image) => (
+                                <CarouselItem key={image.src}>
+                                    <img
+                                        className="d-block w-100"
+                                        src={image.src}
+                                        alt={image.alt}
+                                    />
+                                </CarouselItem>
+                            ))}
+                        </Carousel>
+                    </Suspense>
                 </Jumbotron>
             </Container>
         </div>
