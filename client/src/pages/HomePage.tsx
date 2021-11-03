@@ -6,14 +6,14 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
 const carouselImages = [
-    { src: "https://i.ibb.co/pRXv7kC/Divisonals.webp", alt: "divisionals" },
+    { src: "https://i.ibb.co/ByZb6Zj/group.webp", alt: "group at gym" },
+    { src: "https://i.ibb.co/L1R2f4H/hanging.webp", alt: "hanging from wall" },
+    { src: "https://i.ibb.co/fDqYxYh/Divisonals.webp", alt: "divisionals" },
     { src: "https://i.ibb.co/42fztq0/steep-angle-wall.webp", alt: "steep" },
     { src: "https://i.ibb.co/fxLXJDd/rope-climb.webp", alt: "rope climb" },
     { src: "https://i.ibb.co/ygVbmFB/gym-wall.webp", alt: "climb gym wall" },
     { src: "https://i.ibb.co/WDCHM0b/hanging-from-rock.webp", alt: "rock" },
-    { src: "https://i.ibb.co/Pc75C5s/rockwall.webp", alt: "rock wall" },
     { src: "https://i.ibb.co/09V8M50/rope-climb-2.webp", alt: "rope climb" },
-    { src: "https://i.ibb.co/vhYfcVH/hanging.webp", alt: "hanging from table" },
 ];
 
 export default function HomePage() {
