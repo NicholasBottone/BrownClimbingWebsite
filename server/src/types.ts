@@ -7,7 +7,7 @@ export type UserType = {
     displayPictureURL: string;
     memberSince?: Date;
     lastLogin?: Date;
-    moderator?: boolean; // TODO Implement moderator
+    moderator?: boolean;
 };
 
 // types for Event Model

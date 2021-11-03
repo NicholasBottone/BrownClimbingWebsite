@@ -36,8 +36,9 @@ export type IdParams = {
 };
 
 export const locations = [
-    "Gym 1",
-    "Another one",
-    "Yet another place",
-    "Mount Everest",
+    "Rock Spot Climbing (Providence)",
+    "Central Rock Gym (Warwick)",
+    "Lincoln Woods State Park (Lincoln)",
+    "Rock Spot Climbing (Lincoln)",
+    "Carabiner’s Climbing (New Bedford)",
 ];
