@@ -11,7 +11,7 @@ export function getICS(
     const icsEvent: any = {
         start: [
             date.getFullYear(),
-            date.getMonth(),
+            date.getMonth() + 1,
             date.getDate(),
             date.getHours(),
             date.getMinutes(),
