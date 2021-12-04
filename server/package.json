@@ -2,9 +2,9 @@
     "name": "brownclimbingclubserver",
     "description": "Backend for Brown Climbing Website",
     "author": "Full Stack at Brown",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-or-later",
     "version": "1.0.0",
-    "private": true,
+    "homepage": "https://brownclimbingclub.com",
     "main": "index.js",
     "scripts": {
         "tsc": "tsc",

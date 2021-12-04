@@ -2,11 +2,10 @@
     "name": "brownclimbingclubclient",
     "description": "Frontend for Brown Climbing Website",
     "author": "Full Stack at Brown",
-    "license": "AGPL-3.0",
+    "license": "AGPL-3.0-or-later",
     "version": "1.0.0",
-    "private": true,
     "main": "index.tsx",
-    "homepage": "https://brownclimbingclub.bottone.io",
+    "homepage": "https://brownclimbingclub.com",
     "dependencies": {
         "@testing-library/jest-dom": "^5.12.0",
         "@testing-library/react": "^11.2.6",

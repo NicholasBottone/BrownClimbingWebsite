@@ -20,8 +20,8 @@ export default function AboutPage() {
                 </p>
                 <p>
                     When you visit our website{" "}
-                    <a href="https://brownclimbingclub.bottone.io">
-                        https://brownclimbingclub.bottone.io
+                    <a href="https://brownclimbingclub.com">
+                        https://brownclimbingclub.com
                     </a>{" "}
                     (the "Website"), and more generally, use any of our services
                     (the "Services", which include the Website), we appreciate
