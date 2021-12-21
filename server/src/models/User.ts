@@ -2,6 +2,7 @@ import { model, Schema, Document } from "mongoose";
 
 // MongoDB User Object Interface
 export interface IUser extends Document {
+    _id: string;
     googleId: string;
     displayName: string;
     email: string;

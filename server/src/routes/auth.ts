@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import passport from "passport";
+import User, { IUser } from "../models/User";
 import { authCheck } from "../middleware/auth";
 
 const authRouter = Router();
@@ -7,12 +8,21 @@ const authRouter = Router();
 // when login success, retrieve user info
 authRouter.get("/login/success", (req: Request, res: Response) => {
     if (req.user) {
-        res.status(200).json({
-            success: true,
-            message: "user authentication successful",
-            user: req.user,
-            cookies: req.cookies,
-        });
+        User.findByIdAndUpdate(
+            (req.user as IUser)._id,
+            { lastLoggedIn: new Date() },
+            (err, user) => {
+                if (err) {
+                    res.status(500).send(err);
+                } else {
+                    res.status(200).json({
+                        success: true,
+                        message: "user authentication successful",
+                        user,
+                    });
+                }
+            }
+        );
     } else {
         // user is not authenticated
         res.redirect("/auth/login/failed");
