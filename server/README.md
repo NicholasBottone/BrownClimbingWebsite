@@ -26,15 +26,15 @@ Create a file named '.env' inside /server
 Put all environment variables in .env file.
 Environment Variables:
 
-### `PORT=` (port to host the backend on)
+### `PORT=` (port to host the backend on - optional)
+
+### `HOST=` (host to host the backend on - optional)
 
 ### `GOOGLE_CLIENT_ID=` (client safe)
 
 ### `GOOGLE_CLIENT_SECRET=` (not client safe)
 
 ### `MONGODB_URI=` (not client safe)
-
-### `COOKIE_KEY=` (not client safe)
 
 ### `CLIENT_URL=` (frontend URL)
 

@@ -35,8 +35,9 @@ authRouter.get("/login/failed", (_req: Request, res: Response) => {
 
 // when logout, redirect to client
 authRouter.get("/logout", (req: Request, res: Response) => {
-    req.logout();
-    res.redirect(process.env.CLIENT_URL || "/");
+    req.logout(() => {
+        res.redirect(process.env.CLIENT_URL || "/");
+    });
 });
 
 // auth with google

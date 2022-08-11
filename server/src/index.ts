@@ -59,8 +59,10 @@ export function main() {
     app.use("/admin", adminRouter);
 
     // server starts listening
-    app.listen(process.env.PORT || 8080, () => {
-        console.log(`Server running on port ${process.env.PORT}`);
+    const port = Number(process.env.PORT) || 3000;
+    const hostname = process.env.HOST || "localhost";
+    app.listen(port, hostname, () => {
+        console.log(`Server started on http://${hostname}:${port}`);
     });
 }
 main();
