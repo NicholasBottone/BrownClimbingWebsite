@@ -36,7 +36,7 @@ adminRouter.get("/events", modCheck, (_req: Request, res: Response) => {
     })
         .populate("hostUser")
         .populate("registeredUsers")
-        .sort([["startTime", -1]]);
+        .sort({ startTime: -1 });
 });
 
 export default adminRouter;

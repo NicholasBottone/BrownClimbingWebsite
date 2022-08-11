@@ -1,4 +1,18 @@
-import { model, Schema } from "mongoose";
+import { Document, model, Schema } from "mongoose";
+import { IUser } from "./User";
+
+export interface IEvent extends Document {
+    _id: string;
+    eventTitle: string;
+    description: string;
+    hostUser: IUser;
+    location: string;
+    startTime: Date;
+    durationMinutes: number;
+    transportInfo: string;
+    registeredUsers: IUser[];
+    maxCapacity: number;
+}
 
 const EventSchema = new Schema({
     eventTitle: {
@@ -39,5 +53,5 @@ const EventSchema = new Schema({
     ],
 });
 
-const Event = model("Event", EventSchema);
+const Event = model<IEvent>("Event", EventSchema);
 export default Event;
