@@ -34,6 +34,8 @@ Environment Variables:
 
 ### `GOOGLE_CLIENT_SECRET=` (not client safe)
 
+### `GOOGLE_REDIRECT_URL=` (optional)
+
 ### `MONGODB_URI=` (not client safe)
 
 ### `CLIENT_URL=` (frontend URL)
