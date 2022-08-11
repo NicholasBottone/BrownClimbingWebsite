@@ -4,21 +4,28 @@ import { getICS } from "./ics";
 
 // TODO: Separate the email messages into their own files
 
+const smtpEnabled = !!process.env.SMTP_USERNAME;
+
 // Setup nodemailer transporter
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOSTNAME,
-    secure: true,
-    auth: {
-        user: process.env.SMTP_USERNAME,
-        pass: process.env.SMTP_PASSWORD,
-    },
-});
+const transporter = smtpEnabled
+    ? nodemailer.createTransport({
+          host: process.env.SMTP_HOSTNAME,
+          secure: true,
+          auth: {
+              user: process.env.SMTP_USERNAME,
+              pass: process.env.SMTP_PASSWORD,
+          },
+      })
+    : undefined;
 
 function sendEmail(
     to: string,
     subject: string,
     text: string
 ): Promise<SentMessageInfo> {
+    if (!transporter) {
+        return Promise.resolve();
+    }
     return transporter.sendMail({
         from: `"Brown Climbing" ${process.env.SMTP_USERNAME}`,
         to,
@@ -33,6 +40,9 @@ function sendEmailWithICAL(
     text: string,
     ics: string
 ): Promise<SentMessageInfo> {
+    if (!transporter) {
+        return Promise.resolve();
+    }
     return transporter.sendMail({
         from: `"Brown Climbing" ${process.env.SMTP_USERNAME}`,
         to,
