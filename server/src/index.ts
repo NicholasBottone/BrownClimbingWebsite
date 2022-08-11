@@ -1,8 +1,4 @@
-if (process.env.NODE_ENV !== "production") {
-    const path = require("path");
-    require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
-}
-
+import dotenv from "dotenv";
 import express from "express";
 import passport from "passport";
 import cookieParser from "cookie-parser";
@@ -19,6 +15,7 @@ import { mongoConnection } from "./config/mongo";
 
 // main function
 export function main() {
+    dotenv.config();
     passportConfig.init();
     const app = express();
 
@@ -34,7 +31,6 @@ export function main() {
             cookie: { maxAge: 86400000 * 30 }, // 30 days cookie expiry
             store: MongoStore.create({
                 mongoUrl: process.env.MONGODB_URI,
-                mongoOptions: { useUnifiedTopology: true },
             }),
         })
     );

@@ -19,41 +19,14 @@ export async function fetchUser(
             }
         );
         // if the user is logged in, set the user and authenticated flag
-        if (res.status === 200) {
-            const resJson = await res.json();
+        const resJson = await res.json();
+        if (resJson.success) {
             setUser(resJson.user);
         } else {
             throw new Error("failed to authenticate user");
         }
     } catch (error) {
         setError("Failed to authenticate user");
-    }
-}
-
-// checks if the user is authenticated (probably just going to be used for test purposes)
-export async function checkAuth() {
-    try {
-        const res = await fetch(
-            `${process.env.REACT_APP_API_BASE_URL}/auth/check-auth`,
-            {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Credentials": "true",
-                },
-            }
-        );
-
-        if (res.status === 200) {
-            const resJson = await res.json();
-            console.log(resJson.user);
-        } else {
-            throw new Error("user is not authenticated");
-        }
-    } catch (error) {
-        console.error(error);
     }
 }
 

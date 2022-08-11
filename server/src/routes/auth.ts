@@ -25,7 +25,10 @@ authRouter.get("/login/success", (req: Request, res: Response) => {
         );
     } else {
         // user is not authenticated
-        res.redirect("/auth/login/failed");
+        res.status(200).send({
+            success: false,
+            message: "user is not authenticated",
+        });
     }
 });
 
