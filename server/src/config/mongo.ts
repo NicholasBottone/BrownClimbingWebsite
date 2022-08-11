@@ -6,3 +6,7 @@ export function mongoConnection() {
         console.log("connected to mongodb");
     });
 }
+
+export function mongoDisconnection() {
+    mongoose.disconnect();
+}

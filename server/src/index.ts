@@ -11,7 +11,7 @@ import eventRouter from "./routes/calendar";
 import adminRouter from "./routes/admin";
 
 import * as passportConfig from "./config/passport";
-import { mongoConnection } from "./config/mongo";
+import { mongoConnection, mongoDisconnection } from "./config/mongo";
 
 // main function
 export function main() {
@@ -57,6 +57,12 @@ export function main() {
     app.use("/auth", authRouter);
     app.use("/calendar", eventRouter);
     app.use("/admin", adminRouter);
+
+    // shutdown gracefully
+    process.on("SIGINT", () => {
+        mongoDisconnection();
+        process.exit();
+    });
 
     // server starts listening
     const port = Number(process.env.PORT) || 3000;
