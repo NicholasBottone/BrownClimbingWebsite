@@ -6,26 +6,19 @@ import { authCheck } from "../middleware/auth";
 const authRouter = Router();
 
 // when login success, retrieve user info
-authRouter.get("/login/success", (req: Request, res: Response) => {
+authRouter.get("/login/success", async (req, res) => {
     if (req.user) {
-        User.findByIdAndUpdate(
-            (req.user as IUser)._id,
-            { lastLoggedIn: new Date() },
-            (err, user) => {
-                if (err) {
-                    res.status(500).send(err);
-                } else {
-                    res.status(200).json({
-                        success: true,
-                        message: "user authentication successful",
-                        user,
-                    });
-                }
-            }
-        );
+        const user = await User.findByIdAndUpdate((req.user as IUser)._id, {
+            lastLoggedIn: new Date(),
+        });
+        res.json({
+            success: true,
+            message: "user authentication successful",
+            user,
+        });
     } else {
         // user is not authenticated
-        res.status(200).send({
+        res.send({
             success: false,
             message: "user is not authenticated",
         });
