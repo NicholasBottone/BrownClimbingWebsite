@@ -22,7 +22,7 @@ export default function Footer() {
             <Link className="text-light" to="/privacy">
                 <u>Privacy &amp; Terms</u>
             </Link>{" "}
-            | © 2021 Brown Climbing.
+            | © 2022 Brown Climbing.
             <br /> This website was developed by{" "}
             <a className="text-light" href="https://fullstackatbrown.com">
                 <u>Full Stack at Brown</u>
